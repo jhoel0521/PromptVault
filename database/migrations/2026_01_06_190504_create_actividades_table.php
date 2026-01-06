@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('actividades', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('accion', 50);
+            $table->text('descripcion')->nullable();
+            $table->timestamp('fecha')->useCurrent();
             $table->timestamps();
         });
     }

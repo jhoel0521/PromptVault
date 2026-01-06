@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('etiqueta_prompt', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('etiqueta_id')->constrained()->onDelete('cascade');
+            $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+            
+            $table->unique(['etiqueta_id', 'prompt_id']);
         });
     }
 

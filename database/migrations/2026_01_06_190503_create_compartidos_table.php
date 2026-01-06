@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('compartidos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
+            $table->string('nombre_destinatario', 100);
+            $table->string('email_destinatario', 100);
+            $table->timestamp('fecha_compartido')->useCurrent();
+            $table->text('notas')->nullable();
             $table->timestamps();
         });
     }

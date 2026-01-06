@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('versiones', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
+            $table->integer('numero');
+            $table->text('contenido');
+            $table->text('contenido_anterior')->nullable();
+            $table->text('motivo_cambio')->nullable();
+            $table->timestamp('fecha_version')->useCurrent();
             $table->timestamps();
         });
     }
