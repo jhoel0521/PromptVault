@@ -110,47 +110,6 @@
                         </p>
                     </div>
 
-                    <!-- Sección de funcionalidades -->
-                    <div class="social-section" style="margin-bottom: 20px;">
-                        <p class="social-text" style="font-size: 0.9rem; margin-bottom: 5px;">¿Qué puedes hacer en la plataforma?</p>
-                        <p class="social-title" style="font-size: 1.1rem; margin-bottom: 15px;">¡Explora nuestras funcionalidades!</p>
-                        <div class="social-media-links">
-                            <a href="#" class="social-link tiktok" title="Biblioteca de Prompts">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-                                    </svg>
-                                </div>
-                                <span>Biblioteca</span>
-                            </a>
-                            <a href="#" class="social-link facebook" title="Versionado">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                    </svg>
-                                </div>
-                                <span>Versionado</span>
-                            </a>
-                            <a href="#" class="social-link instagram" title="Colaboración">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                                    </svg>
-                                </div>
-                                <span>Colaboración</span>
-                            </a>
-                            <a href="#" class="social-link whatsapp" title="IA Integrada">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                                        <circle cx="12" cy="12" r="3"/>
-                                    </svg>
-                                </div>
-                                <span>IA Integrada</span>
-                            </a>
-                        </div>
-                    </div>
-
                     <!-- Sección de redes sociales -->
                     <div class="social-section">
                         <p class="social-text" style="font-size: 0.9rem; margin-bottom: 5px;">¿Necesitas ayuda con la plataforma?</p>
@@ -297,41 +256,47 @@
                             <span class="highlight"><a href="{{ route('register') }}" class="register-link" id="registerLink">¡Regístrate aquí!</a></span>
                         </p>
 
-                        <!-- Funcionalidades Cards -->
-                        <div class="social-media-links" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 25px;">
-                            <a href="#" class="social-link tiktok" title="Biblioteca de Prompts">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-                                    </svg>
-                                </div>
-                                <span>Biblioteca</span>
-                            </a>
-                            <a href="#" class="social-link facebook" title="Versionado">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                    </svg>
-                                </div>
-                                <span>Versionado</span>
-                            </a>
-                            <a href="#" class="social-link instagram" title="Colaboración">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
-                                    </svg>
-                                </div>
-                                <span>Colaboración</span>
-                            </a>
-                            <a href="#" class="social-link whatsapp" title="IA Integrada">
-                                <div class="social-icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-                                        <circle cx="12" cy="12" r="3"/>
-                                    </svg>
-                                </div>
-                                <span>IA Integrada</span>
-                            </a>
+                        <!-- Sección de funcionalidades -->
+                        <div style="margin-top: 25px;">
+                            <p style="font-size: 0.9rem; margin-bottom: 5px; text-align: center; color: #ccc;">¿Qué puedes hacer en la plataforma?</p>
+                            <p style="font-size: 1.1rem; margin-bottom: 15px; text-align: center; color: #fff; font-weight: 600;">¡Explora nuestras funcionalidades!</p>
+                            
+                            <!-- Funcionalidades Cards -->
+                            <div class="social-media-links" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                                <a href="#" class="social-link tiktok" title="Biblioteca de Prompts">
+                                    <div class="social-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                                        </svg>
+                                    </div>
+                                    <span>Biblioteca</span>
+                                </a>
+                                <a href="#" class="social-link facebook" title="Versionado">
+                                    <div class="social-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                    </div>
+                                    <span>Versionado</span>
+                                </a>
+                                <a href="#" class="social-link instagram" title="Colaboración">
+                                    <div class="social-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                            <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                                        </svg>
+                                    </div>
+                                    <span>Colaboración</span>
+                                </a>
+                                <a href="#" class="social-link whatsapp" title="IA Integrada">
+                                    <div class="social-icon">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                    </div>
+                                    <span>IA Integrada</span>
+                                </a>
+                            </div>
                         </div>
 
                     </div>
