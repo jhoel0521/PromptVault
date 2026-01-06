@@ -94,8 +94,9 @@
                     <div class="brand-section">
                         <div class="logo-container">
                             <div class="logo-backdrop"></div>
-                            <h1 style="color: #fff; font-size: 3rem; font-weight: 900; margin: 0;">📝 PromptVault</h1>
+                            <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault Logo" class="brand-logo" style="max-width: 120px; height: auto;">
                         </div>
+                        <h1 style="color: #fff; font-size: 3.5rem; font-weight: 900; margin: 20px 0 0 0; font-family: 'Montserrat', sans-serif; letter-spacing: 3px; text-transform: uppercase;">PROMPTVAULT</h1>
                         <div class="brand-text">
                             <div class="brand-line"></div>
                         </div>
@@ -103,48 +104,51 @@
 
                     <!-- Mensaje profesional -->
                     <div class="welcome-section">
-                        <h2 class="welcome-title">¡Bienvenido a PromptVault!</h2>
+                        <h2 class="welcome-title">¡Bienvenido a PROMPTVAULT!</h2>
                         <p class="welcome-description">
-                            Inicia sesión y accede al sistema de gestión de prompts de IA. Organiza, versiona y comparte tus prompts más efectivos con control total y colaboración en equipo.
+                            Tu plataforma centralizada para gestionar prompts de IA. Organiza, versiona y colabora con tu equipo. Maximiza la efectividad de tus interacciones con sistemas de inteligencia artificial.
                         </p>
                     </div>
 
-                    <!-- Sección de redes sociales -->
+                    <!-- Sección de funcionalidades -->
                     <div class="social-section">
-                        <p class="social-text">¿Necesitas ayuda con la plataforma?</p>
-                        <p class="social-title">¡Contáctanos!</p>
+                        <p class="social-text">¿Qué puedes hacer en la plataforma?</p>
+                        <p class="social-title">¡Explora nuestras funcionalidades!</p>
                         <div class="social-media-links">
-                            <a href="#" class="social-link tiktok" title="TikTok">
+                            <a href="#" class="social-link tiktok" title="Biblioteca de Prompts">
                                 <div class="social-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
                                     </svg>
                                 </div>
-                                <span>TikTok</span>
+                                <span>Biblioteca</span>
                             </a>
-                            <a href="#" class="social-link facebook" title="Facebook">
+                            <a href="#" class="social-link facebook" title="Versionado">
                                 <div class="social-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        <path d="M12 6v6l5 3"/>
                                     </svg>
                                 </div>
-                                <span>Facebook</span>
+                                <span>Versionado</span>
                             </a>
-                            <a href="#" class="social-link instagram" title="Instagram">
+                            <a href="#" class="social-link instagram" title="Colaboración">
                                 <div class="social-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                                     </svg>
                                 </div>
-                                <span>Instagram</span>
+                                <span>Colaboración</span>
                             </a>
-                            <a href="#" class="social-link whatsapp" title="WhatsApp">
+                            <a href="#" class="social-link whatsapp" title="IA Integrada">
                                 <div class="social-icon">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                        <path d="M12 8v8M8 12h8"/>
                                     </svg>
                                 </div>
-                                <span>WhatsApp</span>
+                                <span>IA Integrada</span>
                             </a>
                         </div>
                     </div>
