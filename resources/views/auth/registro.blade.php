@@ -4,20 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Tech Home</title>
+    <title>Registro - PromptVault</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Únete a la Asociación 1ro de Junio. Registro seguro para conductores de mototaxi y miembros de nuestra comunidad.">
-    <meta name="keywords" content="registro, asociación, mototaxi, 1ro de junio, conductores, transporte">
+    <meta name="description" content="Únete a PromptVault. Registro seguro para gestionar tus prompts de IA de forma centralizada.">
+    <meta name="keywords" content="registro, prompts, IA, inteligencia artificial, gestión">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Registro - Asociación 1ro de Junio">
-    <meta property="og:description" content="Únete a nuestra asociación de conductores de mototaxi">
+    <meta property="og:title" content="Registro - PromptVault">
+    <meta property="og:description" content="Únete a nuestra plataforma de gestión de prompts de IA">
     <meta property="og:type" content="website">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('images/faviconTH.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
     <!-- CSS -->
     <link rel="stylesheet" href="{{ asset('css/auth/registro.css') }}?v={{ time() }}">
@@ -87,17 +87,16 @@
                     <div class="brand-section">
                         <div class="logo-container">
                             <div class="logo-backdrop"></div>
-                            <img src="{{ asset('images/LogoTech.png') }}" alt="Logo" class="brand-logo">
+                            <h1 style="color: #fff; font-size: 3rem; font-weight: 900; margin: 0;">📝 PromptVault</h1>
                         </div>
                         <div class="brand-line"></div>
                     </div>
 
                     <!-- Mensaje profesional -->
                     <div class="welcome-section">
-                        <h2 class="welcome-title">¡Únete a TECH HOME!</h2>
+                        <h2 class="welcome-title">¡Únete a PromptVault!</h2>
                         <p class="welcome-description">
-                            Forma parte de la comunidad educativa más innovadora en tecnología. Accede a cursos especializados, 
-                            certificaciones y una plataforma completa de aprendizaje digital.
+                            Forma parte de la comunidad de usuarios que gestionan sus prompts de IA de manera profesional. Organiza, versiona y colabora con control total sobre tus prompts.
                         </p>
                     </div>
 
@@ -212,7 +211,7 @@
                     @else
                     <div class="form-header">
                         <h2 class="form-title">Crear Cuenta</h2>
-                        <p class="form-subtitle">Ingresa tus datos para unirte al instituto TECH HOME</p>
+                        <p class="form-subtitle">Ingresa tus datos para unirte a PromptVault</p>
                     </div>
                     @endif
 
@@ -288,9 +287,8 @@
                     </form>
                     @else
                     <!-- Paso 1: Registro inicial -->
-                    <form class="register-form" method="POST" action="{{ route('register.submit') }}" id="registerForm">
+                    <form class="register-form" method="POST" action="{{ route('register') }}" id="registerForm">
                         @csrf
-                        <input type="hidden" name="step" value="register">
 
                         <!-- Fila de nombre y apellido -->
                         <div class="form-row">
@@ -457,14 +455,14 @@
                                 <input type="checkbox" name="acepta_terminos" id="acepta_terminos" class="checkbox-input" required {{ old('acepta_terminos') ? 'checked' : '' }}>
                                 <span class="checkbox-text">
                                     Acepto los <a href="#" class="link-terms">Términos y Condiciones</a>
-                                    y la <a href="#" class="link-privacy">Política de Privacidad</a> de TECH HOME.
+                                    y la <a href="#" class="link-privacy">Política de Privacidad</a> de PromptVault.
                                 </span>
                             </label>
 
                             <label class="checkbox-label">
                                 <input type="checkbox" name="acepta_marketing" id="acepta_marketing" class="checkbox-input" {{ old('acepta_marketing') ? 'checked' : '' }}>
                                 <span class="checkbox-text">
-                                    Deseo recibir información sobre nuevos cursos, certificaciones y novedades de la plataforma.
+                                    Deseo recibir información sobre nuevas funcionalidades, tips de prompts y novedades de la plataforma.
                                 </span>
                             </label>
                         </div>
@@ -502,14 +500,14 @@
                             </a>
                         </div>
                         <div class="back-to-login">
-                            <p>¿Ya tienes cuenta en TECH HOME?</p>
+                            <p>¿Ya tienes cuenta en PromptVault?</p>
                             <a href="{{ route('login') }}" class="login-link">
                                 ¡Inicia sesión aquí!
                             </a>
                         </div>
                         @else
                         <div class="back-to-login">
-                            <p>¿Ya tienes cuenta en TECH HOME?</p>
+                            <p>¿Ya tienes cuenta en PromptVault?</p>
                             <a href="{{ route('login') }}" class="login-link">
                                 ¡Inicia sesión aquí!
                             </a>

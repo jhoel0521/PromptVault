@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña - Tech Home</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/faviconTH.png') }}">
+    <title>Recuperar Contraseña - PromptVault</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
     <!-- Precargar fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,13 +16,13 @@
     <link rel="stylesheet" href="{{ asset('css/auth/recuperar.css') }}?v={{ time() }}">
 
     <!-- Meta tags para SEO -->
-    <meta name="description" content="Recupera tu contraseña en la Asociación 1ro de Junio. Sistema administrativo para gestión de conductores y servicios de mototaxi.">
-    <meta name="keywords" content="recuperar, contraseña, asociación, mototaxi, password, reset">
+    <meta name="description" content="Recupera tu contraseña en PromptVault. Sistema de gestión de prompts de IA.">
+    <meta name="keywords" content="recuperar, contraseña, prompts, IA, password, reset">
     <meta name="robots" content="noindex, nofollow">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Recuperar Contraseña - Asociación 1ro de Junio">
-    <meta property="og:description" content="Recupera tu contraseña en la Asociación 1ro de Junio">
+    <meta property="og:title" content="Recuperar Contraseña - PromptVault">
+    <meta property="og:description" content="Recupera tu contraseña en PromptVault">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ url()->current() }}">
 </head>
@@ -91,7 +91,7 @@
                     <div class="brand-section">
                         <div class="logo-container">
                             <div class="logo-backdrop"></div>
-                            <img src="{{ asset('images/LogoTech.png') }}" alt="TECH HOME" class="brand-logo">
+                            <h1 style="color: #fff; font-size: 3rem; font-weight: 900; margin: 0;">📝 PromptVault</h1>
                         </div>
                         <div class="brand-text">
                             <div class="brand-line"></div>
