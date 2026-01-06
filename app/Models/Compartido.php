@@ -12,11 +12,20 @@ class Compartido extends Model
         'nombre_destinatario',
         'email_destinatario',
         'fecha_compartido',
-        'notas'
+        'notas',
+        'token',
+        'tipo_acceso',
+        'fecha_expiracion',
+        'requiere_autenticacion',
+        'veces_accedido',
+        'ultimo_acceso'
     ];
 
     protected $casts = [
-        'fecha_compartido' => 'datetime'
+        'fecha_compartido' => 'datetime',
+        'fecha_expiracion' => 'datetime',
+        'ultimo_acceso' => 'datetime',
+        'requiere_autenticacion' => 'boolean'
     ];
 
     public function prompt(): BelongsTo
