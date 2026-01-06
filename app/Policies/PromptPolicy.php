@@ -13,7 +13,7 @@ class PromptPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,7 +21,7 @@ class PromptPolicy
      */
     public function view(User $user, Prompt $prompt): bool
     {
-        return false;
+        return $user->id === $prompt->user_id || $prompt->es_publico;
     }
 
     /**
@@ -29,7 +29,7 @@ class PromptPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -37,7 +37,7 @@ class PromptPolicy
      */
     public function update(User $user, Prompt $prompt): bool
     {
-        return false;
+        return $user->id === $prompt->user_id;
     }
 
     /**
@@ -45,7 +45,7 @@ class PromptPolicy
      */
     public function delete(User $user, Prompt $prompt): bool
     {
-        return false;
+        return $user->id === $prompt->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class PromptPolicy
      */
     public function restore(User $user, Prompt $prompt): bool
     {
-        return false;
+        return $user->id === $prompt->user_id;
     }
 
     /**
@@ -61,6 +61,6 @@ class PromptPolicy
      */
     public function forceDelete(User $user, Prompt $prompt): bool
     {
-        return false;
+        return $user->id === $prompt->user_id;
     }
 }
