@@ -219,7 +219,7 @@ body.dark-mode .footer-bottom {
 /* Brand Section */
 .footer-brand-section {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.85rem;
 }
 
