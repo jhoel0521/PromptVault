@@ -28,17 +28,30 @@ class SidebarManager {
         if (!this.themeSwitch) return;
 
         // Load saved theme
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") {
-            document.body.classList.add("dark-mode");
-            this.themeSwitch.checked = true;
-        }
+        const savedTheme = localStorage.getItem("theme") || "dark";
+        this.applyTheme(savedTheme);
+        this.themeSwitch.checked = savedTheme === "light";
 
         this.themeSwitch.addEventListener("change", (e) => {
-            const isDark = e.target.checked;
-            document.body.classList.toggle("dark-mode", isDark);
-            localStorage.setItem("theme", isDark ? "dark" : "light");
+            const newTheme = e.target.checked ? "light" : "dark";
+            this.applyTheme(newTheme);
         });
+    }
+
+    applyTheme(theme) {
+        // Apply theme to both data-theme attribute and body class
+        document.documentElement.setAttribute('data-theme', theme);
+        document.body.classList.remove('light-mode', 'dark-mode');
+        document.body.classList.add(theme === 'light' ? 'light-mode' : 'dark-mode');
+        localStorage.setItem('theme', theme);
+        
+        // Update theme text if exists
+        const themeText = document.querySelector('.theme-text');
+        if (themeText) {
+            themeText.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
+        }
+        
+        console.log(`🎨 Tema aplicado: ${theme}`);
     }
 
     setupMobileToggle() {
