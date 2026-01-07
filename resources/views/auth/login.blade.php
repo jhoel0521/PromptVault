@@ -90,15 +90,10 @@
                 </div>
 
                 <div class="branding-content">
-                    <!-- Logo y marca - Diseño profesional -->
+                    <!-- Logo completo -->
                     <div class="brand-section">
                         <div class="logo-container">
-                            <div class="logo-backdrop"></div>
-                            <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault Logo" class="brand-logo" style="max-width: 180px; height: auto; margin-bottom: 15px;">
-                        </div>
-                        <h1 style="color: #fff; font-size: 2.8rem; font-weight: 900; margin: 10px 0; font-family: 'Montserrat', sans-serif; letter-spacing: 4px; text-transform: uppercase; line-height: 1.2;">PROMPTVAULT</h1>
-                        <div class="brand-text">
-                            <div class="brand-line"></div>
+                            <img src="{{ asset('images/LogoCompletoLogin.png') }}" alt="PromptVault" class="brand-logo" style="max-width: 100%; height: auto; margin: 0 auto; display: block;">
                         </div>
                     </div>
 
