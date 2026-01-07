@@ -99,6 +99,9 @@
 
                     <!-- Mensaje profesional -->
                     <div class="welcome-section" style="margin-bottom: 25px;">
+                        <h2 class="welcome-title" style="font-size: 1.5rem; margin-bottom: 12px; font-weight: 700; text-align: center; color: #fff; font-family: 'Montserrat', sans-serif;">
+                            Gestiona tus Prompts<br>con Inteligencia
+                        </h2>
                         <p class="welcome-description" style="font-size: 0.9rem; line-height: 1.4; text-align: center; color: #e0e0e0;">
                             Sistema de gestión centralizada de prompts de IA con versionado automático, colaboración en tiempo real y organización inteligente por categorías y etiquetas.
                         </p>
