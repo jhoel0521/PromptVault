@@ -42,12 +42,12 @@
 .logo-icon {
     width: 40px; /* Smaller, compact */
     height: 40px;
-    background: linear-gradient(135deg, #ef4444, #dc2626);
+    background: #ffffff;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-logo {

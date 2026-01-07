@@ -226,12 +226,12 @@ body.dark-mode .footer-bottom {
 .logo-icon-red {
     width: 42px;
     height: 42px;
-    background: linear-gradient(135deg, #e11d48, #be123c);
+    background: #ffffff;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
     margin-top: -2px;
 }
