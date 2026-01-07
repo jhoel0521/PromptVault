@@ -18,7 +18,19 @@
     <!-- Contenedor de Navegación con Scroll -->
     <div class="sidebar-scroll-content">
         
-        @if(session('user_role') == 'admin')
+        @php
+            // Obtener el rol del usuario autenticado
+            $user = Auth::user();
+            $userRole = 'guest';
+            
+            if ($user && $user->role) {
+                $userRole = $user->role->nombre;
+            } elseif (session()->has('user_role')) {
+                $userRole = session('user_role');
+            }
+        @endphp
+        
+        @if($userRole == 'admin')
         <!-- Sección: Biblioteca de Prompts (ADMIN) -->
         <div class="nav-section">
             <h3 class="section-title">BIBLIOTECA</h3>
@@ -371,7 +383,7 @@
             </ul>
         </div>
         
-        @elseif(session('user_role') == 'user')
+        @elseif($userRole == 'user')
         <!-- Sección: Mi Biblioteca (USER) -->
         <div class="nav-section">
             <h3 class="section-title">MI BIBLIOTECA</h3>
@@ -525,7 +537,7 @@
             </ul>
         </div>
         
-        @elseif(session('user_role') == 'collaborator')
+        @elseif($userRole == 'collaborator')
         <!-- Sección: Colaboración (COLLABORATOR) -->
         <div class="nav-section">
             <h3 class="section-title">COLABORACIÓN</h3>

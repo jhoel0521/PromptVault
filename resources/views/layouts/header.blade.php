@@ -3,14 +3,24 @@
     <!-- Left: Brand & Search -->
     <div class="header-left">
         <div class="header-brand">
+            @php
+                $userRole = session('user_role', 'guest');
+                $titles = [
+                    'admin' => 'Dashboard Admin',
+                    'user' => 'Dashboard Usuario',
+                    'collaborator' => 'Dashboard Colaborador',
+                    'guest' => 'Dashboard Invitado'
+                ];
+                $headerTitle = $titles[$userRole] ?? 'PromptVault';
+            @endphp
             <h1 class="brand-text">
                 <a href="{{ route('dashboard') }}" style="text-decoration: none; color: inherit;">
-                    {{ $header_title ?? 'PROMPTVAULT' }}
+                    {{ $headerTitle }}
                 </a>
             </h1>
         </div>
         <div class="header-search">
-            <form action="#" method="GET" class="search-form">
+            <form action="{{ route('prompts.index') }}" method="GET" class="search-form">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -279,4 +289,4 @@
     </div>
 </header>
 <!-- Header JS Loaded Here -->
-<script src="{{ asset('js/components/header.js') }}"></script>
+<script src="{{ asset('JavaScript/components/header.js') }}"></script>
