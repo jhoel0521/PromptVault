@@ -6,11 +6,10 @@
         @endphp
         <a href="{{ route($dashboardRoute) }}" class="logo-container" style="text-decoration: none;">
             <div class="logo-icon">
-                <img src="{{ asset('images/LogoPestañaPrompt.jpg') }}" alt="PromptVault" class="sidebar-logo">
+                <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault" class="sidebar-logo">
             </div>
             <div class="logo-text">
-                <h1 class="brand-name">PROMPTVAULT</h1>
-                <span class="brand-subtitle">Gestión de Prompts IA</span>
+                <h1 class="brand-name">PromptVault</h1>
             </div>
         </a>
     </div>
