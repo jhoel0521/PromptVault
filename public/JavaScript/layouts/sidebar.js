@@ -39,6 +39,7 @@ class SidebarManager {
     this.sidebarOverlay = document.querySelector('.sidebar-overlay');
     this.navItems = Array.from(document.querySelectorAll('.nav-item'));
     this.collapseBtn = document.querySelector('.collapse-btn');
+    this.themeSwitch = document.getElementById('themeSwitch');
   }
 
   bindEvents() {
@@ -49,6 +50,12 @@ class SidebarManager {
     
     if (this.collapseBtn) {
       this.collapseBtn.addEventListener('click', this.toggleCollapse.bind(this));
+    }
+
+    // Theme toggle
+    if (this.themeSwitch) {
+      this.themeSwitch.addEventListener('change', this.toggleTheme.bind(this));
+      this.initTheme();
     }
 
     // Overlay click
@@ -741,8 +748,39 @@ document.head.appendChild(styleSheet);
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener("DOMContentLoaded", () => {
-  new SidebarManager();
+  const sidebarManager = new SidebarManager();
+  
+  // Setup theme toggle
+  const themeSwitch = document.getElementById('themeSwitch');
+  if (themeSwitch) {
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(savedTheme);
+    themeSwitch.checked = savedTheme === 'light';
+    
+    // Listen for theme changes
+    themeSwitch.addEventListener('change', function() {
+      const newTheme = this.checked ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+  }
 });
+
+// Theme functions
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.body.classList.remove('light-mode', 'dark-mode');
+  document.body.classList.add(theme === 'light' ? 'light-mode' : 'dark-mode');
+  localStorage.setItem('theme', theme);
+  
+  // Update theme text
+  const themeText = document.querySelector('.theme-text');
+  if (themeText) {
+    themeText.textContent = theme === 'dark' ? 'Oscuro' : 'Claro';
+  }
+  
+  console.log(`🎨 Tema cambiado a: ${theme}`);
+}
 
 // Exportar para uso global
 window.SidebarManager = SidebarManager;
