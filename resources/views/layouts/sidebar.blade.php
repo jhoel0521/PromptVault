@@ -6,7 +6,7 @@
         @endphp
         <a href="{{ route($dashboardRoute) }}" class="logo-container" style="text-decoration: none;">
             <div class="logo-icon">
-                <img src="{{ asset('images/LogoPestañaPrompt.jpg') }}" alt="PromptVault" class="sidebar-logo">
+                <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault" class="sidebar-logo" style="width: 80px; height: 80px; object-fit: contain;">
             </div>
             <div class="logo-text">
                 <h1 class="brand-name">PromptVault</h1>

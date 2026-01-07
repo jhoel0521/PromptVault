@@ -98,7 +98,7 @@
             <!-- Brand -->
             <div class="footer-brand-section">
                 <div class="logo-icon-red">
-                    <img src="{{ asset('images/LogoPestañaPrompt.jpg') }}" alt="PromptVault Logo" class="logo-image">
+                    <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault Logo" class="logo-image" style="width: 70px; height: 70px; object-fit: contain;">
                 </div>
                 <div class="brand-text">
                     <span class="brand-title">PROMPTVAULT</span>
