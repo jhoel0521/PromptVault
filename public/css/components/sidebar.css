@@ -119,8 +119,7 @@ body.dark-mode .brand-subtitle {
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 0.8rem;
-    padding-left: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding: 0.6rem 0.5rem;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -130,6 +129,8 @@ body.dark-mode .brand-subtitle {
     gap: 0.5rem;
     border-bottom: 2px solid rgba(255, 255, 255, 0.1);
     position: relative;
+    border-radius: 8px;
+    background: transparent;
 }
 
 .section-title::after {
@@ -144,7 +145,8 @@ body.dark-mode .brand-subtitle {
 }
 
 .section-title:hover {
-    color: var(--primary-red);
+    background: rgba(239, 68, 68, 0.1);
+    transform: translateX(2px);
 }
 
 .section-title:hover::after {
@@ -191,7 +193,7 @@ body.dark-mode .section-title {
 }
 
 body.dark-mode .section-title:hover {
-    color: var(--primary-red);
+    background: rgba(239, 68, 68, 0.15);
 }
 
 .nav-list {
