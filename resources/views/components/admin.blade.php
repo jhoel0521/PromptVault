@@ -343,6 +343,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Row 3: Additional Charts -->
+                    <div class="analytics-row-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
+                        
+                        <!-- Chart: Prompts por Categoría -->
+                        <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
+                            <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">Prompts por Categoría</h3>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Top 5</button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="position: relative;">
+                                <canvas id="categoriesChart" height="250"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart: Usuarios Más Activos -->
+                        <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
+                            <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">Usuarios Más Activos</h3>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Top 5</button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="position: relative;">
+                                <canvas id="activeUsersChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
             </div>
@@ -496,6 +526,69 @@
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { position: 'bottom', labels: { color: '#fff', padding: 10, font: { size: 11 } } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico: Prompts por Categoría
+            const ctxCategories = document.getElementById('categoriesChart');
+            if (ctxCategories) {
+                @php
+                    $topCategories = \App\Models\Categoria::withCount('prompts')
+                        ->orderBy('prompts_count', 'desc')
+                        ->take(5)
+                        ->get();
+                @endphp
+                new Chart(ctxCategories, {
+                    type: 'bar',
+                    data: {
+                        labels: [@foreach($topCategories as $c)'{{ $c->nombre }}',@endforeach],
+                        datasets: [{
+                            label: 'Prompts',
+                            data: [@foreach($topCategories as $c){{ $c->prompts_count }},@endforeach],
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } },
+                            x: { grid: { display: false }, ticks: { color: '#fff' } }
+                        }
+                    }
+                });
+            }
+
+            // Gráfico: Usuarios Más Activos
+            const ctxActiveUsers = document.getElementById('activeUsersChart');
+            if (ctxActiveUsers) {
+                @php
+                    $activeUsers = \App\Models\User::withCount('actividades')
+                        ->orderBy('actividades_count', 'desc')
+                        ->take(5)
+                        ->get();
+                @endphp
+                new Chart(ctxActiveUsers, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: [@foreach($activeUsers as $u)'{{ $u->name }}',@endforeach],
+                        datasets: [{
+                            label: 'Actividades',
+                            data: [@foreach($activeUsers as $u){{ $u->actividades_count }},@endforeach],
+                            backgroundColor: '#e11d48'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            x: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#fff' } },
+                            y: { grid: { display: false }, ticks: { color: '#fff' } }
                         }
                     }
                 });

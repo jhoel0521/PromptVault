@@ -342,6 +342,36 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Row 3: Additional Charts -->
+                    <div class="analytics-row-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
+                        
+                        <!-- Chart: Prompts por Categoría -->
+                        <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
+                            <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">Prompts por Categoría</h3>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Top 5</button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="position: relative;">
+                                <canvas id="categoriesChart" height="250"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Chart: Usuarios Más Activos -->
+                        <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
+                            <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
+                                <h3 class="card-title">Usuarios Más Activos</h3>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Top 5</button>
+                                </div>
+                            </div>
+                            <div class="card-body" style="position: relative;">
+                                <canvas id="activeUsersChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
             </div>
