@@ -473,11 +473,11 @@
                 });
             }
 
-            // Gráfico: Prompts Compartidos por Usuario
+            // Gráfico: Prompts Compartidos
             const ctxResources = document.getElementById('resourcesBarChart');
             if (ctxResources) {
                 @php
-                    $topShared = \App\Models\User::withCount('compartidos')
+                    $topShared = \App\Models\Prompt::withCount('compartidos')
                         ->orderBy('compartidos_count', 'desc')
                         ->take(5)
                         ->get();
@@ -485,9 +485,9 @@
                 new Chart(ctxResources, {
                     type: 'doughnut',
                     data: {
-                        labels: [@foreach($topShared as $u)'{{ $u->name }}',@endforeach],
+                        labels: [@foreach($topShared as $p)'{{ Str::limit($p->titulo, 20) }}',@endforeach],
                         datasets: [{
-                            data: [@foreach($topShared as $u){{ $u->compartidos_count }},@endforeach],
+                            data: [@foreach($topShared as $p){{ $p->compartidos_count }},@endforeach],
                             backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
                         }]
                     },
