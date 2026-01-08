@@ -173,7 +173,7 @@
                                             <tr class="hover-scale">
                                                 <td class="ps-3">
                                                     <div class="user-info-compact">
-                                                        <div class="user-avatar-xs {{ $user->rol === 'admin' ? 'pulse-red' : '' }}">{{ substr($user->name, 0, 1) }}</div>
+                                                        <div class="user-avatar-xs {{ $user->role && $user->role->nombre === 'admin' ? 'pulse-red' : '' }}">{{ substr($user->name, 0, 1) }}</div>
                                                         <div class="d-flex align-items-center">
                                                             <span class="user-name-styled">{{ $user->name }}</span>
                                                         </div>
@@ -181,11 +181,12 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <span class="badge-modern-red">
-                                                        @if($user->rol == 'admin') <i class="fas fa-crown"></i>
-                                                        @elseif($user->rol == 'docente') <i class="fas fa-chalkboard-teacher"></i>
-                                                        @else <i class="fas fa-user-graduate"></i>
+                                                        @if($user->role && $user->role->nombre == 'admin') <i class="fas fa-crown"></i>
+                                                        @elseif($user->role && $user->role->nombre == 'collaborator') <i class="fas fa-user-edit"></i>
+                                                        @elseif($user->role && $user->role->nombre == 'user') <i class="fas fa-user"></i>
+                                                        @else <i class="fas fa-user-circle"></i>
                                                         @endif
-                                                        {{ ucfirst($user->rol) }}
+                                                        {{ $user->role ? ucfirst($user->role->nombre) : 'Guest' }}
                                                     </span>
                                                 </td>
                                                 <td class="text-center">
@@ -253,16 +254,16 @@
                                     <span class="legend-text">Admin <span style="opacity: 0.7;">({{ round(($roleDistribution['admin'] ?? 0) / $total * 100) }}%)</span></span>
                                 </div>
 
-                                <!-- Docente -->
-                                <div class="legend-item-compact">
-                                    <div class="legend-box" style="background: #a855f7;"></div>
-                                    <span class="legend-text">Docente <span style="opacity: 0.7;">({{ round(($roleDistribution['docente'] ?? 0) / $total * 100) }}%)</span></span>
-                                </div>
-
-                                <!-- Estudiante -->
+                                <!-- User -->
                                 <div class="legend-item-compact">
                                     <div class="legend-box" style="background: #10b981;"></div>
-                                    <span class="legend-text">Estud. <span style="opacity: 0.7;">({{ round(($roleDistribution['estudiante'] ?? 0) / $total * 100) }}%)</span></span>
+                                    <span class="legend-text">User <span style="opacity: 0.7;">({{ round(($roleDistribution['user'] ?? 0) / $total * 100) }}%)</span></span>
+                                </div>
+
+                                <!-- Collaborator -->
+                                <div class="legend-item-compact">
+                                    <div class="legend-box" style="background: #a855f7;"></div>
+                                    <span class="legend-text">Collab. <span style="opacity: 0.7;">({{ round(($roleDistribution['collaborator'] ?? 0) / $total * 100) }}%)</span></span>
                                 </div>
                             </div>
                         </div>
@@ -278,10 +279,10 @@
                     <!-- Row 1: Large Charts (Attendance & Activity) -->
                     <div class="analytics-row-1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
                         
-                        <!-- Chart: Asistencia Mensual -->
+                        <!-- Chart: Prompts Creados -->
                         <div class="dashboard-card glow-effect h-100" style="overflow: hidden;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Asistencia Mensual</h3>
+                                <h3 class="card-title">Prompts Creados</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -312,10 +313,10 @@
                     <!-- Row 2: Small Charts (Grades, Resources) -->
                     <div class="analytics-row-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
                         
-                        <!-- Chart: Promedios -->
+                        <!-- Chart: Versiones por Prompt -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Promedios</h3>
+                                <h3 class="card-title">Versiones por Prompt</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -327,10 +328,10 @@
                             </div>
                         </div>
 
-                        <!-- Chart: Recursos -->
+                        <!-- Chart: Prompts Compartidos -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Recursos</h3>
+                                <h3 class="card-title">Prompts Compartidos</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
