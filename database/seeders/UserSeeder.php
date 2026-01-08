@@ -15,7 +15,6 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $usuarios = [
-            ['name' => 'Usuario Demo', 'email' => 'user@promptvault.com', 'role_id' => 2],
             ['name' => 'Colaborador Demo', 'email' => 'colaborador@promptvault.com', 'role_id' => 3],
             ['name' => 'Invitado Demo', 'email' => 'invitado@promptvault.com', 'role_id' => 4],
             ['name' => 'Carlos Martínez', 'email' => 'carlos@dev.com', 'role_id' => 2],
