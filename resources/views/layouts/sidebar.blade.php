@@ -1,66 +1,24 @@
-<aside class="dashboard-sidebar" id="systemSidebar">
-    <!-- Header del Sidebar -->
-    <div class="sidebar-header">
-        @php
-            $dashboardRoute = 'dashboard';
-        @endphp
-        <a href="{{ route($dashboardRoute) }}" class="logo-container" style="text-decoration: none;">
-            <div class="logo-icon">
-                <img src="{{ asset('images/LogoLoginPrompt.png') }}" alt="PromptVault" class="sidebar-logo" style="width: 50px; height: 50px; object-fit: contain;">
-            </div>
-            <div class="logo-text">
-                <h1 class="brand-name">PromptVault</h1>
-                <span class="brand-subtitle">Gestión de Prompts IA</span>
-            </div>
-        </a>
-    </div>
+@php
+    // Obtener el rol del usuario autenticado
+    $user = Auth::user();
+    $userRole = 'guest';
+    
+    if ($user && $user->role) {
+        $userRole = $user->role->nombre;
+    } elseif (session()->has('user_role')) {
+        $userRole = session('user_role');
+    }
+    
+    // Determinar qué sidebar incluir según el rol
+    $sidebarComponent = match($userRole) {
+        'admin' => 'layouts.sidebarAdmin',
+        'user' => 'layouts.sidebarUser',
+        'collaborator' => 'layouts.sidebarCollaborator',
+        default => 'layouts.sidebarGuest',
+    };
+@endphp
 
-    <!-- Contenedor de Navegación con Scroll -->
-    <div class="sidebar-scroll-content">
-        
-        @php
-            // Obtener el rol del usuario autenticado
-            $user = Auth::user();
-            $userRole = 'guest';
-            
-            if ($user && $user->role) {
-                $userRole = $user->role->nombre;
-            } elseif (session()->has('user_role')) {
-                $userRole = session('user_role');
-            }
-        @endphp
-        
-        @if($userRole == 'admin')
-        <!-- Sección: Biblioteca de Prompts (ADMIN) -->
-        <div class="nav-section">
-            <h3 class="section-title">BIBLIOTECA</h3>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="{{ route('prompts.index') }}" class="nav-link {{ request()->routeIs('prompts.index') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Todos los Prompts</span>
-                        <span class="nav-badge">{{ \App\Models\Prompt::count() }}</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('prompts.create') }}" class="nav-link {{ request()->routeIs('prompts.create') ? 'active' : '' }}">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="12" y1="8" x2="12" y2="16"></line>
-                                <line x1="8" y1="12" x2="16" y2="12"></line>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Crear Prompt</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    </a>
-                </li>
+
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <span class="nav-icon">
