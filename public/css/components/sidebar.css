@@ -127,30 +127,13 @@ body.dark-mode .brand-subtitle {
     user-select: none;
     transition: all 0.3s ease;
     gap: 0.5rem;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-    position: relative;
     border-radius: 8px;
     background: transparent;
-}
-
-.section-title::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--primary-red);
-    transition: width 0.3s ease;
 }
 
 .section-title:hover {
     background: rgba(239, 68, 68, 0.1);
     transform: translateX(2px);
-}
-
-.section-title:hover::after {
-    width: 100%;
 }
 
 .section-title-icon {
