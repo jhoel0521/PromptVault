@@ -21,13 +21,31 @@ Rol: Admin
 Permisos: Acceso total al sistema
 ```
 
-### Usuario Demo
+### Usuario Estándar
 
 ```
 Email: user@promptvault.com
 Contraseña: password
 Rol: User
-Permisos: Usuario estándar
+Permisos: Usuario estándar - Gestión de prompts propios
+```
+
+### Colaborador
+
+```
+Email: colaborador@promptvault.com
+Contraseña: password
+Rol: Collaborator
+Permisos: Usuario + Edición de prompts compartidos
+```
+
+### Invitado
+
+```
+Email: invitado@promptvault.com
+Contraseña: password
+Rol: Guest
+Permisos: Acceso limitado - Solo lectura de prompts públicos
 ```
 
 ### Usuarios Adicionales de Prueba
