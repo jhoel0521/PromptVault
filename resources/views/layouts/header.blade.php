@@ -182,8 +182,16 @@
                 $loggedInUser = auth()->user() ?? (session('user_id') ? \App\Models\User::find(session('user_id')) : null);
                 $initial = $loggedInUser ? substr($loggedInUser->name, 0, 1) : (session('user_name') ? substr(session('user_name'), 0, 1) : 'U');
                 $userName = $loggedInUser ? $loggedInUser->name : (session('user_name') ?? 'Usuario');
-                $userRole = $loggedInUser ? ($loggedInUser->rol ?? 'Admin') : 'ADMIN';
-                $userEmail = $loggedInUser ? $loggedInUser->email : (session('user_email') ?? 'admin@sistema.com');
+                
+                // Obtener el rol correctamente desde la relación
+                $roleName = 'Guest';
+                if ($loggedInUser && $loggedInUser->role) {
+                    $roleName = ucfirst($loggedInUser->role->nombre);
+                } elseif (session('user_role')) {
+                    $roleName = ucfirst(session('user_role'));
+                }
+                
+                $userEmail = $loggedInUser ? $loggedInUser->email : (session('user_email') ?? 'usuario@promptvault.com');
             @endphp
 
             <button class="profile-trigger" id="profileDropdownToggle" aria-expanded="false">
@@ -196,7 +204,7 @@
                 </div>
                 <div class="user-meta-compact">
                     <span class="user-name">{{ $userName }}</span>
-                    <span class="user-role-badge">{{ $userRole }}</span>
+                    <span class="user-role-badge">{{ $roleName }}</span>
                 </div>
                 <svg class="dropdown-arrow-small" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
