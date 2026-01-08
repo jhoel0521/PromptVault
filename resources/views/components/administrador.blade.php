@@ -191,7 +191,12 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <span class="session-time">
-                                                        <i class="fas fa-history text-danger me-1"></i> Hace {{ rand(1, 59) }} min
+                                                        <i class="fas fa-history text-danger me-1"></i> 
+                                                        @if($user->updated_at)
+                                                            {{ $user->updated_at->diffForHumans() }}
+                                                        @else
+                                                            Hace poco
+                                                        @endif
                                                     </span>
                                                 </td>
                                                 <td class="text-center">
@@ -235,19 +240,11 @@
                         <div class="card-body d-flex flex-column align-items-center justify-content-center pt-2 pb-4 flex-grow-1" style="gap: 2rem;">
                             
                             @php
-                                // Contar usuarios por rol
+                                // Contar usuarios por rol desde la BD
                                 $adminCount = \App\Models\User::where('role_id', 1)->count();
                                 $userCount = \App\Models\User::where('role_id', 2)->count();
                                 $collabCount = \App\Models\User::where('role_id', 3)->count();
                                 $totalUsers = $adminCount + $userCount + $collabCount;
-                                
-                                // Si no hay usuarios, usar valores de ejemplo
-                                if ($totalUsers == 0) {
-                                    $adminCount = 3;
-                                    $userCount = 12;
-                                    $collabCount = 5;
-                                    $totalUsers = 20;
-                                }
                             @endphp
                             
                             <!-- Chart Area with Center Text -->
@@ -420,36 +417,73 @@
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
     @php
-        // Preparar datos para JavaScript
+        // ===== DATOS REALES DE LA BASE DE DATOS =====
+        
+        // 1. Conteo de usuarios por rol
         $adminCount = \App\Models\User::where('role_id', 1)->count();
         $userCount = \App\Models\User::where('role_id', 2)->count();
         $collabCount = \App\Models\User::where('role_id', 3)->count();
         
-        if (($adminCount + $userCount + $collabCount) == 0) {
-            $adminCount = 3;
-            $userCount = 12;
-            $collabCount = 5;
+        // 2. Prompts creados por día (últimos 7 días)
+        $promptsPerDay = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $count = \App\Models\Prompt::whereDate('created_at', $date)->count();
+            $promptsPerDay[] = $count;
         }
         
-        $rolesDataJson = json_encode([$adminCount, $userCount, $collabCount]);
+        // 3. Actividades por tipo
+        $allActividades = \App\Models\Actividad::all();
+        $creacion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'creó'))->count();
+        $edicion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'editó'))->count();
+        $compartir = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'compartió'))->count();
+        $version = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'versión'))->count();
+        $eliminacion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'eliminó'))->count();
+        
+        // 4. Top 5 prompts con más versiones
+        $topPrompts = \App\Models\Prompt::withCount('versiones')->orderBy('versiones_count', 'desc')->take(5)->get();
+        $topPromptsLabels = $topPrompts->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray();
+        $topPromptsData = $topPrompts->pluck('versiones_count')->toArray();
+        
+        // 5. Prompts más compartidos
+        $topShared = \App\Models\Prompt::withCount('compartidos')->orderBy('compartidos_count', 'desc')->take(5)->get();
+        $topSharedLabels = $topShared->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray();
+        $topSharedData = $topShared->pluck('compartidos_count')->toArray();
+        
+        // 6. Prompts por categoría (top 5 categorías)
+        $topCategorias = \App\Models\Categoria::withCount('prompts')->orderBy('prompts_count', 'desc')->take(5)->get();
+        $topCategoriesLabels = $topCategorias->pluck('nombre')->toArray();
+        $topCategoriesData = $topCategorias->pluck('prompts_count')->toArray();
+        
+        // 7. Usuarios más activos (por número de actividades)
+        $topUsers = \App\Models\User::withCount('actividades')->orderBy('actividades_count', 'desc')->take(5)->get();
+        $activeUsersLabels = $topUsers->pluck('name')->toArray();
+        $activeUsersData = $topUsers->pluck('actividades_count')->toArray();
+        
+        // Preparar todos los datos para JavaScript
+        $dashboardData = [
+            'promptsPerDay' => $promptsPerDay,
+            'actividadesPorTipo' => [$creacion, $edicion, $compartir, $version, $eliminacion],
+            'topPromptsLabels' => $topPromptsLabels,
+            'topPromptsData' => $topPromptsData,
+            'topSharedLabels' => $topSharedLabels,
+            'topSharedData' => $topSharedData,
+            'topCategoriesLabels' => $topCategoriesLabels,
+            'topCategoriesData' => $topCategoriesData,
+            'activeUsersLabels' => $activeUsersLabels,
+            'activeUsersData' => $activeUsersData,
+            'rolesData' => [$adminCount, $userCount, $collabCount]
+        ];
     @endphp
+    
+    <!-- Datos para JavaScript -->
+    <div id="dashboard-data" data-config="{{ json_encode($dashboardData) }}" style="display:none;"></div>
     
     <!-- Gráficas Chart.js -->
     <script>
-        // Datos estáticos de ejemplo para las gráficas
-        window.dashboardData = {
-            promptsPerDay: [3, 7, 5, 12, 8, 15, 10],
-            actividadesPorTipo: [25, 18, 12, 8, 5],
-            topPromptsLabels: ['Prompt Marketing', 'Prompt SEO', 'Prompt Diseño', 'Prompt Ventas', 'Prompt Código'],
-            topPromptsData: [12, 9, 7, 5, 3],
-            topSharedLabels: ['Prompt Social', 'Prompt Email', 'Prompt Blog', 'Prompt Ads', 'Prompt Copy'],
-            topSharedData: [10, 8, 6, 4, 2],
-            topCategoriesLabels: ['Desarrollo', 'Marketing', 'Diseño', 'Educación', 'Negocios'],
-            topCategoriesData: [20, 15, 12, 10, 8],
-            activeUsersLabels: ['Juan Pérez', 'María García', 'Carlos López', 'Ana Martínez', 'Luis Rodríguez'],
-            activeUsersData: [45, 32, 28, 19, 12],
-            rolesData: {!! $rolesDataJson !!}
-        };
+        // Cargar datos reales desde la base de datos
+        const dashboardDataElement = document.getElementById('dashboard-data');
+        window.dashboardData = JSON.parse(dashboardDataElement.getAttribute('data-config'));
         
         console.log('Dashboard Data:', window.dashboardData);
         console.log('Roles Data:', window.dashboardData.rolesData);
