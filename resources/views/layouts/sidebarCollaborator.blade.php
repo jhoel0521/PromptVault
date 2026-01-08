@@ -19,11 +19,10 @@
     <div class="sidebar-scroll-content">
         
         <!-- Sección: Colaboración (COLLABORATOR) -->
-        <div class="nav-section">
-            <h3 class="section-title" data-toggle="collapse">
+        <div class="nav-section always-open">
+            <h3 class="section-title">
                 <i class="fas fa-handshake section-title-icon"></i>
                 COLABORACIÓN
-                <i class="fas fa-chevron-down section-toggle-icon"></i>
             </h3>
             <ul class="nav-list">
                 <li class="nav-item">
