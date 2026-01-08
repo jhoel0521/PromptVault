@@ -421,11 +421,11 @@
                         datasets: [{
                             label: 'Actividades',
                             data: [
-                                {{ \App\Models\Actividad::where('tipo_actividad', 'creacion')->count() }},
-                                {{ \App\Models\Actividad::where('tipo_actividad', 'edicion')->count() }},
-                                {{ \App\Models\Actividad::where('tipo_actividad', 'compartir')->count() }},
-                                {{ \App\Models\Actividad::where('tipo_actividad', 'version')->count() }},
-                                {{ \App\Models\Actividad::where('tipo_actividad', 'eliminacion')->count() }}
+                                {{ \App\Models\Actividad::where('accion', 'creacion')->count() }},
+                                {{ \App\Models\Actividad::where('accion', 'edicion')->count() }},
+                                {{ \App\Models\Actividad::where('accion', 'compartir')->count() }},
+                                {{ \App\Models\Actividad::where('accion', 'version')->count() }},
+                                {{ \App\Models\Actividad::where('accion', 'eliminacion')->count() }}
                             ],
                             backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
                         }]

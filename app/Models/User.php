@@ -70,6 +70,11 @@ class User extends Authenticatable
         return $this->hasMany(Actividad::class);
     }
 
+    public function compartidos(): HasMany
+    {
+        return $this->hasMany(Compartido::class, 'user_id');
+    }
+
     public function sesionPrompt(): HasOne
     {
         return $this->hasOne(SesionPrompt::class);
