@@ -404,8 +404,76 @@
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
+    @php
+        // Preparar datos para JavaScript
+        $promptsPerDay = [
+            \App\Models\Prompt::whereDate('created_at', now()->subDays(6))->count(),
+            \App\Models\Prompt::whereDate('created_at', now()->subDays(5))->count(),
+            \App\Models\Prompt::whereDate('created_at', now()->subDays(4))->count(),
+            \App\Models\Prompt::whereDate('created_at', now()->subDays(3))->count(),
+            \App\Models\Prompt::whereDate('created_at', now()->subDays(2))->count(),
+            \App\Models\Prompt::whereDate('created_at', now()->subDays(1))->count(),
+            \App\Models\Prompt::whereDate('created_at', now())->count()
+        ];
+        
+        $actividadesPorTipo = [
+            \App\Models\Actividad::where('accion', 'creacion')->count(),
+            \App\Models\Actividad::where('accion', 'edicion')->count(),
+            \App\Models\Actividad::where('accion', 'compartir')->count(),
+            \App\Models\Actividad::where('accion', 'version')->count(),
+            \App\Models\Actividad::where('accion', 'eliminacion')->count()
+        ];
+        
+        $topPrompts = \App\Models\Prompt::withCount('versiones')
+            ->orderBy('versiones_count', 'desc')
+            ->take(5)
+            ->get();
+            
+        $topShared = \App\Models\Prompt::withCount('compartidos')
+            ->orderBy('compartidos_count', 'desc')
+            ->take(5)
+            ->get();
+            
+        $topCategories = \App\Models\Categoria::withCount('prompts')
+            ->orderBy('prompts_count', 'desc')
+            ->take(5)
+            ->get();
+            
+        $activeUsers = \App\Models\User::withCount('actividades')
+            ->orderBy('actividades_count', 'desc')
+            ->take(5)
+            ->get();
+            
+        $roleDistribution = [
+            'admin' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'admin'))->count(),
+            'user' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'user'))->count(),
+            'collaborator' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'collaborator'))->count(),
+        ];
+        
+        // Preparar el objeto completo de datos para JavaScript
+        $dashboardData = [
+            'promptsPerDay' => $promptsPerDay,
+            'actividadesPorTipo' => $actividadesPorTipo,
+            'topPromptsLabels' => $topPrompts->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray(),
+            'topPromptsData' => $topPrompts->pluck('versiones_count')->toArray(),
+            'topSharedLabels' => $topShared->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray(),
+            'topSharedData' => $topShared->pluck('compartidos_count')->toArray(),
+            'topCategoriesLabels' => $topCategories->pluck('nombre')->toArray(),
+            'topCategoriesData' => $topCategories->pluck('prompts_count')->toArray(),
+            'activeUsersLabels' => $activeUsers->pluck('name')->toArray(),
+            'activeUsersData' => $activeUsers->pluck('actividades_count')->toArray(),
+            'rolesData' => [$roleDistribution['admin'], $roleDistribution['user'], $roleDistribution['collaborator']]
+        ];
+    @endphp
+    
+    <!-- Datos para JavaScript -->
+    <div id="dashboard-data" data-config="{{ json_encode($dashboardData) }}" style="display:none;"></div>
+    
     <!-- Gráficas Chart.js -->
     <script>
+        // Cargar datos desde el elemento HTML
+        window.dashboardData = JSON.parse(document.getElementById('dashboard-data').getAttribute('data-config'));
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Gráfico: Prompts Creados por Día
             const ctxAttendance = document.getElementById('attendanceChart');
@@ -416,13 +484,7 @@
                         labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
                         datasets: [{
                             label: 'Prompts Creados',
-                            data: [{{ \App\Models\Prompt::whereDate('created_at', now()->subDays(6))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(5))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(4))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(3))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(2))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now()->subDays(1))->count() }}, 
-                                   {{ \App\Models\Prompt::whereDate('created_at', now())->count() }}],
+                            data: window.dashboardData.promptsPerDay,
                             borderColor: '#e11d48',
                             backgroundColor: 'rgba(225, 29, 72, 0.1)',
                             tension: 0.4,
@@ -450,13 +512,7 @@
                         labels: ['Creación', 'Edición', 'Compartir', 'Versión', 'Eliminación'],
                         datasets: [{
                             label: 'Actividades',
-                            data: [
-                                {{ \App\Models\Actividad::where('accion', 'creacion')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'edicion')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'compartir')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'version')->count() }},
-                                {{ \App\Models\Actividad::where('accion', 'eliminacion')->count() }}
-                            ],
+                            data: window.dashboardData.actividadesPorTipo,
                             backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
                         }]
                     },
@@ -475,19 +531,13 @@
             // Gráfico: Versiones por Prompt (Top 5 Prompts con más versiones)
             const ctxGrades = document.getElementById('gradesBarChart');
             if (ctxGrades) {
-                @php
-                    $topPrompts = \App\Models\Prompt::withCount('versiones')
-                        ->orderBy('versiones_count', 'desc')
-                        ->take(5)
-                        ->get();
-                @endphp
                 new Chart(ctxGrades, {
                     type: 'bar',
                     data: {
-                        labels: [@foreach($topPrompts as $p)'{{ Str::limit($p->titulo, 20) }}',@endforeach],
+                        labels: window.dashboardData.topPromptsLabels,
                         datasets: [{
                             label: 'Versiones',
-                            data: [@foreach($topPrompts as $p){{ $p->versiones_count }},@endforeach],
+                            data: window.dashboardData.topPromptsData,
                             backgroundColor: '#e11d48'
                         }]
                     },
@@ -506,18 +556,12 @@
             // Gráfico: Prompts Compartidos
             const ctxResources = document.getElementById('resourcesBarChart');
             if (ctxResources) {
-                @php
-                    $topShared = \App\Models\Prompt::withCount('compartidos')
-                        ->orderBy('compartidos_count', 'desc')
-                        ->take(5)
-                        ->get();
-                @endphp
                 new Chart(ctxResources, {
                     type: 'doughnut',
                     data: {
-                        labels: [@foreach($topShared as $p)'{{ Str::limit($p->titulo, 20) }}',@endforeach],
+                        labels: window.dashboardData.topSharedLabels,
                         datasets: [{
-                            data: [@foreach($topShared as $p){{ $p->compartidos_count }},@endforeach],
+                            data: window.dashboardData.topSharedData,
                             backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
                         }]
                     },
@@ -534,19 +578,13 @@
             // Gráfico: Prompts por Categoría
             const ctxCategories = document.getElementById('categoriesChart');
             if (ctxCategories) {
-                @php
-                    $topCategories = \App\Models\Categoria::withCount('prompts')
-                        ->orderBy('prompts_count', 'desc')
-                        ->take(5)
-                        ->get();
-                @endphp
                 new Chart(ctxCategories, {
                     type: 'bar',
                     data: {
-                        labels: [@foreach($topCategories as $c)'{{ $c->nombre }}',@endforeach],
+                        labels: window.dashboardData.topCategoriesLabels,
                         datasets: [{
                             label: 'Prompts',
-                            data: [@foreach($topCategories as $c){{ $c->prompts_count }},@endforeach],
+                            data: window.dashboardData.topCategoriesData,
                             backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444']
                         }]
                     },
@@ -565,19 +603,13 @@
             // Gráfico: Usuarios Más Activos
             const ctxActiveUsers = document.getElementById('activeUsersChart');
             if (ctxActiveUsers) {
-                @php
-                    $activeUsers = \App\Models\User::withCount('actividades')
-                        ->orderBy('actividades_count', 'desc')
-                        ->take(5)
-                        ->get();
-                @endphp
                 new Chart(ctxActiveUsers, {
                     type: 'horizontalBar',
                     data: {
-                        labels: [@foreach($activeUsers as $u)'{{ $u->name }}',@endforeach],
+                        labels: window.dashboardData.activeUsersLabels,
                         datasets: [{
                             label: 'Actividades',
-                            data: [@foreach($activeUsers as $u){{ $u->actividades_count }},@endforeach],
+                            data: window.dashboardData.activeUsersData,
                             backgroundColor: '#e11d48'
                         }]
                     },
@@ -597,19 +629,12 @@
             // Gráfico: Distribución de Roles
             const ctxRoles = document.getElementById('userRolesChart');
             if (ctxRoles) {
-                @php
-                    $roleDistribution = [
-                        'admin' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'admin'))->count(),
-                        'user' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'user'))->count(),
-                        'collaborator' => \App\Models\User::whereHas('role', fn($q) => $q->where('nombre', 'collaborator'))->count(),
-                    ];
-                @endphp
                 new Chart(ctxRoles, {
                     type: 'doughnut',
                     data: {
                         labels: ['Admin', 'User', 'Collaborator'],
                         datasets: [{
-                            data: [{{ $roleDistribution['admin'] }}, {{ $roleDistribution['user'] }}, {{ $roleDistribution['collaborator'] }}],
+                            data: window.dashboardData.rolesData,
                             backgroundColor: ['#3b82f6', '#10b981', '#a855f7'],
                             borderWidth: 0
                         }]
