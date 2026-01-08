@@ -74,71 +74,71 @@
                         </div>
                     </div>
 
-                    <!-- Students Card -->
+                    <!-- Prompts Card -->
                     <div class="stat-card rich-stat">
                         <div class="stat-left">
                             <div class="stat-icon-wrapper">
-                                <i class="fas fa-user-graduate"></i>
+                                <i class="fas fa-file-alt"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 class="stat-value">{{ $stats['students'] ?? 0 }}</h3>
-                                <p class="stat-label">Estudiantes</p>
+                                <h3 class="stat-value">{{ \App\Models\Prompt::count() }}</h3>
+                                <p class="stat-label">Prompts</p>
                             </div>
                         </div>
                         <div class="stat-right">
                             <div class="stat-mini-row success">
-                                <span>Activos</span>
+                                <span>Publicados</span>
                                 <i class="fas fa-check-circle" style="font-size: 0.8rem;"></i>
                             </div>
                             <div class="stat-mini-row">
                                 <span>Total</span>
-                                <strong>{{ $stats['students'] ?? 0 }}</strong>
+                                <strong>{{ \App\Models\Prompt::count() }}</strong>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Teachers Card -->
+                    <!-- Categories Card -->
                     <div class="stat-card rich-stat">
                         <div class="stat-left">
                             <div class="stat-icon-wrapper">
-                                <i class="fas fa-chalkboard-teacher"></i>
+                                <i class="fas fa-folder"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 class="stat-value">{{ $stats['teachers'] ?? 0 }}</h3>
-                                <p class="stat-label">Docentes</p>
+                                <h3 class="stat-value">{{ \App\Models\Categoria::count() }}</h3>
+                                <p class="stat-label">Categorías</p>
                             </div>
                         </div>
                         <div class="stat-right">
                             <div class="stat-mini-row">
-                                <span>Activos</span>
-                                <strong>{{ $stats['teachers'] ?? 0 }}</strong>
+                                <span>Activas</span>
+                                <strong>{{ \App\Models\Categoria::count() }}</strong>
                             </div>
                             <div class="stat-mini-row accent">
-                                <span>Académicos</span>
-                                <i class="fas fa-laptop" style="font-size: 0.8rem;"></i>
+                                <span>Organizadas</span>
+                                <i class="fas fa-sitemap" style="font-size: 0.8rem;"></i>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Courses Card -->
+                    <!-- Tags Card -->
                     <div class="stat-card rich-stat">
                         <div class="stat-left">
                             <div class="stat-icon-wrapper">
-                                <i class="fas fa-book"></i>
+                                <i class="fas fa-tags"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 class="stat-value">{{ $stats['courses'] ?? 0 }}</h3>
-                                <p class="stat-label">Cursos Activos</p>
+                                <h3 class="stat-value">{{ \App\Models\Etiqueta::count() }}</h3>
+                                <p class="stat-label">Etiquetas</p>
                             </div>
                         </div>
                         <div class="stat-right">
                             <div class="stat-mini-row success">
                                 <span>Recientes</span>
-                                <strong>+{{ $stats['recent_courses_count'] ?? 0 }}</strong>
+                                <strong>+{{ \App\Models\Etiqueta::latest()->take(5)->count() }}</strong>
                             </div>
                             <div class="stat-mini-row">
                                 <span>Total</span>
-                                <strong>{{ $stats['courses'] ?? 0 }}</strong>
+                                <strong>{{ \App\Models\Etiqueta::count() }}</strong>
                             </div>
                         </div>
                     </div>
@@ -278,10 +278,10 @@
                     <!-- Row 1: Large Charts (Attendance & Activity) -->
                     <div class="analytics-row-1" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
                         
-                        <!-- Chart: Asistencia Mensual -->
+                        <!-- Chart: Prompts Creados -->
                         <div class="dashboard-card glow-effect h-100" style="overflow: hidden;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Asistencia Mensual</h3>
+                                <h3 class="card-title">Prompts Creados</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -310,12 +310,12 @@
                     </div>
 
                     <!-- Row 2: Small Charts (Grades, Resources) -->
-                    <div class="analytics-row-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div class="analytics-row-2" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 1.5rem;">
                         
-                        <!-- Chart: Promedios -->
+                        <!-- Chart: Versiones por Prompt -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Promedios</h3>
+                                <h3 class="card-title">Versiones por Prompt</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -327,10 +327,10 @@
                             </div>
                         </div>
 
-                        <!-- Chart: Recursos -->
+                        <!-- Chart: Prompts Compartidos -->
                         <div class="dashboard-card h-100" style="overflow: hidden !important; background-image: none !important;">
                             <div class="card-header border-0 pb-0 d-flex justify-content-between align-items-center">
-                                <h3 class="card-title">Recursos</h3>
+                                <h3 class="card-title">Prompts Compartidos</h3>
                                 <div class="d-flex gap-2">
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; font-weight: 600;">Semana</button>
                                     <button type="button" class="btn" style="background-color: #e11d48 !important; color: #ffffff !important; border: none; border-radius: 8px; padding: 5px 15px; opacity: 0.6; font-weight: 600;">Mes</button>
@@ -338,7 +338,7 @@
                                 </div>
                             </div>
                             <div class="card-body" style="position: relative;">
-                                <canvas id="resourcesBarChart" height="200"></canvas>
+                                <canvas id="resourcesBarChart" height="250"></canvas>
                             </div>
                         </div>
                     </div>
