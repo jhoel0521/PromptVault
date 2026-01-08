@@ -183,13 +183,25 @@
                 $initial = $loggedInUser ? substr($loggedInUser->name, 0, 1) : (session('user_name') ? substr(session('user_name'), 0, 1) : 'U');
                 $userName = $loggedInUser ? $loggedInUser->name : (session('user_name') ?? 'Usuario');
                 
-                // Obtener el rol correctamente desde la relación
-                $roleName = 'Guest';
+                // Obtener el rol correctamente y traducirlo a español completo
+                $roleName = 'Invitado';
                 if ($loggedInUser && $loggedInUser->role) {
-                    $roleName = ucfirst($loggedInUser->role->nombre);
+                    $roleKey = strtolower($loggedInUser->role->nombre);
                 } elseif (session('user_role')) {
-                    $roleName = ucfirst(session('user_role'));
+                    $roleKey = strtolower(session('user_role'));
+                } else {
+                    $roleKey = 'guest';
                 }
+                
+                // Mapear roles a nombres completos en español
+                $roleNames = [
+                    'admin' => 'Administrador',
+                    'user' => 'Usuario',
+                    'collaborator' => 'Colaborador',
+                    'guest' => 'Invitado'
+                ];
+                
+                $roleName = $roleNames[$roleKey] ?? 'Invitado';
                 
                 $userEmail = $loggedInUser ? $loggedInUser->email : (session('user_email') ?? 'usuario@promptvault.com');
             @endphp
