@@ -25,7 +25,10 @@ class PerfilController extends Controller
                                        ->take(5)
                                        ->get();
 
-        return view('perfil.index', compact('user', 'logs'));
+        // Variables necesarias para el componente administrador
+        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+
+        return view('perfil.index', compact('user', 'logs', 'recentUsers'));
     }
 
     public function show()
