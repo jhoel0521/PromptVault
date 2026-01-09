@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('css/components/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/calendario/show.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/calendario/show.css') }}">
 </head>
 
 <body>
@@ -54,7 +54,7 @@
     </div>
 
     <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
-    <script src="{{ asset('js/admin/calendario/show.js') }}"></script>
+    <script src="{{ asset('JavaScript/calendario/show.js') }}"></script>
 
 </body>
 </html>

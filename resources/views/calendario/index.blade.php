@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('css/components/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
     <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/calendario/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/calendario/index.css') }}">
 </head>
 
 <body>
@@ -225,7 +225,7 @@
 
     <!-- JavaScript -->
     <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
-    <script src="{{ asset('js/admin/calendario/index.js') }}"></script>
+    <script src="{{ asset('JavaScript/calendario/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
