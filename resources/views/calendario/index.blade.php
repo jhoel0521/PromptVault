@@ -1,16 +1,45 @@
-@php
-    $user = Auth::user();
-    $userRole = $user && $user->role ? $user->role->nombre : (session('user_role') ?? 'guest');
-    $componentPath = match($userRole) {
-        'admin' => 'components.administrador',
-        'user' => 'components.usuario',
-        'collaborator' => 'components.colaborador',
-        default => 'components.invitado',
-    };
-@endphp
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario - PromptVault</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('images/LogoPestañaPrompt.jpg') }}">
+    
+    <!-- Precargar fuentes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS del Dashboard -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components/sidebar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components/header.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/calendario/index.css') }}">
+</head>
 
-<x-dynamic-component :component="$componentPath">
-    <x-slot name="header_title">Calendario</x-slot>
+<body>
+    
+    <!-- Loading Screen -->
+    @include('layouts.loading')
+    
+    <!-- Layout del Dashboard -->
+    <div class="dashboard-layout">
+        
+        <!-- Sidebar Component -->
+        @include('layouts.sidebar')
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            
+            <!-- Header Component -->
+            @include('layouts.header', ['header_title' => 'Calendario'])
+            
+            <!-- Contenido principal -->
+            <div class="dashboard-content">
 
 <div class="calendario-container">
     <div class="control-panel">
@@ -190,13 +219,14 @@
 <!-- Modal Nuevo Evento (Hidden by default) -->
 <!-- Can be implemented later or now depending on scope. For index visual, not strictly required but good to have skeleton -->
 
-@push('styles')
-    <link rel="stylesheet" href="{{ asset('css/admin/calendario/index.css') }}">
-@endpush
+            </div>
+        </div>
+    </div>
 
-@push('scripts')
+    <!-- JavaScript -->
+    <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
     <script src="{{ asset('js/admin/calendario/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endpush
 
-</x-dynamic-component>
+</body>
+</html>
