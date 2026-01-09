@@ -48,6 +48,7 @@
     </div>
 
     <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
+    <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('JavaScript/calendario/create.js') }}"></script>
 
 </body>

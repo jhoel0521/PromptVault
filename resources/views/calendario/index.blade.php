@@ -225,6 +225,7 @@
 
     <!-- JavaScript -->
     <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
+    <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('JavaScript/calendario/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
