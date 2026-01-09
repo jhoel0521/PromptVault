@@ -12,13 +12,6 @@
 <x-dynamic-component :component="$componentPath">
     <x-slot name="header_title">Calendario</x-slot>
 
-@section('title', 'Calendario Académico')
-
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/admin/calendario/index.css') }}">
-@endsection
-
-@section('content')
 <div class="calendario-container">
     <div class="control-panel">
         <div class="panel-header">
@@ -196,9 +189,14 @@
 
 <!-- Modal Nuevo Evento (Hidden by default) -->
 <!-- Can be implemented later or now depending on scope. For index visual, not strictly required but good to have skeleton -->
-@endsection
 
-@section('js')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/admin/calendario/index.css') }}">
+@endpush
+
+@push('scripts')
     <script src="{{ asset('js/admin/calendario/index.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@endsection
+@endpush
+
+</x-dynamic-component>

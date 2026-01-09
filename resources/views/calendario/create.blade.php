@@ -12,17 +12,10 @@
 <x-dynamic-component :component="$componentPath">
     <x-slot name="header_title">Crear Evento</x-slot>
 
-@section('title', 'Crear Evento')
-
-@section('css')
-<link rel="stylesheet" href="{{ asset('css/admin/calendario/create.css') }}">
-@endsection
-
-@section('content')
 <div class="create-evento-container">
     <div class="form-header">
         <h2>Crear Nuevo Evento</h2>
-        <a href="{{ route('admin.calendario.index') }}" class="btn btn-secondary">
+        <a href="{{ route('calendario.index') }}" class="btn btn-secondary">
             Volver
         </a>
     </div>
@@ -31,8 +24,13 @@
         <!-- Campos del formulario aquí -->
     </form>
 </div>
-@endsection
 
-@section('js')
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/admin/calendario/create.css') }}">
+@endpush
+
+@push('scripts')
 <script src="{{ asset('js/admin/calendario/create.js') }}"></script>
-@endsection
+@endpush
+
+</x-dynamic-component>
