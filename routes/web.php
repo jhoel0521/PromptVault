@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromptController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionesController;
+use App\Http\Controllers\BuscadorController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -76,6 +77,9 @@ Route::middleware('auth')->group(function () {
     
     // Rutas de Calendario
     Route::resource('calendario', CalendarioController::class);
+    
+    // Rutas de Buscador
+    Route::get('buscador', [BuscadorController::class, 'index'])->name('buscador.index');
     
     // Rutas de Configuraciones
     Route::get('configuraciones', [ConfiguracionesController::class, 'index'])->name('configuraciones.index');
