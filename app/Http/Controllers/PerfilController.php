@@ -112,25 +112,30 @@ class PerfilController extends Controller
     public function subirAvatar(Request $request)
     {
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
         $user = \App\Models\User::find(session('user_id'));
 
         if ($request->hasFile('avatar')) {
-            $imageName = time().'.'.$request->avatar->extension();
-            $request->avatar->move(public_path('images/avatars'), $imageName);
+            $imageName = 'profile_' . $user->id . '_' . time() . '.' . $request->avatar->extension();
+            $request->avatar->move(public_path('uploads/profile'), $imageName);
 
-            // Eliminar avatar anterior si no es el default
-            if ($user->avatar && $user->avatar !== 'default-avatar.png' && file_exists(public_path('images/avatars/'.$user->avatar))) {
-                unlink(public_path('images/avatars/'.$user->avatar));
+            // Eliminar foto anterior si existe
+            if ($user->foto_perfil && file_exists(public_path($user->foto_perfil))) {
+                unlink(public_path($user->foto_perfil));
             }
 
-            $user->update(['avatar' => $imageName]);
+            $rutaFoto = 'uploads/profile/' . $imageName;
+            $user->update(['foto_perfil' => $rutaFoto]);
             
-            return response()->json(['success' => true, 'avatar_url' => asset('images/avatars/'.$imageName)]);
+            return response()->json([
+                'success' => true, 
+                'foto_url' => asset($rutaFoto),
+                'message' => 'Foto de perfil actualizada correctamente'
+            ]);
         }
 
-        return response()->json(['success' => false], 400);
+        return response()->json(['success' => false, 'message' => 'No se recibió ninguna imagen'], 400);
     }
 }

@@ -76,14 +76,14 @@
                 <!-- Card 1: Avatar -->
                 <div class="profile-card" style="width: 100%; position: relative; top: 0;">
                     <div class="profile-avatar-wrapper">
-                        <img src="{{ $user->avatar && file_exists(public_path('images/avatars/'.$user->avatar)) ? asset('images/avatars/'.$user->avatar) : asset('images/default-avatar.png') }}" alt="Avatar" class="profile-avatar" id="avatarPreview">
+                        <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.png') }}" alt="Foto de Perfil" class="profile-avatar" id="avatarPreview">
                         
                         <button type="button" class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click()" title="Cambiar Foto">
                             <i class="fas fa-camera"></i>
                         </button>
                         <form id="avatarForm" action="{{ route('perfil.avatar') }}" method="POST" enctype="multipart/form-data" style="display: none;">
                             @csrf
-                            <input type="file" id="avatarInput" name="avatar" accept="image/*" onchange="document.getElementById('avatarForm').submit()">
+                            <input type="file" id="avatarInput" name="avatar" accept="image/*" onchange="previewAndUpload(this)">
                         </form>
                     </div>
 
@@ -298,4 +298,68 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('js')
+<script>
+function previewAndUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+
+    // Validar tipo de archivo
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+        alert('Solo se permiten imágenes (JPEG, PNG, GIF, WEBP)');
+        return;
+    }
+
+    // Validar tamaño (2MB)
+    if (file.size > 2048 * 1024) {
+        alert('La imagen no puede superar los 2MB');
+        return;
+    }
+
+    // Previsualizar imagen inmediatamente
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('avatarPreview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    // Subir vía AJAX
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+    fetch('{{ route("perfil.avatar") }}', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken,
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Foto de perfil actualizada correctamente');
+            // Mostrar mensaje de éxito (opcional)
+            const successMsg = document.createElement('div');
+            successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 1.5rem; border-radius: 8px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+            successMsg.innerHTML = '<i class="fas fa-check-circle"></i> ' + (data.message || 'Foto actualizada');
+            document.body.appendChild(successMsg);
+            setTimeout(() => successMsg.remove(), 3000);
+        } else {
+            alert('Error al subir la imagen: ' + (data.message || 'Error desconocido'));
+            // Revertir la previsualización si hay error
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error de conexión al subir imagen');
+        location.reload();
+    });
+}
+</script>
 @endsection

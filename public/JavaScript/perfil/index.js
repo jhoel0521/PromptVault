@@ -59,10 +59,19 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
+                        // Update avatar with new URL
+                        if (data.foto_url) {
+                            avatarPreview.src = data.foto_url;
+                        }
                         // Optional: Show success toast
-                        console.log("Avatar updated successfully");
+                        console.log("Foto de perfil actualizada correctamente");
+                        const successMsg = document.createElement('div');
+                        successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #10b981; color: white; padding: 1rem 1.5rem; border-radius: 8px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);';
+                        successMsg.innerHTML = '<i class="fas fa-check-circle"></i> ' + (data.message || 'Foto actualizada');
+                        document.body.appendChild(successMsg);
+                        setTimeout(() => successMsg.remove(), 3000);
                     } else {
-                        alert("Error al subir la imagen");
+                        alert("Error al subir la imagen: " + (data.message || "Error desconocido"));
                     }
                 })
                 .catch((error) => {
