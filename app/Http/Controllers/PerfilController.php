@@ -41,7 +41,10 @@ class PerfilController extends Controller
         /** @var User $user */
         $user = Auth::user();
         if (!$user) return redirect()->route('login');
-        return view('perfil.edit', compact('user'));
+        
+        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        
+        return view('perfil.edit', compact('user', 'recentUsers'));
     }
 
     public function cambiarPassword()
@@ -49,7 +52,10 @@ class PerfilController extends Controller
         /** @var User $user */
         $user = Auth::user();
         if (!$user) return redirect()->route('login');
-        return view('perfil.security', compact('user'));
+        
+        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
+        
+        return view('perfil.security', compact('user', 'recentUsers'));
     }
 
     public function actualizarPassword(Request $request)

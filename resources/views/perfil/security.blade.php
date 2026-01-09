@@ -14,7 +14,7 @@
     $componentName = 'components.' . ($roleComponentMap[$userRole] ?? 'invitado');
 @endphp
 
-@component($componentName, ['title' => 'Seguridad - Cambiar Contraseña'])
+@component($componentName, ['title' => 'Seguridad - Cambiar Contraseña', 'recentUsers' => $recentUsers ?? collect()])
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
