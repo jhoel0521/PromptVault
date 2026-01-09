@@ -330,9 +330,61 @@
     </div>
     
     <!-- Configuración global -->
+    @php
+        // ===== DATOS REALES PARA USUARIO =====
+        $userId = auth()->id();
+        
+        // 1. Prompts creados por día (últimos 7 días)
+        $promptsPorDia = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $count = \App\Models\Prompt::where('user_id', $userId)
+                ->whereDate('created_at', $date)
+                ->count();
+            $promptsPorDia[] = $count;
+        }
+        
+        // 2. Prompts por categoría (top 5 categorías del usuario)
+        $promptsPorCategoria = \App\Models\Prompt::where('user_id', $userId)
+            ->join('categorias', 'prompts.categoria_id', '=', 'categorias.id')
+            ->selectRaw('categorias.nombre, COUNT(*) as total')
+            ->groupBy('categorias.nombre')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get();
+        
+        $categoriasLabels = $promptsPorCategoria->pluck('nombre')->toArray();
+        $categoriasData = $promptsPorCategoria->pluck('total')->toArray();
+        
+        // 3. Estado de prompts del usuario
+        $promptsPublicos = \App\Models\Prompt::where('user_id', $userId)->where('es_publico', true)->count();
+        $promptsPrivados = \App\Models\Prompt::where('user_id', $userId)->where('es_publico', false)->count();
+        $promptsFavoritos = \App\Models\Prompt::where('user_id', $userId)->where('es_favorito', true)->count();
+        
+        // 4. Actividad del usuario (prompts más usados)
+        $promptsMasUsados = \App\Models\Prompt::where('user_id', $userId)
+            ->orderBy('veces_usado', 'desc')
+            ->take(6)
+            ->get(['titulo', 'veces_usado']);
+        
+        $usadosLabels = $promptsMasUsados->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 15))->toArray();
+        $usadosData = $promptsMasUsados->pluck('veces_usado')->toArray();
+        
+        // Preparar datos para JavaScript
+        $userChartData = [
+            'promptsPorDia' => $promptsPorDia,
+            'categoriasLabels' => $categoriasLabels,
+            'categoriasData' => $categoriasData,
+            'estadoPrompts' => [$promptsPublicos, $promptsPrivados, $promptsFavoritos],
+            'usadosLabels' => $usadosLabels,
+            'usadosData' => $usadosData
+        ];
+    @endphp
+    
+    <!-- Datos para JavaScript -->
+    <div id="user-chart-data" data-config="{{ json_encode($userChartData) }}" style="display:none;"></div>
+    
     <script>
-        // @ts-nocheck
-        /* eslint-disable */
         window.appConfig = {
             csrfToken: '{{ csrf_token() }}',
             baseUrl: '{{ url("/") }}',
@@ -342,8 +394,12 @@
                 role: '{{ session("user_role") }}'
             }
         };
-        window.appConfig.chartData = @json($chartData ?? []);
-        /* eslint-enable */
+        
+        // Cargar datos reales desde elemento HTML
+        const userDataElement = document.getElementById('user-chart-data');
+        window.userChartData = JSON.parse(userDataElement.getAttribute('data-config'));
+        
+        console.log('User Chart Data:', window.userChartData);
     </script>
     
     <!-- JavaScript del Dashboard -->
