@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/components/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/components/loading.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
     
     @stack('styles')
 </head>
