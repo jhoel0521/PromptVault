@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromptController;
+use App\Http\Controllers\CalendarioController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -71,6 +72,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir');
     Route::get('/prompts/{prompt}/historial', [PromptController::class, 'historial'])->name('prompts.historial');
     Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar');
+    
+    // Rutas de Calendario
+    Route::resource('calendario', CalendarioController::class);
 });
 
 require __DIR__.'/auth.php';

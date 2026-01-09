@@ -1,4 +1,16 @@
-@extends('layouts.admin')
+@php
+    $user = Auth::user();
+    $userRole = $user && $user->role ? $user->role->nombre : (session('user_role') ?? 'guest');
+    $componentPath = match($userRole) {
+        'admin' => 'components.administrador',
+        'user' => 'components.usuario',
+        'collaborator' => 'components.colaborador',
+        default => 'components.invitado',
+    };
+@endphp
+
+<x-dynamic-component :component="$componentPath">
+    <x-slot name="header_title">Calendario</x-slot>
 
 @section('title', 'Calendario Académico')
 
