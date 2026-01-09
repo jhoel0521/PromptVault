@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@component('components.administrador', ['title' => 'Gestión de Usuarios', 'recentUsers' => collect()])
 
 @section('title', 'Gestión de Usuarios')
 
@@ -192,3 +192,4 @@
     </script>
     <script src="{{ asset('JavaScript/usuarios/index.js') }}"></script>
 @endsection
+@endcomponent

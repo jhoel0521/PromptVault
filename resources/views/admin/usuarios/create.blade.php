@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@component('components.administrador', ['title' => 'Nuevo Usuario', 'recentUsers' => collect()])
 
 @section('title', 'Nuevo Usuario')
 
@@ -180,3 +180,4 @@
 @section('js')
 <script src="{{ asset('JavaScript/usuarios/create.js') }}"></script>
 @endsection
+@endcomponent
