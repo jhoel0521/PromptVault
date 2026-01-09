@@ -11,9 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let loadingInterval = null;
     let messageInterval = null;
     let logInterval = null;
+    let loadingStartTime = null;
 
     // Simulation Config
     const duration = 5000;
+    const minDuration = 2000; // Mínimo 2 segundos
     const interval = 30;
     const steps = duration / interval;
     const increment = 100 / steps;
@@ -76,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function showLoader() {
         if (overlay.classList.contains("hidden")) {
             overlay.classList.remove("hidden");
+            loadingStartTime = Date.now();
             resetLoader();
             startSimulation();
         }
@@ -96,6 +99,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (loadingInterval) clearInterval(loadingInterval);
         if (messageInterval) clearInterval(messageInterval);
         if (logInterval) clearInterval(logInterval);
+
+        loadingStartTime = Date.now();
 
         let messageIndex = 0;
         let logIndex = 0;
@@ -162,6 +167,9 @@ document.addEventListener("DOMContentLoaded", function () {
         if (messageInterval) clearInterval(messageInterval);
         if (logInterval) clearInterval(logInterval);
 
+        const elapsed = Date.now() - loadingStartTime;
+        const remainingTime = Math.max(0, minDuration - elapsed);
+
         if (systemLog) {
             const line = document.createElement("span");
             line.className = "log-line";
@@ -177,7 +185,7 @@ document.addEventListener("DOMContentLoaded", function () {
             setTimeout(() => {
                 resetLoader();
             }, 500);
-        }, 1000);
+        }, remainingTime + 1000);
     }
 
     function hideLoaderInstant() {
