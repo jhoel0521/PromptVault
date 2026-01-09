@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class PerfilController extends Controller
 {
     public function index()
     {
-        // Recuperar usuario desde la sesión manual
-        $userId = session('user_id');
-        $user = \App\Models\User::find($userId);
+        // Recuperar usuario autenticado
+        /** @var User $user */
+        $user = Auth::user();
         
         if (!$user) {
             return redirect()->route('login')->with('error', 'Sesión no válida.');
         }
 
-        // Obtener actividad reciente
-        $logs = \App\Models\LogSistema::where('usuario_id', $userId)
-                                       ->orderBy('created_at', 'desc')
+        // Obtener actividad reciente del usuario
+        $logs = \App\Models\Actividad::where('user_id', $user->id)
+                                       ->with(['prompt'])
+                                       ->orderBy('fecha', 'desc')
                                        ->take(5)
                                        ->get();
 
@@ -32,21 +35,24 @@ class PerfilController extends Controller
 
     public function edit()
     {
-        $user = \App\Models\User::find(session('user_id'));
+        /** @var User $user */
+        $user = Auth::user();
         if (!$user) return redirect()->route('login');
         return view('perfil.edit', compact('user'));
     }
 
     public function cambiarPassword()
     {
-        $user = \App\Models\User::find(session('user_id'));
+        /** @var User $user */
+        $user = Auth::user();
         if (!$user) return redirect()->route('login');
         return view('perfil.security', compact('user'));
     }
 
     public function actualizarPassword(Request $request)
     {
-        $user = \App\Models\User::find(session('user_id'));
+        /** @var User $user */
+        $user = Auth::user();
 
         $request->validate([
             'current_password' => 'required',
@@ -66,7 +72,8 @@ class PerfilController extends Controller
 
     public function update(Request $request)
     {
-        $user = \App\Models\User::find(session('user_id'));
+        /** @var User $user */
+        $user = Auth::user();
         
         $request->validate([
             'name' => 'required|string|max:255',
@@ -115,7 +122,8 @@ class PerfilController extends Controller
             'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
 
-        $user = \App\Models\User::find(session('user_id'));
+        /** @var User $user */
+        $user = Auth::user();
 
         if ($request->hasFile('avatar')) {
             $imageName = 'profile_' . $user->id . '_' . time() . '.' . $request->avatar->extension();
