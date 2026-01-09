@@ -104,7 +104,7 @@ Route::middleware('auth')->group(function () {
     
     // Rutas de Administración de Usuarios (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
-        Route::resource('usuarios', \App\Http\Controllers\Admin\UsuarioController::class);
+        Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);
     });
 });
 
