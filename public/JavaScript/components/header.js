@@ -48,7 +48,15 @@ class HeaderManager {
         // Prevent closing when clicking inside menu
         Object.values(this.dropdowns).forEach(({ menu }) => {
             if (menu) {
-                menu.addEventListener("click", (e) => e.stopPropagation());
+                menu.addEventListener("click", (e) => {
+                    // Si el elemento clicado es un enlace, permitir la navegación
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        // Permitir que el enlace funcione normalmente
+                        return;
+                    }
+                    // De lo contrario, prevenir el cierre del menú
+                    e.stopPropagation();
+                });
             }
         });
 
