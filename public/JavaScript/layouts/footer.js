@@ -127,6 +127,8 @@ class FooterManager {
   }
 
   updateScrollProgress() {
+    // Disabled - No scroll progress bar in current footer design
+    /*
     const progressBar = document.querySelector('.scroll-progress');
     if (progressBar) {
       const scrollTop = window.scrollY;
@@ -135,6 +137,7 @@ class FooterManager {
       
       progressBar.style.width = `${Math.min(scrollPercent, 100)}%`;
     }
+    */
   }
 
   setupStatsCounters() {
