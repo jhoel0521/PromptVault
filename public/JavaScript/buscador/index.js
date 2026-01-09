@@ -1,12 +1,63 @@
 // ======================================
-// BUSCADOR - FUNCIONALIDAD
+// BUSCADOR - FUNCIONALIDAD CON LIVE SEARCH
 // ======================================
 
 document.addEventListener('DOMContentLoaded', function() {
     // Elementos
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchQuery');
+    const liveResults = document.getElementById('liveSearchResults');
     const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+    
+    let searchTimeout = null;
+    let currentResults = [];
+    
+    // Evento: Input en búsqueda (Live Search)
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.trim();
+            
+            // Limpiar timeout anterior
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            // Si está vacío, ocultar resultados
+            if (query.length === 0) {
+                hideLiveResults();
+                return;
+            }
+            
+            // Si tiene menos de 2 caracteres, mostrar mensaje
+            if (query.length < 2) {
+                showLiveMessage('Escribe al menos 2 caracteres para buscar...');
+                return;
+            }
+            
+            // Mostrar loading
+            showLiveLoading();
+            
+            // Debounce: esperar 300ms antes de buscar
+            searchTimeout = setTimeout(() => {
+                performLiveSearch(query);
+            }, 300);
+        });
+        
+        // Cerrar resultados al hacer click fuera
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !liveResults.contains(e.target)) {
+                hideLiveResults();
+            }
+        });
+        
+        // Cerrar con ESC
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideLiveResults();
+                this.blur();
+            }
+        });
+    }
     
     // Evento: Enviar formulario de búsqueda
     if (searchForm) {
@@ -33,16 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Evento: Limpiar búsqueda con ESC
-    if (searchInput) {
-        searchInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                this.value = '';
-                this.focus();
-            }
-        });
-    }
-    
     // Auto-focus en el input al cargar la página
     if (searchInput && !searchInput.value) {
         searchInput.focus();
@@ -50,6 +91,123 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Animación de entrada para resultados
     animateResults();
+    
+    // ======================================
+    // FUNCIONES DE LIVE SEARCH
+    // ======================================
+    
+    async function performLiveSearch(query) {
+        try {
+            const response = await fetch(`/buscador/search?q=${encodeURIComponent(query)}`);
+            const data = await response.json();
+            
+            if (data.resultados && data.resultados.length > 0) {
+                currentResults = data.resultados;
+                showLiveResults(data.resultados);
+            } else {
+                showNoLiveResults();
+            }
+        } catch (error) {
+            console.error('Error en búsqueda:', error);
+            showLiveMessage('Error al buscar. Intenta nuevamente.');
+        }
+    }
+    
+    function showLiveResults(resultados) {
+        let html = '';
+        
+        // Agrupar por tipo
+        const porTipo = {};
+        resultados.forEach(item => {
+            if (!porTipo[item.tipo]) {
+                porTipo[item.tipo] = [];
+            }
+            porTipo[item.tipo].push(item);
+        });
+        
+        // Renderizar por tipo
+        Object.keys(porTipo).forEach(tipo => {
+            html += `<div class="live-search-header"><h5>${tipo}s</h5></div>`;
+            
+            porTipo[tipo].forEach(item => {
+                const iconClass = getIconClass(item.icono);
+                html += `
+                    <a href="${item.url}" class="live-search-item">
+                        <div class="live-search-icon">
+                            <i class="fas ${iconClass}"></i>
+                        </div>
+                        <div class="live-search-content">
+                            <div class="live-search-title">${escapeHtml(item.titulo)}</div>
+                            <div class="live-search-desc">${escapeHtml(item.descripcion)}</div>
+                        </div>
+                        <span class="live-search-badge">${item.tipo}</span>
+                    </a>
+                `;
+            });
+        });
+        
+        liveResults.innerHTML = html;
+        liveResults.classList.add('active');
+    }
+    
+    function showNoLiveResults() {
+        liveResults.innerHTML = `
+            <div class="live-search-no-results">
+                <i class="fas fa-search"></i>
+                <p><strong>No se encontraron resultados</strong></p>
+                <p style="font-size: 0.85rem; margin-top: 8px;">
+                    Intenta buscar: Dashboard, Prompts, Calendario, Configuraciones
+                </p>
+            </div>
+        `;
+        liveResults.classList.add('active');
+    }
+    
+    function showLiveMessage(message) {
+        liveResults.innerHTML = `
+            <div class="live-search-no-results">
+                <i class="fas fa-info-circle"></i>
+                <p>${message}</p>
+            </div>
+        `;
+        liveResults.classList.add('active');
+    }
+    
+    function showLiveLoading() {
+        liveResults.innerHTML = `
+            <div class="live-search-loading">
+                <i class="fas fa-spinner"></i>
+                <p>Buscando...</p>
+            </div>
+        `;
+        liveResults.classList.add('active');
+    }
+    
+    function hideLiveResults() {
+        liveResults.classList.remove('active');
+        setTimeout(() => {
+            liveResults.innerHTML = '';
+        }, 300);
+    }
+    
+    function getIconClass(icon) {
+        const iconMap = {
+            'file-alt': 'fa-file-alt',
+            'folder': 'fa-folder',
+            'tag': 'fa-tag',
+            'user': 'fa-user',
+            'desktop': 'fa-desktop',
+            'calendar': 'fa-calendar',
+            'cog': 'fa-cog'
+        };
+        return iconMap[icon] || 'fa-circle';
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 });
 
 // ======================================

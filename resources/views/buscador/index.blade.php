@@ -10,23 +10,27 @@
 <div class="buscador-container">
     <div class="search-header">
         <h2>Búsqueda Global</h2>
-        <p class="search-subtitle">Encuentra prompts, categorías, etiquetas y más</p>
+        <p class="search-subtitle">Encuentra prompts, categorías, etiquetas, vistas del sistema y más</p>
     </div>
     
-    <!-- Formulario de búsqueda -->
+    <!-- Formulario de búsqueda con Live Search -->
     <div class="search-form-container">
         <form id="searchForm" class="search-form" method="GET" action="{{ route('buscador.index') }}">
             <div class="search-input-group">
                 <input type="text" 
                        id="searchQuery" 
                        name="query" 
-                       placeholder="¿Qué estás buscando?" 
+                       placeholder="Buscar vistas, prompts, categorías..." 
                        class="search-input"
                        value="{{ $query ?? '' }}"
+                       autocomplete="off"
                        autofocus>
                 <button type="submit" class="search-btn">
                     <i class="fas fa-search"></i>
                 </button>
+                
+                <!-- Live Search Results -->
+                <div id="liveSearchResults" class="live-search-results"></div>
             </div>
             
             <!-- Filtros de búsqueda -->
@@ -106,11 +110,11 @@
     <div class="suggested-searches">
         <h4>Búsquedas sugeridas</h4>
         <div class="suggestions-list">
-            <button class="suggestion-btn" data-query="desarrollo">Desarrollo</button>
-            <button class="suggestion-btn" data-query="marketing">Marketing</button>
-            <button class="suggestion-btn" data-query="diseño">Diseño</button>
-            <button class="suggestion-btn" data-query="programación">Programación</button>
-            <button class="suggestion-btn" data-query="creatividad">Creatividad</button>
+            <button class="suggestion-btn" data-query="dashboard">Dashboard</button>
+            <button class="suggestion-btn" data-query="prompts">Prompts</button>
+            <button class="suggestion-btn" data-query="calendario">Calendario</button>
+            <button class="suggestion-btn" data-query="configuraciones">Configuraciones</button>
+            <button class="suggestion-btn" data-query="crear">Crear Nuevo</button>
         </div>
     </div>
 </div>
@@ -118,29 +122,4 @@
 
 @section('js')
 <script src="{{ asset('JavaScript/buscador/index.js') }}"></script>
-@endsection
-                    <h4>No se encontraron resultados</h4>
-                    <p>Intenta con otros términos de búsqueda o ajusta los filtros</p>
-                </div>
-            @endif
-        </div>
-        @endif
-    </div>
-    
-    <!-- Búsquedas sugeridas -->
-    <div class="suggested-searches">
-        <h4>Búsquedas sugeridas</h4>
-        <div class="suggestions-list">
-            <button class="suggestion-btn" data-query="matemáticas">Matemáticas</button>
-            <button class="suggestion-btn" data-query="estudiantes activos">Estudiantes activos</button>
-            <button class="suggestion-btn" data-query="tareas pendientes">Tareas pendientes</button>
-            <button class="suggestion-btn" data-query="exámenes próximos">Exámenes próximos</button>
-            <button class="suggestion-btn" data-query="recursos educativos">Recursos educativos</button>
-        </div>
-    </div>
-</div>
-@endsection
-
-@section('js')
-<script src="{{ asset('js/shared/buscador/index.js') }}"></script>
 @endsection
