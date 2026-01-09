@@ -220,56 +220,47 @@
                         
                         <div class="form-grid" style="margin-bottom: 2.5rem;">
                             <div class="form-group">
-                                <label class="form-label"><i class="fas fa-user"></i> Nombre</label>
+                                <label class="form-label"><i class="fas fa-user"></i> Nombre Completo</label>
                                 <input type="text" name="name" class="form-input" value="{{ $user->name }}" required>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-user-tag"></i> Apellido</label>
-                                <input type="text" name="apellido" class="form-input" value="{{ $user->apellido ?? '' }}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-id-card"></i> Cédula de Identidad</label>
-                                <input type="text" name="ci" class="form-input" value="{{ $user->ci ?? '' }}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-birthday-cake"></i> Fecha de Nacimiento</label>
-                                <input type="date" name="fecha_nacimiento" class="form-input" value="{{ $user->fecha_nacimiento ? \Carbon\Carbon::parse($user->fecha_nacimiento)->format('Y-m-d') : '' }}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-venus-mars"></i> Género</label>
-                                <select name="genero" class="form-input">
-                                    <option value="">Seleccionar...</option>
-                                    <option value="masculino" {{ ($user->genero ?? '') == 'masculino' ? 'selected' : '' }}>Masculino</option>
-                                    <option value="femenino" {{ ($user->genero ?? '') == 'femenino' ? 'selected' : '' }}>Femenino</option>
-                                    <option value="otro" {{ ($user->genero ?? '') == 'otro' ? 'selected' : '' }}>Otro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-briefcase"></i> Profesión</label>
-                                <input type="text" name="profesion" class="form-input" value="{{ $user->profesion ?? '' }}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-graduation-cap"></i> Nivel de Estudios</label>
-                                <input type="text" name="nivel_estudios" class="form-input" value="{{ $user->nivel_estudios ?? '' }}">
                             </div>
                             <div class="form-group">
                                 <label class="form-label"><i class="fas fa-envelope"></i> Correo Electrónico</label>
                                 <input type="email" name="email" class="form-input" value="{{ $user->email }}" required>
                             </div>
+                        </div>
+
+                        <div class="alert-info" style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <i class="fas fa-info-circle" style="color: #3b82f6;"></i>
+                            <span style="color: var(--text-dark); font-size: 0.9rem;">Tu rol en el sistema es <strong>{{ $user->role ? ucfirst($user->role->nombre) : 'Usuario' }}</strong>. Solo un administrador puede cambiar roles.</span>
+                        </div>
+
+                        <div style="border-top: 1px solid var(--border-color); margin: 2rem 0;"></div>
+
+                        <h4 style="color: var(--primary-red); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fas fa-shield-alt"></i> Estado de Cuenta
+                        </h4>
+
+                        <div class="form-grid" style="margin-bottom: 2rem;">
                             <div class="form-group">
-                                <label class="form-label"><i class="fas fa-phone"></i> Teléfono</label>
-                                <input type="tel" name="phone" class="form-input" placeholder="+591 ..." value="{{ $user->telefono ?? '' }}">
+                                <label class="form-label"><i class="fas fa-toggle-on"></i> Estado de la Cuenta</label>
+                                <select name="cuenta_activa" class="form-input" disabled>
+                                    <option value="1" {{ $user->cuenta_activa ? 'selected' : '' }}>Activa</option>
+                                    <option value="0" {{ !$user->cuenta_activa ? 'selected' : '' }}>Inactiva</option>
+                                </select>
+                                <small style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem; display: block;">
+                                    <i class="fas fa-lock"></i> Solo un administrador puede cambiar el estado de tu cuenta
+                                </small>
                             </div>
                             <div class="form-group">
-                                <label class="form-label"><i class="fas fa-map-marker-alt"></i> Dirección</label>
-                                <input type="text" name="address" class="form-input" placeholder="Av. Principal #123" value="{{ $user->direccion ?? '' }}">
+                                <label class="form-label"><i class="fas fa-calendar"></i> Miembro Desde</label>
+                                <input type="text" class="form-input" value="{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : 'N/A' }}" disabled>
                             </div>
                         </div>
 
                         <div style="border-top: 1px solid var(--border-color); margin: 2rem 0;"></div>
 
                         <h4 style="color: var(--primary-red); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fas fa-share-alt"></i> Redes Sociales
+                            <i class="fas fa-info-circle"></i> Información del Sistema
                         </h4>
 
                         <div class="form-grid" style="margin-bottom: 2rem;">
@@ -278,24 +269,12 @@
                                 <input type="text" name="website" class="form-input" placeholder="https://" value="{{ $user->website ?? '' }}">
                             </div>
                             <div class="form-group">
-                                <label class="form-label"><i class="fab fa-facebook"></i> Facebook</label>
-                                <input type="text" name="facebook" class="form-input" placeholder="Usuario" value="{{ $user->facebook ?? '' }}">
+                                <label class="form-label"><i class="fas fa-calendar-check"></i> Último Acceso</label>
+                                <input type="text" class="form-input" value="{{ $user->ultimo_acceso ? $user->ultimo_acceso->format('d/m/Y H:i') : 'Nunca' }}" disabled>
                             </div>
                             <div class="form-group">
-                                <label class="form-label"><i class="fab fa-twitter"></i> Twitter / X</label>
-                                <input type="text" name="twitter" class="form-input" placeholder="@usuario" value="{{ $user->twitter ?? '' }}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fab fa-linkedin"></i> LinkedIn</label>
-                                <input type="text" name="linkedin" class="form-input" placeholder="Usuario" value="{{ $user->linkedin ?? '' }}">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label"><i class="fab fa-instagram"></i> Instagram</label>
-                                <input type="text" name="instagram" class="form-input" placeholder="Usuario" value="{{ $user->instagram ?? '' }}">
-                            </div>
-                            <div class="form-group full-width">
-                                <label class="form-label"><i class="fas fa-align-left"></i> Biografía / Sobre mí</label>
-                                <textarea name="biografia" class="form-input" rows="3" placeholder="Cuéntanos un poco sobre ti...">{{ $user->biografia ?? '' }}</textarea>
+                                <label class="form-label"><i class="fas fa-envelope-open-text"></i> Email Verificado</label>
+                                <input type="text" class="form-input" value="{{ $user->email_verified_at ? 'Sí (' . $user->email_verified_at->format('d/m/Y') . ')' : 'No verificado' }}" disabled>
                             </div>
                         </div>
 

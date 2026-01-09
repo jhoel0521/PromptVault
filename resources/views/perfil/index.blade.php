@@ -48,7 +48,7 @@
                     <i class="fas fa-id-card"></i>
                     <div class="info">
                         <span class="label">Rol</span>
-                        <span class="value">{{ $user->rol ?? 'Usuario' }}</span>
+                        <span class="value">{{ $user->role ? $user->role->nombre : 'Usuario' }}</span>
                     </div>
                 </div>
                 
@@ -56,7 +56,7 @@
                     <i class="fas fa-toggle-on"></i>
                     <div class="info">
                         <span class="label">Estado</span>
-                        <span class="value" style="color: #10b981;">Activo</span>
+                        <span class="value" style="color: {{ $user->cuenta_activa ? '#10b981' : '#ef4444' }};">{{ $user->cuenta_activa ? 'Activo' : 'Inactivo' }}</span>
                     </div>
                 </div>
 
@@ -72,7 +72,7 @@
                     <i class="fas fa-clock"></i>
                     <div class="info">
                         <span class="label">Último Acceso</span>
-                        <span class="value">{{ $user->ultimo_acceso ? \Carbon\Carbon::parse($user->ultimo_acceso)->diffForHumans() : 'Ahora' }}</span>
+                        <span class="value">{{ $user->ultimo_acceso ? $user->ultimo_acceso->diffForHumans() : 'Ahora' }}</span>
                     </div>
                 </div>
             </div>
@@ -93,28 +93,9 @@
                 <input type="file" id="avatarInput" hidden accept="image/*">
             </div>
             
-            <h2 class="profile-name">{{ $user->name }} {{ $user->apellido }}</h2>
-            <span class="profile-role">{{ $user->profesion ?? $user->rol ?? 'Usuario' }}</span>
-            <p style="color: var(--text-muted); margin-bottom: 0.5rem;">{{ $user->email }}</p>
-
-            <!-- Redes Sociales -->
-            <div class="social-links" style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem;">
-                @if($user->facebook)
-                    <a href="https://facebook.com/{{ $user->facebook }}" target="_blank" style="color: #1877f2; font-size: 1.2rem;"><i class="fab fa-facebook"></i></a>
-                @endif
-                @if($user->twitter)
-                    <a href="https://twitter.com/{{ $user->twitter }}" target="_blank" style="color: #1da1f2; font-size: 1.2rem;"><i class="fab fa-twitter"></i></a>
-                @endif
-                @if($user->linkedin)
-                    <a href="https://linkedin.com/in/{{ $user->linkedin }}" target="_blank" style="color: #0077b5; font-size: 1.2rem;"><i class="fab fa-linkedin"></i></a>
-                @endif
-                @if($user->instagram)
-                    <a href="https://instagram.com/{{ $user->instagram }}" target="_blank" style="color: #c32aa3; font-size: 1.2rem;"><i class="fab fa-instagram"></i></a>
-                @endif
-                @if($user->website)
-                    <a href="{{ $user->website }}" target="_blank" style="color: var(--text-muted); font-size: 1.2rem;"><i class="fas fa-globe"></i></a>
-                @endif
-            </div>
+            <h2 class="profile-name">{{ $user->name }}</h2>
+            <span class="profile-role">{{ $user->role ? $user->role->nombre : 'Usuario' }}</span>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">{{ $user->email }}</p>
 
             <div class="profile-stats">
                 <div class="stat-item">
@@ -122,12 +103,12 @@
                     <span class="stat-label">Miembro Desde</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-value text-success">{{ $user->estado ?? 'Activo' }}</span>
+                    <span class="stat-value text-success">{{ $user->cuenta_activa ? 'Activo' : 'Inactivo' }}</span>
                     <span class="stat-label">Estado</span>
                 </div>
             </div>
             <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
-                Último acceso: {{ $user->ultimo_acceso ? \Carbon\Carbon::parse($user->ultimo_acceso)->diffForHumans() : 'Nunca' }}
+                Último acceso: {{ $user->ultimo_acceso ? $user->ultimo_acceso->diffForHumans() : 'Nunca' }}
             </div>
         </div>
 
@@ -148,32 +129,28 @@
 
                 <div class="info-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
                     <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Profesión</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->profesion ?? 'No registrado' }}</span>
+                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Nombre Completo</label>
+                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->name }}</span>
                     </div>
                     <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Nivel de Estudios</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->nivel_estudios ?? 'No registrado' }}</span>
+                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Correo Electrónico</label>
+                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->email }}</span>
                     </div>
                     <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">CI / Documento</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->ci ?? 'No registrado' }}</span>
+                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Rol del Sistema</label>
+                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->role ? ucfirst($user->role->nombre) : 'Usuario' }}</span>
                     </div>
                     <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Teléfono</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->telefono ?? 'No registrado' }}</span>
+                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Estado de Cuenta</label>
+                        <span style="font-weight:600; font-size:1.1rem; color:{{ $user->cuenta_activa ? '#10b981' : '#ef4444' }};">{{ $user->cuenta_activa ? 'Activa' : 'Inactiva' }}</span>
                     </div>
                     <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Dirección</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->direccion ?? 'No registrado' }}</span>
+                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Registro en el Sistema</label>
+                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : 'N/A' }}</span>
                     </div>
                     <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Fecha Nacimiento</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->fecha_nacimiento ?? 'No registrado' }}</span>
-                    </div>
-                    <div class="info-item full-width" style="grid-column: span 2;">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Biografía</label>
-                        <p style="color:var(--text-dark); line-height:1.6;">{{ $user->biografia ?? 'Sin biografía.' }}</p>
+                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Email Verificado</label>
+                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->email_verified_at ? 'Sí (' . $user->email_verified_at->format('d/m/Y') . ')' : 'No verificado' }}</span>
                     </div>
                 </div>
             </div>
