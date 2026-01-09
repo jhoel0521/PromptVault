@@ -2,7 +2,16 @@
     use Illuminate\Support\Facades\Auth;
     $user = Auth::user();
     $userRole = $user && $user->role ? $user->role->nombre : 'guest';
-    $componentName = 'components.' . $userRole;
+    
+    // Mapear roles a nombres de componentes
+    $roleComponentMap = [
+        'admin' => 'administrador',
+        'user' => 'user',
+        'collaborator' => 'collaborator',
+        'guest' => 'invitado'
+    ];
+    
+    $componentName = 'components.' . ($roleComponentMap[$userRole] ?? 'invitado');
 @endphp
 
 @component($componentName, ['title' => 'Editar Perfil'])
