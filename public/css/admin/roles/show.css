@@ -1,0 +1,269 @@
+/* ============================================
+   ROLES SHOW - DASHBOARD STYLE
+   ============================================ */
+
+.show-role-container {
+    --primary-red: #e11d48;
+    --primary-red-hover: #be123c;
+    --border-color: rgba(225, 29, 72, 0.5);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --card-hover-shadow: 0 10px 15px -3px rgba(225, 29, 72, 0.15);
+
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Header Section */
+.panel-header {
+    background: var(--bg-surface);
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.icon-wrapper {
+    width: 52px;
+    height: 52px;
+    background: var(--primary-red);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(225, 29, 72, 0.3);
+}
+
+.title-content h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.btn-secondary-action {
+    background: var(--primary-red);
+    color: #ffffff;
+    padding: 0.875rem 1.75rem;
+    border-radius: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    border: none;
+    box-shadow: 0 4px 10px rgba(225, 29, 72, 0.3);
+}
+
+.btn-secondary-action:hover {
+    background: var(--primary-red-hover);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(225, 29, 72, 0.4);
+}
+
+/* Form Layout */
+.form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Card Styles */
+.form-card {
+    background: var(--bg-surface);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid rgba(225, 29, 72, 0.6);
+    box-shadow: var(--card-shadow);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.card-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header-title h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 0.25rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-header-title h3 i {
+    width: 48px;
+    height: 48px;
+    background: var(--primary-red);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
+}
+
+.card-header-title p {
+    margin: 0;
+    color: var(--primary-red);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+}
+
+/* Info Display */
+.role-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.info-value {
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.role-description {
+    grid-column: span 2;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-top: 0.5rem;
+    color: #d1d5db;
+    line-height: 1.6;
+}
+
+/* Permissions Grid (Read Only) */
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.module-card {
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.module-header {
+    background: rgba(225, 29, 72, 0.05);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.module-title {
+    font-weight: 700;
+    color: var(--primary-red);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.module-count {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+}
+
+.module-permissions {
+    padding: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.permission-badge {
+    background: rgba(4, 120, 87, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(4, 120, 87, 0.4);
+    padding: 0.35rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.permission-badge i {
+    font-size: 0.7rem;
+}
+
+/* Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.btn-edit-action {
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    background: var(--primary-red);
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 10px rgba(225, 29, 72, 0.25);
+    transition: all 0.3s ease;
+}
+
+.btn-edit-action:hover {
+    background: var(--primary-red-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(225, 29, 72, 0.35);
+}
