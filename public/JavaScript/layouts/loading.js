@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Simulation Config
     const duration = 2000; // Llega al 100% en 2 segundos
     const minDuration = 3000; // Mínimo 3 segundos total
-    const interval = 50; // Actualización más suave
+    const interval = 20; // Actualización cada 20ms para animación fluida
     const steps = duration / interval;
     const increment = 100 / steps;
 
@@ -136,8 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Progress Bar
         loadingInterval = setInterval(() => {
-            const randomIncrement = increment * (0.5 + Math.random());
-            progress += randomIncrement;
+            progress += increment;
 
             if (progress >= 100) {
                 progress = 100;
