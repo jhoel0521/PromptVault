@@ -178,6 +178,6 @@
 </div>
 @endsection
 @section('js')
-<script src="{{ asset('JavaScript/usuarios/create.js') }}"></script>
+    <script src="{{ asset('JavaScript/admin/usuarios/create.js') }}"></script>
 @endsection
 @endcomponent

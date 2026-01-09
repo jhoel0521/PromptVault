@@ -20,6 +20,7 @@
     transition: all 0.3s ease;
 }
 
+.filters-modal-overlay.show,
 .filters-modal-overlay.active {
     opacity: 1;
     visibility: visible;
@@ -40,6 +41,7 @@
     transition: all 0.3s ease;
 }
 
+.filters-modal-overlay.show .filters-modal,
 .filters-modal-overlay.active .filters-modal {
     transform: scale(1);
 }

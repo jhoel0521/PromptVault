@@ -32,6 +32,35 @@ class UsuarioController extends Controller
             });
         }
 
+        // Filtro por estado de cuenta
+        if ($request->has('cuenta_activa') && $request->cuenta_activa !== '') {
+            $query->where('cuenta_activa', (bool) $request->cuenta_activa);
+        }
+
+        // Filtro por fecha de registro (desde)
+        if ($request->has('fecha_desde') && $request->fecha_desde != '') {
+            $query->whereDate('created_at', '>=', $request->fecha_desde);
+        }
+
+        // Filtro por fecha de registro (hasta)
+        if ($request->has('fecha_hasta') && $request->fecha_hasta != '') {
+            $query->whereDate('created_at', '<=', $request->fecha_hasta);
+        }
+
+        // Filtro por número mínimo de prompts
+        if ($request->has('prompts_min') && $request->prompts_min !== '') {
+            $query->having('prompts_count', '>=', (int) $request->prompts_min);
+        }
+
+        // Filtro por último acceso
+        if ($request->has('tiene_acceso') && $request->tiene_acceso !== '') {
+            if ($request->tiene_acceso == '1') {
+                $query->whereNotNull('ultimo_acceso');
+            } else {
+                $query->whereNull('ultimo_acceso');
+            }
+        }
+
         $perPage = $request->input('per_page', 10);
         $usuarios = $query->latest()->paginate($perPage);
 

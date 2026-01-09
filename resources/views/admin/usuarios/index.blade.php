@@ -5,6 +5,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/admin/usuarios/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pages/paginacion.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/filters/filtersUsuario.css') }}">
 @endsection
 
 @section('content')
@@ -68,6 +69,14 @@
                     </select>
                 </div>
                 
+                <button class="btn-secondary-action" id="openFiltersModal">
+                    <i class="fas fa-filter"></i>
+                    <span>Filtros Avanzados</span>
+                    @if(request()->hasAny(['cuenta_activa', 'fecha_desde', 'fecha_hasta', 'prompts_min', 'tiene_acceso']))
+                        <span class="filter-badge">{{ collect(['cuenta_activa', 'fecha_desde', 'fecha_hasta', 'prompts_min', 'tiene_acceso'])->filter(fn($f) => request()->filled($f))->count() }}</span>
+                    @endif
+                </button>
+                
                 <button class="btn-secondary-action">
                     <i class="fas fa-file-export"></i>
                     <span>Exportar</span>
@@ -75,6 +84,9 @@
             </div>
         </div>
     </div>
+    
+    <!-- Incluir el componente de filtros -->
+    @include('filters.filtersUsuario')
     
     <!-- Tabla -->
     <div class="table-section">
@@ -190,6 +202,6 @@
             color: '#f1f5f9'
         };
     </script>
-    <script src="{{ asset('JavaScript/usuarios/index.js') }}"></script>
+    <script src="{{ asset('JavaScript/admin/usuarios/index.js') }}"></script>
 @endsection
 @endcomponent

@@ -185,6 +185,6 @@
 </div>
 @endsection
 @section('js')
-<script src="{{ asset('JavaScript/usuarios/edit.js') }}"></script>
+    <script src="{{ asset('JavaScript/admin/usuarios/edit.js') }}"></script>
 @endsection
 @endcomponent
