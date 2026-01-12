@@ -15,19 +15,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Primero crear roles y permisos
+        // 1. Primero crear roles y permisos
         $this->call([
             RoleSeeder::class,
             PermisoSeeder::class,
         ]);
 
-        // Luego crear categorías y etiquetas
+        // 2. Crear etiquetas (unificación de categorías + etiquetas)
         $this->call([
-            CategoriaSeeder::class,
             EtiquetaSeeder::class,
         ]);
 
-        // Crear usuarios (admin y demo por defecto)
+        // 3. Crear usuarios base
         User::factory()->create([
             'name' => 'Admin User',
             'email' => 'admin@promptvault.com',
@@ -40,18 +39,34 @@ class DatabaseSeeder extends Seeder
             'role_id' => 2, // User
         ]);
 
-        // Crear usuarios adicionales
+        // 4. Crear usuarios adicionales
         $this->call([
             UserSeeder::class,
         ]);
 
-        // Crear prompts y relaciones
+        // 5. Crear prompts con etiquetas
         $this->call([
             PromptSeeder::class,
+        ]);
+
+        // 6. Crear versionado de prompts
+        $this->call([
             VersionSeeder::class,
-            CompartidoSeeder::class,
-            ActividadSeeder::class,
-            SesionPromptSeeder::class,
+        ]);
+
+        // 7. Crear accesos compartidos (Req 3: compartir tipo Google Docs)
+        $this->call([
+            AccesoCompartidoSeeder::class,
+        ]);
+
+        // 8. Crear comentarios (Req 4)
+        $this->call([
+            ComentarioSeeder::class,
+        ]);
+
+        // 9. Crear calificaciones (Req 5: estrellas)
+        $this->call([
+            CalificacionSeeder::class,
         ]);
     }
 }

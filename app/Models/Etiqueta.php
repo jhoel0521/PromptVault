@@ -9,10 +9,11 @@ class Etiqueta extends Model
 {
     protected $fillable = [
         'nombre',
+        'color_hex',
     ];
 
     public function prompts(): BelongsToMany
     {
-        return $this->belongsToMany(Prompt::class, 'etiqueta_prompt');
+        return $this->belongsToMany(Prompt::class, 'prompt_etiquetas');
     }
 }

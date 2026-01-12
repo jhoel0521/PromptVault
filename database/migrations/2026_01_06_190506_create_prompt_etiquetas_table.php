@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre', 100);
-            $table->text('descripcion')->nullable();
-            $table->string('color', 7)->default('#3B82F6');
-            $table->timestamps();
+        Schema::create('prompt_etiquetas', function (Blueprint $table) {
+            $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
+            $table->foreignId('etiqueta_id')->constrained()->onDelete('cascade');
+
+            $table->primary(['prompt_id', 'etiqueta_id']);
         });
     }
 
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorias');
+        Schema::dropIfExists('prompt_etiquetas');
     }
 };

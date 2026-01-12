@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('versiones', function (Blueprint $table) {
+        Schema::create('calificaciones', function (Blueprint $table) {
             $table->id();
             $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
-            $table->integer('numero_version');
-            $table->text('contenido');
-            $table->string('mensaje_cambio', 255)->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedTinyInteger('estrellas');
+            $table->text('resena')->nullable();
             $table->timestamps();
+
+            $table->unique(['prompt_id', 'user_id']);
         });
     }
 
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('versiones');
+        Schema::dropIfExists('calificaciones');
     }
 };

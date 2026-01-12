@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('etiqueta_prompt', function (Blueprint $table) {
+        Schema::create('comentarios', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('etiqueta_id')->constrained()->onDelete('cascade');
             $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->text('contenido');
+            $table->foreignId('parent_id')->nullable()->constrained('comentarios')->onDelete('cascade');
             $table->timestamps();
-
-            $table->unique(['etiqueta_id', 'prompt_id']);
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('etiqueta_prompt');
+        Schema::dropIfExists('comentarios');
     }
 };

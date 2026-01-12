@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('etiquetas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 50)->unique();
+            $table->string('color_hex', 7)->default('#E5E7EB');
             $table->timestamps();
         });
     }

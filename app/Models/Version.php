@@ -13,13 +13,11 @@ class Version extends Model
         'prompt_id',
         'numero_version',
         'contenido',
-        'contenido_anterior',
-        'motivo_cambio',
-        'fecha_version',
+        'mensaje_cambio',
     ];
 
     protected $casts = [
-        'fecha_version' => 'datetime',
+        'numero_version' => 'integer',
     ];
 
     public function prompt(): BelongsTo

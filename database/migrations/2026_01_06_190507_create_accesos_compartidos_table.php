@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('actividades', function (Blueprint $table) {
+        Schema::create('accesos_compartidos', function (Blueprint $table) {
             $table->id();
             $table->foreignId('prompt_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('accion', 50);
-            $table->text('descripcion')->nullable();
-            $table->timestamp('fecha')->useCurrent();
+            $table->enum('nivel_acceso', ['lector', 'comentador', 'editor'])->default('lector');
             $table->timestamps();
+
+            $table->unique(['prompt_id', 'user_id']);
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('actividades');
+        Schema::dropIfExists('accesos_compartidos');
     }
 };

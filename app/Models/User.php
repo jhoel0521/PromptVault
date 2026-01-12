@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -66,19 +65,29 @@ class User extends Authenticatable
         return $this->hasMany(Prompt::class);
     }
 
-    public function actividades(): HasMany
+    public function accesosCompartidos(): HasMany
     {
-        return $this->hasMany(Actividad::class);
+        return $this->hasMany(AccesoCompartido::class);
     }
 
-    public function compartidos(): HasMany
+    public function comentarios(): HasMany
     {
-        return $this->hasMany(Compartido::class, 'user_id');
+        return $this->hasMany(Comentario::class);
     }
 
-    public function sesionPrompt(): HasOne
+    public function calificaciones(): HasMany
     {
-        return $this->hasOne(SesionPrompt::class);
+        return $this->hasMany(Calificacion::class);
+    }
+
+    /**
+     * Prompts compartidos con este usuario
+     */
+    public function promptsCompartidos(): BelongsToMany
+    {
+        return $this->belongsToMany(Prompt::class, 'accesos_compartidos')
+            ->withPivot('nivel_acceso')
+            ->withTimestamps();
     }
 
     // Métodos helper para roles y permisos
@@ -141,43 +150,44 @@ class User extends Authenticatable
             return true;
         }
 
-        // Verificar si tiene permiso de editar compartidos
-        if ($this->tienePermiso('prompts.editar_compartidos')) {
-            // Verificar si el prompt está compartido con este usuario con permiso de edición
-            $compartido = $prompt->compartidos()
-                ->where('email_destinatario', $this->email)
-                ->where('tipo_acceso', 'puede_editar')
-                ->first();
+        // Verificar si tiene acceso compartido como editor
+        $acceso = $prompt->accesosCompartidos()
+            ->where('user_id', $this->id)
+            ->where('nivel_acceso', 'editor')
+            ->first();
 
-            return $compartido !== null;
-        }
-
-        return false;
+        return $acceso !== null;
     }
 
     public function puedeVer(Prompt $prompt): bool
     {
-        // Prompt público
-        if ($prompt->es_publico) {
-            return true;
-        }
+        return $prompt->esVisiblePara($this);
+    }
 
-        // Propietario
+    public function puedeComentar(Prompt $prompt): bool
+    {
+        // El propietario siempre puede comentar
         if ($this->id === $prompt->user_id) {
             return true;
         }
 
-        // Admin puede ver todos
+        // Admin puede comentar en todos
         if ($this->esAdmin()) {
             return true;
         }
 
-        // Verificar si está compartido con este usuario
-        $compartido = $prompt->compartidos()
-            ->where('email_destinatario', $this->email)
+        // Prompts públicos permiten comentarios
+        if ($prompt->visibilidad === 'publico') {
+            return true;
+        }
+
+        // Verificar si tiene acceso compartido como comentador o editor
+        $acceso = $prompt->accesosCompartidos()
+            ->where('user_id', $this->id)
+            ->whereIn('nivel_acceso', ['comentador', 'editor'])
             ->first();
 
-        return $compartido !== null;
+        return $acceso !== null;
     }
 
     public function actualizarUltimoAcceso(): void
