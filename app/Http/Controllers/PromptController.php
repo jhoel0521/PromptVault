@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccesoCompartido;
-use App\Models\Etiqueta;
+use App\Contracts\Repositories\EtiquetaRepositoryInterface;
+use App\Contracts\Services\CompartirServiceInterface;
+use App\Contracts\Services\PromptServiceInterface;
 use App\Models\Prompt;
 use App\Models\User;
 use App\Models\Version;
@@ -12,73 +13,52 @@ use Illuminate\Support\Facades\Auth;
 
 class PromptController extends Controller
 {
+    public function __construct(
+        private PromptServiceInterface $promptService,
+        private CompartirServiceInterface $compartirService,
+        private EtiquetaRepositoryInterface $etiquetaRepository
+    ) {}
+
     /**
-     * Display a listing of the resource.
+     * Lista de prompts del usuario autenticado
      */
     public function index(Request $request)
     {
-        $query = Prompt::with(['etiquetas', 'user'])
-            ->where('user_id', Auth::id());
+        $this->authorize('viewAny', Prompt::class);
 
-        // Búsqueda por palabra clave
-        if ($request->filled('buscar')) {
-            $buscar = $request->buscar;
-            $query->where(function ($q) use ($buscar) {
-                $q->where('titulo', 'like', "%{$buscar}%")
-                    ->orWhere('contenido', 'like', "%{$buscar}%")
-                    ->orWhere('descripcion', 'like', "%{$buscar}%");
-            });
-        }
+        $filters = [
+            'buscar' => $request->get('buscar'),
+            'etiqueta' => $request->get('etiqueta'),
+            'visibilidad' => $request->get('visibilidad'),
+            'orden' => $request->get('orden', 'reciente'),
+            'solo_mios' => true,
+        ];
 
-        // Filtro por visibilidad
-        if ($request->filled('visibilidad')) {
-            $query->where('visibilidad', $request->visibilidad);
-        }
-
-        // Filtro por etiqueta
-        if ($request->filled('etiqueta')) {
-            $query->whereHas('etiquetas', function ($q) use ($request) {
-                $q->where('nombre', $request->etiqueta);
-            });
-        }
-
-        // Ordenamiento
-        $orden = $request->get('orden', 'reciente');
-        switch ($orden) {
-            case 'titulo':
-                $query->orderBy('titulo');
-                break;
-            case 'vistas':
-                $query->orderBy('conteo_vistas', 'desc');
-                break;
-            case 'calificacion':
-                $query->orderBy('promedio_calificacion', 'desc');
-                break;
-            default:
-                $query->latest();
-        }
-
-        $prompts = $query->paginate(15);
-        $etiquetas = Etiqueta::all();
+        $prompts = $this->promptService->listar(Auth::user(), 15, $filters);
+        $etiquetas = $this->etiquetaRepository->all();
 
         return view('prompts.index', compact('prompts', 'etiquetas'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Formulario de creación
      */
     public function create()
     {
-        $etiquetas = Etiqueta::all();
+        $this->authorize('create', Prompt::class);
+
+        $etiquetas = $this->etiquetaRepository->all();
 
         return view('prompts.create', compact('etiquetas'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guardar nuevo prompt
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Prompt::class);
+
         $validated = $request->validate([
             'titulo' => 'required|string|max:150',
             'contenido' => 'required|string',
@@ -88,41 +68,20 @@ class PromptController extends Controller
             'etiquetas.*' => 'exists:etiquetas,id',
         ]);
 
-        $prompt = Prompt::create([
-            'user_id' => Auth::id(),
-            'titulo' => $validated['titulo'],
-            'contenido' => $validated['contenido'],
-            'descripcion' => $validated['descripcion'] ?? null,
-            'visibilidad' => $validated['visibilidad'] ?? 'privado',
-            'version_actual' => 1,
-        ]);
-
-        // Asignar etiquetas
-        if ($request->filled('etiquetas')) {
-            $prompt->etiquetas()->attach($request->etiquetas);
-        }
-
-        // Crear primera versión
-        Version::create([
-            'prompt_id' => $prompt->id,
-            'numero_version' => 1,
-            'contenido' => $prompt->contenido,
-            'mensaje_cambio' => 'Versión inicial',
-        ]);
+        $prompt = $this->promptService->crear(Auth::user(), $validated);
 
         return redirect()->route('prompts.show', $prompt)
             ->with('success', 'Prompt creado exitosamente');
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar un prompt
      */
     public function show(Prompt $prompt)
     {
         $this->authorize('view', $prompt);
 
-        // Incrementar vistas
-        $prompt->incrementarVistas();
+        $this->promptService->incrementarVistas($prompt);
 
         $prompt->load(['etiquetas', 'versiones', 'accesosCompartidos.user', 'comentarios.user', 'calificaciones.user']);
 
@@ -130,19 +89,19 @@ class PromptController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Formulario de edición
      */
     public function edit(Prompt $prompt)
     {
         $this->authorize('update', $prompt);
 
-        $etiquetas = Etiqueta::all();
+        $etiquetas = $this->etiquetaRepository->all();
 
         return view('prompts.edit', compact('prompt', 'etiquetas'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizar prompt
      */
     public function update(Request $request, Prompt $prompt)
     {
@@ -158,44 +117,20 @@ class PromptController extends Controller
             'mensaje_cambio' => 'nullable|string|max:255',
         ]);
 
-        // Verificar si el contenido cambió para crear nueva versión
-        $contenidoCambio = $prompt->contenido !== $validated['contenido'];
-
-        if ($contenidoCambio) {
-            // Crear nueva versión
-            $prompt->version_actual++;
-            Version::create([
-                'prompt_id' => $prompt->id,
-                'numero_version' => $prompt->version_actual,
-                'contenido' => $validated['contenido'],
-                'mensaje_cambio' => $validated['mensaje_cambio'] ?? null,
-            ]);
-        }
-
-        $prompt->update([
-            'titulo' => $validated['titulo'],
-            'contenido' => $validated['contenido'],
-            'descripcion' => $validated['descripcion'] ?? null,
-            'visibilidad' => $validated['visibilidad'] ?? 'privado',
-        ]);
-
-        // Actualizar etiquetas
-        if ($request->has('etiquetas')) {
-            $prompt->etiquetas()->sync($request->etiquetas);
-        }
+        $this->promptService->actualizar($prompt, $validated);
 
         return redirect()->route('prompts.show', $prompt)
             ->with('success', 'Prompt actualizado exitosamente');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar prompt
      */
     public function destroy(Prompt $prompt)
     {
         $this->authorize('delete', $prompt);
 
-        $prompt->delete();
+        $this->promptService->eliminar($prompt);
 
         return redirect()->route('prompts.index')
             ->with('success', 'Prompt eliminado exitosamente');
@@ -206,7 +141,7 @@ class PromptController extends Controller
      */
     public function compartir(Request $request, Prompt $prompt)
     {
-        $this->authorize('update', $prompt);
+        $this->authorize('share', $prompt);
 
         $validated = $request->validate([
             'email' => 'required|email|exists:users,email',
@@ -215,30 +150,23 @@ class PromptController extends Controller
 
         $usuario = User::where('email', $validated['email'])->first();
 
-        // Verificar que no sea el propietario
         if ($usuario->id === $prompt->user_id) {
             return back()->with('error', 'No puedes compartir contigo mismo');
         }
 
-        // Crear o actualizar acceso
-        AccesoCompartido::updateOrCreate(
-            ['prompt_id' => $prompt->id, 'user_id' => $usuario->id],
-            ['nivel_acceso' => $validated['nivel_acceso']]
-        );
+        $this->compartirService->compartir($prompt, $usuario, $validated['nivel_acceso']);
 
         return back()->with('success', "Prompt compartido con {$usuario->name}");
     }
 
     /**
-     * Eliminar acceso compartido
+     * Quitar acceso a un usuario
      */
     public function quitarAcceso(Prompt $prompt, User $user)
     {
-        $this->authorize('update', $prompt);
+        $this->authorize('share', $prompt);
 
-        AccesoCompartido::where('prompt_id', $prompt->id)
-            ->where('user_id', $user->id)
-            ->delete();
+        $this->compartirService->quitarAcceso($prompt, $user);
 
         return back()->with('success', 'Acceso removido');
     }
@@ -258,7 +186,7 @@ class PromptController extends Controller
     }
 
     /**
-     * Restaurar una versión específica
+     * Restaurar una versión
      */
     public function restaurarVersion(Prompt $prompt, Version $version)
     {
@@ -268,17 +196,9 @@ class PromptController extends Controller
             abort(403);
         }
 
-        // Crear nueva versión con el contenido restaurado
-        $prompt->version_actual++;
-        Version::create([
-            'prompt_id' => $prompt->id,
-            'numero_version' => $prompt->version_actual,
+        $this->promptService->actualizar($prompt, [
             'contenido' => $version->contenido,
             'mensaje_cambio' => "Restaurado desde versión {$version->numero_version}",
-        ]);
-
-        $prompt->update([
-            'contenido' => $version->contenido,
         ]);
 
         return redirect()->route('prompts.show', $prompt)
@@ -288,11 +208,14 @@ class PromptController extends Controller
     /**
      * Prompts compartidos conmigo
      */
-    public function compartidosConmigo()
+    public function compartidosConmigo(Request $request)
     {
-        $prompts = Auth::user()->promptsCompartidos()
-            ->with(['user', 'etiquetas'])
-            ->paginate(15);
+        $filters = [
+            'compartidos_conmigo' => true,
+            'orden' => $request->get('orden', 'reciente'),
+        ];
+
+        $prompts = $this->promptService->listar(Auth::user(), 15, $filters);
 
         return view('prompts.compartidos', compact('prompts'));
     }

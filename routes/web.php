@@ -3,70 +3,47 @@
 use App\Http\Controllers\BuscadorController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionesController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromptController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+/*
+|--------------------------------------------------------------------------
+| Rutas Públicas (sin autenticación)
+|--------------------------------------------------------------------------
+*/
+
+// Página principal pública - muestra prompts públicos
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Búsqueda pública
+Route::get('buscador/search', [BuscadorController::class, 'search'])->name('buscador.search');
+
+/*
+|--------------------------------------------------------------------------
+| Rutas de Autenticación
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/dashboard', function () {
-    /** @var \App\Models\User $user */
-    $user = Auth::user();
-
-    // Preparar estadísticas según el rol
-    $stats = [];
-
-    if ($user->esAdmin()) {
-        $stats = [
-            'users' => \App\Models\User::count(),
-            'prompts' => \App\Models\Prompt::count(),
-            'tags' => \App\Models\Etiqueta::count(),
-            'shared' => \App\Models\AccesoCompartido::count(),
-            'versions' => \App\Models\Version::count(),
-            'comments' => \App\Models\Comentario::count(),
-            'ratings' => \App\Models\Calificacion::count(),
-            'recent_users_count' => \App\Models\User::where('created_at', '>=', now()->subDays(30))->count(),
-            'public_prompts' => \App\Models\Prompt::where('visibilidad', 'publico')->count(),
-        ];
-        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
-
-        return view('dashboard', compact('stats', 'recentUsers'));
-    } elseif ($user->role && in_array($user->role->nombre, ['user', 'collaborator'])) {
-        $stats = [
-            'prompts' => \App\Models\Prompt::where('user_id', $user->id)->count(),
-            'tags' => \App\Models\Etiqueta::count(),
-            'shared_with_me' => $user->promptsCompartidos()->count(),
-            'my_shares' => \App\Models\AccesoCompartido::whereHas('prompt', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            })->count(),
-            'versions' => \App\Models\Version::whereHas('prompt', function ($q) use ($user) {
-                $q->where('user_id', $user->id);
-            })->count(),
-        ];
-
-        return view('dashboard', compact('stats'));
-    } else {
-        // Guest
-        $stats = [
-            'prompts' => \App\Models\Prompt::where('visibilidad', 'publico')->count(),
-            'tags' => \App\Models\Etiqueta::count(),
-        ];
-        $recentUsers = \App\Models\User::with('role')->latest()->take(5)->get();
-
-        return view('dashboard', compact('stats', 'recentUsers'));
-    }
+    return redirect()->route('prompts.index');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+/*
+|--------------------------------------------------------------------------
+| Rutas Protegidas (requieren autenticación)
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('auth')->group(function () {
+    // Profile (Laravel Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Rutas de Perfil
+    // Perfil personalizado
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
     Route::get('/perfil/editar', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');
@@ -74,34 +51,35 @@ Route::middleware('auth')->group(function () {
     Route::post('/perfil/password', [PerfilController::class, 'actualizarPassword'])->name('perfil.password');
     Route::post('/perfil/avatar', [PerfilController::class, 'subirAvatar'])->name('perfil.avatar');
 
-    // Rutas de Prompts
+    // Prompts (CRUD)
     Route::resource('prompts', PromptController::class);
 
-    // Rutas adicionales de Prompts
+    // Prompts adicionales
     Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir');
     Route::delete('/prompts/{prompt}/acceso/{user}', [PromptController::class, 'quitarAcceso'])->name('prompts.quitarAcceso');
     Route::get('/prompts/{prompt}/historial', [PromptController::class, 'historial'])->name('prompts.historial');
     Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar');
     Route::get('/compartidos-conmigo', [PromptController::class, 'compartidosConmigo'])->name('prompts.compartidosConmigo');
 
-    // Rutas de Calendario
+    // Calendario
     Route::resource('calendario', CalendarioController::class);
 
-    // Rutas de Buscador
+    // Buscador
     Route::get('buscador', [BuscadorController::class, 'search'])->name('buscador.index');
-    Route::get('buscador/search', [BuscadorController::class, 'search'])->name('buscador.search');
 
-    // Rutas de Configuraciones
-    Route::get('configuraciones', [ConfiguracionesController::class, 'index'])->name('configuraciones.index');
-    Route::get('configuraciones/general', [ConfiguracionesController::class, 'general'])->name('configuraciones.general');
-    Route::get('configuraciones/seguridad', [ConfiguracionesController::class, 'seguridad'])->name('configuraciones.seguridad');
-    Route::get('configuraciones/notificaciones', [ConfiguracionesController::class, 'notificaciones'])->name('configuraciones.notificaciones');
-    Route::get('configuraciones/apariencia', [ConfiguracionesController::class, 'apariencia'])->name('configuraciones.apariencia');
-    Route::get('configuraciones/sistema', [ConfiguracionesController::class, 'sistema'])->name('configuraciones.sistema');
-    Route::get('configuraciones/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('configuraciones.respaldos');
-    Route::post('configuraciones/update', [ConfiguracionesController::class, 'update'])->name('configuraciones.update');
+    // Configuraciones
+    Route::prefix('configuraciones')->name('configuraciones.')->group(function () {
+        Route::get('/', [ConfiguracionesController::class, 'index'])->name('index');
+        Route::get('/general', [ConfiguracionesController::class, 'general'])->name('general');
+        Route::get('/seguridad', [ConfiguracionesController::class, 'seguridad'])->name('seguridad');
+        Route::get('/notificaciones', [ConfiguracionesController::class, 'notificaciones'])->name('notificaciones');
+        Route::get('/apariencia', [ConfiguracionesController::class, 'apariencia'])->name('apariencia');
+        Route::get('/sistema', [ConfiguracionesController::class, 'sistema'])->name('sistema');
+        Route::get('/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('respaldos');
+        Route::post('/update', [ConfiguracionesController::class, 'update'])->name('update');
+    });
 
-    // Rutas de Administración de Usuarios (solo admin)
+    // Administración (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);
     });
