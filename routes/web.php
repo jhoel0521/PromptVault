@@ -85,4 +85,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+Route::middleware('auth')->prefix('chatbot')->group(function () {
+    Route::post('/ask', [App\Http\Controllers\ChatbotController::class, 'ask'])->name('chatbot.ask');
+    Route::get('/providers', [App\Http\Controllers\ChatbotController::class, 'providers'])->name('chatbot.providers');
+});
 require __DIR__.'/auth.php';

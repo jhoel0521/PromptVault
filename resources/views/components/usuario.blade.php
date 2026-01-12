@@ -18,6 +18,8 @@
     <meta name="description" content="Dashboard para docentes de Tech Home Books. Sistema de gestión educativa.">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
     <!-- CSS del Dashboard -->
     <link rel="stylesheet" href="{{ asset('css/dashboard/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/sidebar.css') }}">

@@ -49,13 +49,25 @@ class PromptRepository implements PromptRepositoryInterface
             });
         }
 
-        // Búsqueda por texto
+        // Búsqueda por texto (frase exacta o parcial)
         if (isset($filters['buscar']) && ! empty($filters['buscar'])) {
             $buscar = $filters['buscar'];
             $query->where(function ($q) use ($buscar) {
                 $q->where('titulo', 'like', "%{$buscar}%")
                     ->orWhere('contenido', 'like', "%{$buscar}%")
                     ->orWhere('descripcion', 'like', "%{$buscar}%");
+            });
+        }
+
+        // Búsqueda por múltiples palabras clave (OR)
+        if (isset($filters['any_keywords']) && is_array($filters['any_keywords']) && ! empty($filters['any_keywords'])) {
+            $keywords = $filters['any_keywords'];
+            $query->where(function ($q) use ($keywords) {
+                foreach ($keywords as $keyword) {
+                    $q->orWhere('titulo', 'like', "%{$keyword}%")
+                        ->orWhere('contenido', 'like', "%{$keyword}%")
+                        ->orWhere('descripcion', 'like', "%{$keyword}%");
+                }
             });
         }
 

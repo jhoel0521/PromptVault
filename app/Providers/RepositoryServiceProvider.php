@@ -29,6 +29,11 @@ class RepositoryServiceProvider extends ServiceProvider
         // Services
         $this->app->bind(PromptServiceInterface::class, PromptService::class);
         $this->app->bind(CompartirServiceInterface::class, CompartirService::class);
+
+        $this->app->bind(
+            \App\Contracts\Services\ChatbotServiceInterface::class,
+            \App\Services\ChatbotService::class
+        );
     }
 
     /**
