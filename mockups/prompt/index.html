@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Vault - Inicio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgDark: '#0f111a',
+                        cardDark: '#1e212b',
+                        primary: '#f43f5e',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bgDark text-gray-200 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-cardDark border-b border-gray-800 px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2">
+            <i class="fa-solid fa-bolt text-primary text-2xl"></i>
+            <span class="text-xl font-bold text-white">Prompt Vault</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="editDelete.html" class="bg-primary hover:bg-rose-600 text-white px-4 py-2 rounded-lg text-sm font-bold transition">
+                <i class="fa-solid fa-plus mr-2"></i> Nuevo Prompt
+            </a>
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-xs font-bold text-white">
+                SA
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="container mx-auto px-6 py-10">
+        
+        <!-- Buscador -->
+        <div class="text-center mb-12">
+            <h1 class="text-3xl font-bold text-white mb-4">Biblioteca de Prompts</h1>
+            <div class="relative max-w-xl mx-auto">
+                <input type="text" placeholder="Buscar prompt..." class="w-full bg-cardDark border border-gray-700 rounded-full py-3 px-10 text-white focus:outline-none focus:border-primary">
+                <i class="fa-solid fa-search absolute left-4 top-4 text-gray-500"></i>
+            </div>
+            <!-- Tags -->
+            <div class="flex justify-center gap-2 mt-4">
+                <span class="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400 border border-gray-700">#Marketing</span>
+                <span class="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400 border border-gray-700">#Dev</span>
+                <span class="px-3 py-1 bg-gray-800 rounded-full text-xs text-gray-400 border border-gray-700">#Diseño</span>
+            </div>
+        </div>
+
+        <!-- Grid de Tarjetas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <!-- Tarjeta 1 (Clickeable -> va a view-tarjeta.html) -->
+            <a href="view-tarjeta.html" class="block bg-cardDark border border-gray-800 rounded-xl p-6 hover:border-primary/50 transition hover:-translate-y-1 group">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-blue-900/30 text-blue-400 text-xs px-2 py-1 rounded border border-blue-800">GPT-4</span>
+                    <span class="text-yellow-500 text-sm"><i class="fa-solid fa-star"></i> 4.5</span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition">Redactor Informe Técnico</h3>
+                <p class="text-gray-400 text-sm mb-4 line-clamp-2">Estructura completa para generar informes técnicos de ingeniería con metodología IEEE.</p>
+                <div class="flex items-center gap-2 text-xs text-gray-500 border-t border-gray-700 pt-3">
+                    <div class="w-5 h-5 rounded-full bg-gray-600 flex items-center justify-center text-white">A</div>
+                    <span>Super Admin</span>
+                </div>
+            </a>
+
+            <!-- Tarjeta 2 (Ejemplo visual) -->
+            <a href="view-tarjeta.html" class="block bg-cardDark border border-gray-800 rounded-xl p-6 hover:border-primary/50 transition hover:-translate-y-1 group">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-purple-900/30 text-purple-400 text-xs px-2 py-1 rounded border border-purple-800">Midjourney</span>
+                    <span class="text-yellow-500 text-sm"><i class="fa-solid fa-star"></i> 5.0</span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition">Fotografía Cyberpunk</h3>
+                <p class="text-gray-400 text-sm mb-4 line-clamp-2">Prompt para generar imágenes de ciudades futuristas con lluvia y neón.</p>
+                <div class="flex items-center gap-2 text-xs text-gray-500 border-t border-gray-700 pt-3">
+                    <div class="w-5 h-5 rounded-full bg-green-600 flex items-center justify-center text-white">L</div>
+                    <span>Lucía M.</span>
+                </div>
+            </a>
+
+             <!-- Tarjeta 3 -->
+             <a href="view-tarjeta.html" class="block bg-cardDark border border-gray-800 rounded-xl p-6 hover:border-primary/50 transition hover:-translate-y-1 group">
+                <div class="flex justify-between items-start mb-4">
+                    <span class="bg-green-900/30 text-green-400 text-xs px-2 py-1 rounded border border-green-800">Claude</span>
+                    <span class="text-yellow-500 text-sm"><i class="fa-solid fa-star"></i> 4.2</span>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition">Analista SQL</h3>
+                <p class="text-gray-400 text-sm mb-4 line-clamp-2">Experto en generar consultas complejas para bases de datos relacionales.</p>
+                <div class="flex items-center gap-2 text-xs text-gray-500 border-t border-gray-700 pt-3">
+                    <div class="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center text-white">J</div>
+                    <span>Juan Dev</span>
+                </div>
+            </a>
+
+        </div>
+    </main>
+</body>
+</html>

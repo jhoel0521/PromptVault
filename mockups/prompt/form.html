@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Prompt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgDark: '#0f111a',
+                        cardDark: '#1e212b',
+                        primary: '#f43f5e',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-bgDark text-gray-200 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-cardDark border-b border-gray-800 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='home.html'">
+            <i class="fa-solid fa-bolt text-primary text-2xl"></i>
+            <span class="text-xl font-bold text-white">Prompt Vault</span>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-10 max-w-3xl">
+
+        <div class="flex items-center gap-4 mb-8">
+            <a href="view-tarjeta.html"
+                class="bg-cardDark p-2 rounded-lg text-gray-400 hover:text-white border border-gray-700 transition">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <h1 class="text-2xl font-bold text-white">Editar Prompt</h1>
+        </div>
+
+        <div class="bg-cardDark border border-gray-800 rounded-xl p-8 shadow-2xl">
+            <!-- El formulario no envía datos reales, solo navega -->
+            <form onsubmit="event.preventDefault(); window.location.href='view-tarjeta.html'">
+
+                <!-- Título -->
+                <div class="mb-6">
+                    <label class="block text-gray-400 text-sm font-bold mb-2">Título del Prompt</label>
+                    <input type="text" value="Redactor Informe Técnico"
+                        class="w-full bg-bgDark border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition">
+                </div>
+
+                <!-- Modelo y Categoría -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-400 text-sm font-bold mb-2">Modelo IA</label>
+                        <select
+                            class="w-full bg-bgDark border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition">
+                            <option selected>GPT-4</option>
+                            <option>Claude 3</option>
+                            <option>Midjourney</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 text-sm font-bold mb-2">Categoría</label>
+                        <select
+                            class="w-full bg-bgDark border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition">
+                            <option selected>Ingeniería</option>
+                            <option>Marketing</option>
+                            <option>Desarrollo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Prompt Code -->
+                <div class="mb-8">
+                    <label class="block text-gray-400 text-sm font-bold mb-2">Contenido del Prompt</label>
+                    <textarea rows="10"
+                        class="w-full bg-bgDark border border-gray-700 rounded-lg px-4 py-3 text-gray-300 font-mono text-sm focus:outline-none focus:border-primary transition">Actúa como un ingeniero senior. Redacta la sección de metodología para un informe técnico.
+
+Contexto:
+- Proyecto: Migración de Servidores.
+- Tiempo: 2 semanas.
+
+Requisitos:
+1. Usa voz pasiva.
+2. Sé directo y conciso.
+3. Incluye lista de riesgos mitigados.</textarea>
+                </div>
+
+                <!-- Botones de Acción -->
+                <div class="flex items-center justify-between pt-6 border-t border-gray-700">
+                    <!-- Botón Eliminar (Lleva al Home) -->
+                    <button type="button"
+                        onclick="if(confirm('¿Eliminar permanentemente?')) window.location.href='home.html'"
+                        class="text-red-500 hover:text-red-400 font-medium px-4 py-2 transition flex items-center gap-2">
+                        <i class="fa-solid fa-trash"></i> Eliminar Prompt
+                    </button>
+
+                    <div class="flex gap-4">
+                        <a href="view-tarjeta.html"
+                            class="text-gray-400 hover:text-white font-medium px-4 py-2 transition flex items-center">
+                            Cancelar
+                        </a>
+                        <!-- Botón Guardar (Vuelve al detalle) -->
+                        <button type="submit"
+                            class="bg-primary hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg shadow-primary/20 transition">
+                            Guardar Cambios
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+</body>
+
+</html>
