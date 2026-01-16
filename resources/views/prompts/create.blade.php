@@ -3,7 +3,7 @@
 @section('title', 'Crear Nuevo Prompt - PromptVault')
 
 @section('content')
-<div class="min-h-screen bg-bgDark text-gray-200">
+<div class="min-h-screen text-[var(--text-dark)]">
     <div class="max-w-3xl mx-auto px-6 py-10">
         
         {{-- Header --}}
@@ -21,7 +21,7 @@
         </div>
 
         {{-- Formulario --}}
-        <div class="bg-cardDark border border-gray-800 rounded-xl p-8 shadow-2xl">
+        <div class="bg-[var(--light-bg)] border border-[var(--border-color)] rounded-xl p-8 shadow-2xl">
             <form action="{{ route('prompts.store') }}" method="POST">
                 @csrf
 
@@ -34,7 +34,7 @@
                         type="text" 
                         name="titulo" 
                         id="titulo" 
-                        class="w-full bg-bgDark border @error('titulo') border-red-500 @else border-gray-700 @enderror rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors placeholder-gray-500"
+                        class="w-full bg-[var(--input-bg)] border @error('titulo') border-red-500 @else border-[var(--border-color)] @enderror rounded-lg px-4 py-3 text-[var(--text-dark)] focus:outline-none focus:border-[var(--primary-red)] transition-colors placeholder-[var(--text-muted)]"
                         value="{{ old('titulo') }}"
                         placeholder="Ej: Generador de ideas de marketing"
                         required
@@ -53,7 +53,7 @@
                         name="descripcion" 
                         id="descripcion" 
                         rows="2" 
-                        class="w-full bg-bgDark border @error('descripcion') border-red-500 @else border-gray-700 @enderror rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors placeholder-gray-500"
+                        class="w-full bg-[var(--input-bg)] border @error('descripcion') border-red-500 @else border-[var(--border-color)] @enderror rounded-lg px-4 py-3 text-[var(--text-dark)] focus:outline-none focus:border-[var(--primary-red)] transition-colors placeholder-[var(--text-muted)]"
                         placeholder="Explica brevemente para qué sirve este prompt"
                     >{{ old('descripcion') }}</textarea>
                     @error('descripcion')
@@ -70,11 +70,11 @@
                         name="contenido" 
                         id="contenido" 
                         rows="10" 
-                        class="w-full bg-bgDark border @error('contenido') border-red-500 @else border-gray-700 @enderror rounded-lg px-4 py-3 text-gray-300 font-mono text-sm focus:outline-none focus:border-primary transition-colors placeholder-gray-500"
+                        class="w-full bg-[var(--input-bg)] border @error('contenido') border-red-500 @else border-[var(--border-color)] @enderror rounded-lg px-4 py-3 text-[var(--text-dark)] font-mono text-sm focus:outline-none focus:border-[var(--primary-red)] transition-colors placeholder-[var(--text-muted)]"
                         placeholder="Escribe aquí las instrucciones detalladas para la IA..."
                         required
                     >{{ old('contenido') }}</textarea>
-                    <small class="text-gray-500 block mt-2">Usa [CORCHETES] para indicar variables que el usuario debe completar.</small>
+                    <small class="text-[var(--text-muted)] block mt-2">Usa [CORCHETES] para indicar variables que el usuario debe completar.</small>
                     @error('contenido')
                         <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
                     @enderror
@@ -89,7 +89,7 @@
                         <select 
                             name="visibilidad" 
                             id="visibilidad" 
-                            class="w-full bg-bgDark border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                            class="w-full bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg px-4 py-3 text-[var(--text-dark)] focus:outline-none focus:border-[var(--primary-red)] transition-colors"
                             required
                         >
                             <option value="privado" {{ old('visibilidad') == 'privado' ? 'selected' : '' }}>Privado (Solo yo)</option>
@@ -104,7 +104,7 @@
                         <select 
                             name="etiquetas_ids[]" 
                             id="etiquetas" 
-                            class="w-full bg-bgDark border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                            class="w-full bg-[var(--input-bg)] border border-[var(--border-color)] rounded-lg px-4 py-3 text-[var(--text-dark)] focus:outline-none focus:border-[var(--primary-red)] transition-colors"
                             multiple
                             style="height: 120px;"
                         >
@@ -117,21 +117,21 @@
                                 </option>
                             @endforeach
                         </select>
-                        <small class="text-gray-500 block mt-2">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varias.</small>
+                        <small class="text-[var(--text-muted)] block mt-2">Mantén presionado Ctrl (Cmd en Mac) para seleccionar varias.</small>
                     </div>
                 </div>
 
                 {{-- Botones de Acción --}}
-                <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-700">
+                <div class="flex items-center justify-end gap-4 pt-6 border-t border-[var(--border-color)]">
                     <a 
                         href="{{ route('prompts.index') }}" 
-                        class="text-gray-400 hover:text-white font-medium px-6 py-2 transition-colors"
+                        class="text-[var(--text-muted)] hover:text-[var(--text-dark)] font-medium px-6 py-2 transition-colors"
                     >
                         Cancelar
                     </a>
                     <button 
                         type="submit" 
-                        class="bg-primary hover:bg-rose-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg shadow-primary/20 transition-colors"
+                        class="bg-[var(--primary-red)] hover:bg-[var(--primary-red-hover)] text-white font-bold py-2 px-6 rounded-lg shadow-lg shadow-primary/20 transition-colors"
                     >
                         Guardar Prompt
                     </button>

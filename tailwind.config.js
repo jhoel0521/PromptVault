@@ -15,9 +15,13 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
             colors: {
-                bgDark: '#0f111a',
-                cardDark: '#1e212b',
-                primary: '#f43f5e',
+                primary: '#e11d48',
+                primaryHover: '#be123c',
+                bgSurface: 'var(--bg-surface)',
+                bgSurfaceSecondary: 'var(--bg-surface-secondary)',
+                textBase: 'var(--text-dark)',
+                textMuted: 'var(--text-muted)',
+                borderBase: 'var(--border-color)',
             }
         },
     },
