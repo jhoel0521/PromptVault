@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ asset('css/components/sidebar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/header.css') }}">
     <link rel="stylesheet" href="{{ asset('css/components/footer.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/layouts/loading.css') }}">
+    
     
     @yield('css')
     @stack('styles')
@@ -31,8 +31,8 @@
 
 <body>
     
-    <!-- Loading Screen -->
-    @include('layouts.loading')
+    
+    
     
     <!-- Layout del Dashboard -->
     <div class="dashboard-layout">
@@ -418,7 +418,7 @@
     </script>
     
     <!-- JavaScript del Dashboard -->
-    <script src="{{ asset('JavaScript/layouts/loading.js') }}"></script>
+    
     <script src="{{ asset('JavaScript/components/sidebar.js') }}"></script>
     <script src="{{ asset('js/components/footer.js') }}"></script>
     
