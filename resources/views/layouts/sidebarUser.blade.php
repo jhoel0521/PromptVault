@@ -193,37 +193,6 @@
                 </li>
             </ul>
         </div>
-
-        <!-- Sección: Historial (USER) -->
-        <div class="nav-section">
-            <h3 class="section-title" data-toggle="collapse">
-                <i class="fas fa-clock section-title-icon"></i>
-                HISTORIAL
-                <i class="fas fa-chevron-down section-toggle-icon"></i>
-            </h3>
-            <ul class="nav-list">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Recientes</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <span class="nav-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                            </svg>
-                        </span>
-                        <span class="nav-text">Mis Actividades</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
     </div>
 
     <!-- Footer del Sidebar -->
