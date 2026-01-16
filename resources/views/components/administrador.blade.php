@@ -108,14 +108,14 @@
                                 <i class="fas fa-folder"></i>
                             </div>
                             <div class="stat-info">
-                                <h3 class="stat-value">{{ \App\Models\Categoria::count() }}</h3>
+                                <h3 class="stat-value">0</h3>
                                 <p class="stat-label">Categorías</p>
                             </div>
                         </div>
                         <div class="stat-right">
                             <div class="stat-mini-row">
                                 <span>Activas</span>
-                                <strong>{{ \App\Models\Categoria::count() }}</strong>
+                                <strong>0</strong>
                             </div>
                             <div class="stat-mini-row accent">
                                 <span>Organizadas</span>
@@ -438,13 +438,12 @@
             $promptsPerDay[] = $count;
         }
         
-        // 3. Actividades por tipo
-        $allActividades = \App\Models\Actividad::all();
-        $creacion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'creó'))->count();
-        $edicion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'editó'))->count();
-        $compartir = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'compartió'))->count();
-        $version = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'versión'))->count();
-        $eliminacion = $allActividades->filter(fn($a) => str_contains(strtolower($a->accion), 'eliminó'))->count();
+        // 3. Actividades por tipo (modelo no implementado aún)
+        $creacion = 0;
+        $edicion = 0;
+        $compartir = 0;
+        $version = 0;
+        $eliminacion = 0;
         
         // 4. Top 5 prompts con más versiones
         $topPrompts = \App\Models\Prompt::withCount('versiones')->orderBy('versiones_count', 'desc')->take(5)->get();
@@ -452,19 +451,20 @@
         $topPromptsData = $topPrompts->pluck('versiones_count')->toArray();
         
         // 5. Prompts más compartidos
-        $topShared = \App\Models\Prompt::withCount('compartidos')->orderBy('compartidos_count', 'desc')->take(5)->get();
+        $topShared = \App\Models\Prompt::withCount('accesosCompartidos')->orderBy('accesos_compartidos_count', 'desc')->take(5)->get();
         $topSharedLabels = $topShared->pluck('titulo')->map(fn($t) => \Illuminate\Support\Str::limit($t, 20))->toArray();
-        $topSharedData = $topShared->pluck('compartidos_count')->toArray();
+        $topSharedData = $topShared->pluck('accesos_compartidos_count')->toArray();
         
         // 6. Prompts por categoría (top 5 categorías)
-        $topCategorias = \App\Models\Categoria::withCount('prompts')->orderBy('prompts_count', 'desc')->take(5)->get();
-        $topCategoriesLabels = $topCategorias->pluck('nombre')->toArray();
-        $topCategoriesData = $topCategorias->pluck('prompts_count')->toArray();
+        // 6. Prompts por categoría (top 5 categorías) - Modelo no implementado aún
+        // $topCategorias = \App\Models\Categoria::withCount('prompts')->orderBy('prompts_count', 'desc')->take(5)->get();
+        $topCategoriesLabels = [];
+        $topCategoriesData = [];
         
-        // 7. Usuarios más activos (por número de actividades)
-        $topUsers = \App\Models\User::withCount('actividades')->orderBy('actividades_count', 'desc')->take(5)->get();
-        $activeUsersLabels = $topUsers->pluck('name')->toArray();
-        $activeUsersData = $topUsers->pluck('actividades_count')->toArray();
+        // 7. Usuarios más activos (por número de actividades) - Relación no existe aún
+        // $topUsers = \App\Models\User::withCount('actividades')->orderBy('actividades_count', 'desc')->take(5)->get();
+        $activeUsersLabels = [];
+        $activeUsersData = [];
         
         // Preparar todos los datos para JavaScript
         $dashboardData = [

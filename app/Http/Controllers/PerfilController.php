@@ -12,34 +12,49 @@ use Illuminate\Support\Facades\Hash;
 class PerfilController extends Controller
 {
     /**
+     * Obtener estadísticas del usuario autenticado
+     * Responsabilidad única: recopilar datos de estadísticas
+     */
+    private function getUserStatistics(User $user): array
+    {
+        return [
+            'total_prompts' => $user->prompts()->count(),
+            'prompts_publicos' => $user->prompts()->where('visibilidad', 'publico')->count(),
+            'prompts_compartidos' => $user->accesosCompartidos()->count(),
+            'total_comentarios' => $user->comentarios()->count(),
+        ];
+    }
+
+    /**
+     * Obtener prompts recientes del usuario
+     * Responsabilidad única: obtener datos de prompts recientes
+     */
+    private function getRecentPrompts(User $user): \Illuminate\Database\Eloquent\Collection
+    {
+        return $user->prompts()
+            ->with('etiquetas')
+            ->latest()
+            ->take(5)
+            ->get();
+    }
+
+    /**
      * Mostrar perfil del usuario
      */
     public function index()
     {
-        // Obtener datos
         $user = Auth::user();
 
         if (! $user) {
             return redirect()->route('login')->with('error', 'Sesión no válida.');
         }
 
-        $promptsRecientes = $user->prompts()
-            ->with('etiquetas')
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $estadisticas = [
-            'total_prompts' => $user->prompts()->count(),
-            'prompts_publicos' => $user->prompts()->where('visibilidad', 'publico')->count(),
-            'prompts_compartidos' => $user->accesosCompartidos()->count(),
-            'total_comentarios' => $user->comentarios()->count(),
-        ];
-
+        $promptsRecientes = $this->getRecentPrompts($user);
+        $estadisticas = $this->getUserStatistics($user);
         $recentUsers = User::with('role')->latest()->take(5)->get();
+        $logs = collect([]); // Sin tabla de auditoría
 
-        // Retornar vista
-        return view('perfil.index', compact('user', 'promptsRecientes', 'estadisticas', 'recentUsers'));
+        return view('perfil.index', compact('user', 'promptsRecientes', 'estadisticas', 'recentUsers', 'logs'));
     }
 
     /**
