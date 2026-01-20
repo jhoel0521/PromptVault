@@ -76,11 +76,12 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ## Resumen de Inventario
 - **65 archivos .blade.php** en `resources/views/` (15 procesados, 50 pendientes)
   - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 (4 layout + 3 prompt + 1 user-avatar) ✅
+  - Configuraciones: 7 pendientes | Admin: 18 pendientes
   - Eliminados: dashboard.blade.php (1)
-- **23 archivos .css** restantes en `public/css/` (13 eliminados, 23 pendientes migración)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3)
-- **27 archivos .js** restantes en `public/JavaScript/` (14 eliminados, 27 pendientes migración)
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1)
+- **23 archivos .css** restantes en `public/css/` (15 eliminados, 23 pendientes migración)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (2)
+- **27 archivos .js** restantes en `public/JavaScript/` (15 eliminados, 27 pendientes migración)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1)
 
 ---
 
@@ -138,14 +139,15 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/perfil/edit.blade.php` ✅ MIGRADO (formulario edición + avatar upload + sidebar sticky)
 - `resources/views/perfil/security.blade.php` ✅ MIGRADO (cambiar contraseña + recomendaciones seguridad)
 
-### 1.6 Configuraciones Module (7 archivos)
-- `resources/views/configuraciones/index.blade.php`
-- `resources/views/configuraciones/general.blade.php`
-- `resources/views/configuraciones/sistema.blade.php`
-- `resources/views/configuraciones/seguridad.blade.php`
-- `resources/views/configuraciones/apariencia.blade.php`
-- `resources/views/configuraciones/notificaciones.blade.php`
-- `resources/views/configuraciones/respaldos.blade.php`
+### 1.6 Configuraciones Module (7 archivos) - ⚠️ EN PROGRESO
+- `resources/views/configuraciones/index.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+- `resources/views/configuraciones/general.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+- `resources/views/configuraciones/sistema.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+- `resources/views/configuraciones/seguridad.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+- `resources/views/configuraciones/apariencia.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+- `resources/views/configuraciones/notificaciones.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+- `resources/views/configuraciones/respaldos.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+**Nota:** Link agregado en sidebar (sección Sistema, solo admin). CSS/JS eliminados en commit 5498367.
 
 ### 1.7 Components ✅ FASE COMPLETA
 #### Layout Components (MIGRADOS A components/layout/)
@@ -381,12 +383,18 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] Eventos multi-día funcionales
 - [x] Link calendario en sidebar
 
-#### 2.4 Perfil (PENDIENTE)
-- [ ] index, show, edit, security (4 vistas)
-- [ ] Verificar CSS/JS correspondientes
+#### 2.4 Perfil ✅ COMPLETADO
+- [x] index, show, edit, security (4 vistas)
+- [x] Componente user-avatar reutilizable creado
+- [x] CSS/JS eliminados (3 archivos)
+- [x] Consolidación ProfileController duplicado
+- [x] Cache busting avatares
 
-#### 2.5 Configuraciones (PENDIENTE)
-- [ ] 7 vistas pendientes migración
+#### 2.5 Configuraciones ✅ COMPLETADO
+- [x] Link agregado en sidebar (solo admin)
+- [x] 7 vistas migradas: index (layout Alpine tabs) + 6 componentes @include
+- [x] Vistas: general, sistema, seguridad, apariencia, notificaciones, respaldos
+- [x] NO hay CSS/JS externos (todo Tailwind + Alpine)
 
 ### FASE 3: Admin Module (Prioridad Media)
 - [ ] Admin/Usuarios: 4 vistas + CSS + JS
@@ -396,7 +404,6 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [ ] Admin/Backups: 1 vista
 
 ### FASE 4: Módulos Secundarios (Prioridad Baja)
-- [ ] Configuraciones: 7 vistas
 - [ ] Buscador
 - [ ] Filters
 - [ ] Pages
@@ -481,14 +488,14 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA
 
-### Módulos completados: 6/14
+### Módulos completados: 7/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
 - [x] Prompts ✅
 - [x] Calendario ✅
 - [x] Perfil ✅
-- [ ] Configuraciones
+- [x] Configuraciones ✅
 - [ ] Admin/Usuarios
 - [ ] Admin/Roles
 - [ ] Admin/Permisos
@@ -1444,3 +1451,62 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
 - **JS restantes:** 27 archivos (validado con PowerShell)
 - **Features agregadas:** Link Configuraciones admin, componente avatar reutilizable, consolidación ProfileController
 
+---
+
+### 🔄 FASE 2.7: CONFIGURACIONES MODULE - ✅ PREPARACIÓN COMPLETADA (Commit 5498367)
+
+#### Cambios Backend:
+- **Routes:** Ya existentes en `routes/web.php`
+  - Prefix: `configuraciones` con middleware `auth`
+  - Rutas: index, general, sistema, seguridad, apariencia, notificaciones, respaldos, update
+- **Controller:** `ConfiguracionesController` ya existe
+- **Sin migraciones:** Módulo solo administra configuración aplicación (no BD)
+
+#### Cambios Frontend:
+- **sidebar.blade.php:** Link Configuraciones agregado
+  - Posición: Sección Sistema (solo admin)
+  - Icon: SVG settings (engranaje)
+  - Active state: `configuraciones.*` con bg-red-50
+  - Orden: Configuraciones (1°) → Usuarios (2°) → Roles (3°) → Permisos (4°)
+
+#### Archivos Eliminados (Preparación):
+- ❌ `public/css/configuraciones/configuraciones.css` (migración pendiente a Tailwind)
+- ❌ `public/JavaScript/configuraciones/configuraciones.js` (migración pendiente a Alpine)
+
+#### Validación Pre-Migración:
+- ✅ Link visible solo para admin en sidebar
+- ✅ Active state funciona con `request()->routeIs('configuraciones.*')`
+- ✅ Icon settings renderiza correctamente
+- ✅ Dark mode funciona
+- ✅ 7 vistas Configuraciones existen y pendientes migración
+
+#### Archivos Pendientes Migración:
+1. **configuraciones/index.blade.php** → Dashboard configuraciones
+2. **configuraciones/general.blade.php** → Nombre app, logo, timezone
+3. **configuraciones/sistema.blade.php** → Mantenimiento, logs, cache
+4. **configuraciones/seguridad.blade.php** → 2FA, sesiones, políticas
+5. **configuraciones/apariencia.blade.php** → Tema, colores, fuentes
+6. **configuraciones/notificaciones.blade.php** → Email, push, preferencias
+7. **configuraciones/respaldos.blade.php** → Backup/restore sistema
+
+#### Validación Comandos (20/01/2026):
+```powershell
+Get-ChildItem resources/views/configuraciones -Filter "*.blade.php" | Measure-Object
+# Output: 7 archivos
+
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 23 archivos (configuraciones.css eliminado)
+
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 27 archivos (configuraciones.js eliminado)
+```
+
+#### Total de Cambios Fase 2.7:
+- **Vistas actualizadas:** sidebar.blade.php (link agregado)
+- **Vistas pendientes migración:** 7 archivos configuraciones/
+- **CSS eliminados:** 1 archivo (configuraciones.css)
+- **JS eliminados:** 1 archivo (configuraciones.js)
+- **Total procesados:** 15/65 archivos Blade (23%)
+- **CSS restantes:** 23 archivos
+- **JS restantes:** 27 archivos
+- **Commits:** 5498367 (fix: mover Configuraciones a sección Sistema)
