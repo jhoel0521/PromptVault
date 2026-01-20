@@ -74,7 +74,7 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **71 archivos .blade.php** en `resources/views/` (28 procesados, 42 pendientes, 1 eliminado)
+- **71 archivos .blade.php** en `resources/views/` (32 procesados, 38 pendientes, 1 eliminado)
 - **36 archivos .css** en `public/css/` (17 eliminados → Tailwind, 19 pendientes migración)
 - **41 archivos .js** en `public/JavaScript/` (19 eliminados → Alpine, 22 pendientes migración)
 
@@ -122,11 +122,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/prompts/historial.blade.php` ✅ MIGRADO (tabla de versiones, restaurar)
 - `resources/views/prompts/compartidos.blade.php` ✅ MIGRADO (grid de prompts compartidos)
 
-### 1.4 Calendario Module (4 archivos)
-- `resources/views/calendario/index.blade.php`
-- `resources/views/calendario/create.blade.php`
-- `resources/views/calendario/show.blade.php`
-- `resources/views/calendario/edit.blade.php`
+### 1.4 Calendario Module (4 archivos) ✅ COMPLETADO
+- `resources/views/calendario/index.blade.php` ✅ MIGRADO (calendario grid + eventos sidebar)
+- `resources/views/calendario/create.blade.php` ✅ MIGRADO (formulario crear evento)
+- `resources/views/calendario/show.blade.php` ✅ MIGRADO (detalle evento con gradient header)
+- `resources/views/calendario/edit.blade.php` ✅ MIGRADO (formulario editar + delete button)
 
 ### 1.5 Perfil Module (4 archivos)
 - `resources/views/perfil/index.blade.php`
@@ -461,14 +461,14 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA
 
-### Módulos completados: 2/14
+### Módulos completados: 5/14
 - [x] Auth ✅
 - [x] Layouts ✅
-- [ ] Components  
+- [x] Components ✅
+- [x] Prompts ✅
+- [x] Calendario ✅
 - [ ] Dashboard
 - [ ] Home
-- [ ] Prompts
-- [ ] Calendario
 - [ ] Perfil
 - [ ] Configuraciones
 - [ ] Admin/Usuarios
@@ -477,8 +477,8 @@ http://127.0.0.1:8000/admin/permisos
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 18/148 total
-- Blade: 18/71 (Auth: 3, Layouts: 8, Components: 7)
+### Archivos validados: 32/148 total
+- Blade: 32/71 (Auth: 3, Layouts: 8, Components: 7, Prompts: 6, Calendario: 4, Eliminados: 4)
 - CSS: 0/36 (migrando a Tailwind)
 - JS: 0/41 (migrando a Alpine)
 
@@ -848,3 +848,319 @@ http://127.0.0.1:8000/admin/permisos
 - **CSS eliminados:** 17/36 (47%)
 - **JS eliminados:** 19/41 (46%)
 - **Features agregadas:** CRUD completo de prompts con versionado, compartir, historial
+
+---
+
+### 🔄 FASE 1.4: CALENDARIO MODULE - ✅ COMPLETADO
+
+#### Cambios Realizados:
+
+**1. Vista Index (Calendario Principal)**
+- `resources/views/calendario/index.blade.php`
+  - Migrado: HTML con @include → `<x-app-layout>`
+  - **Panel de control**: Botones exportar/lista + crear evento (rose-600)
+  - **Calendar controls**: Alpine.js para navegación mes/año
+    - Botones prev/next con Alpine @click
+    - Selects sincronizados con x-model
+    - Display dinámico: `x-text="monthNames[currentMonth] + ' ' + currentYear"`
+  - **View toggles**: Mes (activo) / Semana / Agenda
+  - **Calendar Grid**: 
+    - Weekdays header: grid-cols-7 con uppercase text
+    - Days grid: JS genera días del mes con hover states
+    - Día actual: bg-rose-50 dark:bg-rose-900/20
+  - **Upcoming Events Sidebar**:
+    - 7 eventos hardcoded con colores distintos
+    - Event items: Fecha grande + badge tipo (Académico, Reunión, Examen, etc.)
+    - Colores por tipo: blue, amber, green, red, rose, orange, indigo
+    - Hover effect: bg-slate-100 dark:bg-slate-700
+  - **JavaScript**: Función generateCalendar() en @push('scripts')
+    - Genera días del mes actual
+    - Detecta hoy y aplica estilos rose
+    - Espacios vacíos antes del primer día
+
+**2. Vista Create (Crear Evento)**
+- `resources/views/calendario/create.blade.php`
+  - Formulario completo con dark mode
+  - Campos: titulo, descripcion, fecha_inicio, fecha_fin, tipo, color
+  - Select tipo: academico, examen, reunion, feriado, social
+  - Input color: type="color" para picker nativo
+  - Botones: Cancelar (ghost) + Crear Evento (rose-600)
+  - Validación: campos requeridos con asterisco rojo
+
+**3. Vista Show (Detalle del Evento)**
+- `resources/views/calendario/show.blade.php`
+  - **Header gradient**: from-rose-500 to-rose-600 con título blanco
+  - **Grid de detalles**: 2x2 con iconos de colores
+    - Fecha inicio: icono calendar azul
+    - Fecha fin: icono calendar-check verde
+    - Tipo: badge con color según categoría
+    - Color: preview box + código hexadecimal
+  - **Descripción**: Sección separada con border-t
+  - **Acciones**: Botones Editar (amber) + Volver + Eliminar (rojo)
+  - Form eliminar: método DELETE con confirmación
+
+**4. Vista Edit (Editar Evento)**
+- `resources/views/calendario/edit.blade.php`
+  - Formulario idéntico a create con valores pre-llenados
+  - Método PUT para actualización
+  - Botones adicionales: Ver Detalles (blue) + Volver
+  - Delete button: onclick confirmation + form oculto
+  - Datos ejemplo: "Reunión de Profesores" con color #3b82f6
+
+#### Archivos que deben eliminarse (CSS/JS obsoletos):
+- ⚠️ `public/css/calendario/index.css` - Pendiente eliminación
+- ⚠️ `public/JavaScript/calendario/index.js` - Pendiente eliminación  
+- ⚠️ `public/JavaScript/calendario/create.js` - Pendiente eliminación
+- ⚠️ `public/JavaScript/calendario/show.js` - Pendiente eliminación
+- ⚠️ `public/JavaScript/calendario/edit.js` - Pendiente eliminación
+
+#### Validación:
+- ✅ `/calendario` renderiza sin errores
+- ✅ `/calendario/create` formulario completo con dark mode
+- ✅ `/calendario/{id}` detalle con gradient header
+- ✅ `/calendario/{id}/edit` formulario pre-llenado
+- ✅ Calendar grid se genera correctamente con JS
+- ✅ Alpine controls funcionan (prev/next month)
+- ✅ Selects sincronizados con x-model
+- ✅ Dark mode funciona en todas las vistas
+- ✅ Event cards con colores distintos
+- ✅ No hay errores en consola
+
+---
+
+#### Total de Cambios Fase 1.4:
+- **Vistas migradas:** index + create + show + edit = 4
+- **Total procesados:** 32/71 archivos Blade (45%)
+- **CSS pendientes eliminar:** 1 (calendario/index.css)
+- **JS pendientes eliminar:** 4 (calendario/*.js)
+- **Features agregadas:** Calendario interactivo con Alpine, eventos sidebar, formularios CRUD
+
+---
+
+### 🗓️ FASE 2.3: CALENDARIO MODULE CON FULLCALENDAR - ✅ COMPLETADO
+
+#### Cambios Backend:
+
+**1. Migración de Base de Datos**
+- Creado: `database/migrations/2026_01_19_*_create_eventos_table.php`
+  - Columnas: id, user_id (FK), titulo, descripcion, fecha_inicio (datetime), fecha_fin (datetime), tipo (string), ubicacion, todo_el_dia (boolean), color, timestamps
+  - Foreign key: user_id → users table con onDelete cascade
+  - Indexes: user_id, fecha_inicio para queries optimizados
+
+**2. Modelo Eloquent**
+- Creado: `app/Models/Evento.php`
+  - Fillable: user_id, titulo, descripcion, fecha_inicio, fecha_fin, tipo, ubicacion, todo_el_dia, color
+  - Casts: fecha_inicio/fecha_fin → datetime, todo_el_dia → boolean, tipo → TipoEvento::class
+  - Relación: belongsTo(User::class)
+  - Scope: whereUserId() para queries filtradas
+
+**3. Enum de Tipos**
+- Creado: `app/Enums/TipoEvento.php`
+  - Backed string enum con 5 casos: trabajo, personal, estudio, reunion, recordatorio
+  - Método label(): Retorna nombre legible en español
+  - Método color(): Retorna código hexadecimal por tipo
+    - trabajo: #3b82f6 (blue)
+    - personal: #8b5cf6 (purple)
+    - estudio: #10b981 (green)
+    - reunion: #f59e0b (amber)
+    - recordatorio: #ef4444 (red)
+
+**4. Controlador CRUD Completo**
+- Creado: `app/Http/Controllers/CalendarioController.php`
+  - **index()**: Lista eventos del usuario + estadísticas (total, mes, semana, hoy) + próximos 5 eventos
+  - **create()**: Renderiza formulario con tipos disponibles
+  - **store(Request)**: Validación + creación evento con user_id
+  - **show($id)**: Detalle evento con verificación propietario (403 si no es dueño)
+  - **edit($id)**: Formulario pre-llenado con verificación propietario
+  - **update(Request, $id)**: Validación + actualización + redirect
+  - **destroy($id)**: Verificación propietario + eliminación + redirect
+  - **CRÍTICO**: Usa `$id + findOrFail()` en lugar de route model binding por conflicto {calendario}/{evento}
+
+**5. Rutas**
+- Agregado en `routes/web.php`: `Route::resource('calendario', CalendarioController::class)`
+  - Genera: index, create, store, show, edit, update, destroy
+  - Middleware: auth aplicado globalmente
+
+#### Cambios Frontend:
+
+**1. Vista Index (Calendario FullCalendar)**
+- `resources/views/calendario/index.blade.php`
+  - **FullCalendar 6.1.10 CDN** (NO npm - package no incluye CSS)
+  - **CDN Scripts**:
+    - https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js
+    - https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/es.global.min.js
+  - **Características**:
+    - 4 vistas: dayGridMonth, timeGridWeek, timeGridDay, listWeek
+    - Locale español nativo (días, meses, botones)
+    - Eventos multi-día se arrastran visualmente por múltiples días
+    - Dark mode custom con variables CSS `--fc-*`
+    - Colores por tipo: getTipoColor() mapea enum → hex
+  - **Interactividad**:
+    - eventClick: Redirige a `/calendario/{id}` para ver detalle
+    - dateClick: Redirige a `/calendario/create?fecha=YYYY-MM-DD` pre-llenado
+  - **Stats Cards**: Total, mes, semana, hoy con iconos
+  - **Próximos Eventos**: Lista lateral con badges de tipo coloreados
+
+**2. Vista Create (Crear Evento)**
+- `resources/views/calendario/create.blade.php`
+  - Formulario con dark mode completo
+  - Inputs: titulo (text), descripcion (textarea)
+  - Fechas: fecha_inicio, fecha_fin con type="datetime-local"
+  - Select tipo: 5 opciones del enum TipoEvento
+  - Input ubicacion (text), checkbox todo_el_dia
+  - Validación Laravel: @error con mensajes rojos
+  - Botones: Cancelar (ghost) + Crear (rose-600 gradient)
+
+**3. Vista Show (Detalle del Evento)**
+- `resources/views/calendario/show.blade.php`
+  - Layout 2 columnas: Contenido principal + Sidebar
+  - **Contenido**:
+    - Header con botón volver + título
+    - Badge tipo con color gradient
+    - Info: fecha_inicio/fin con iconos calendar
+    - Ubicación con icono map-marker-alt
+    - Descripción en sección separada
+  - **Sidebar**:
+    - Metadata: Creado, actualizado, creador (con link a perfil)
+    - Tipo evento con badge coloreado
+    - Todo el día: badge si aplica
+  - **Acciones**: Editar (blue) + Eliminar (red) con confirmación
+  - **CRÍTICO**: Usa `$evento->tipo->value` para evitar error ucfirst() con Enum
+
+**4. Vista Edit (Editar Evento)**
+- `resources/views/calendario/edit.blade.php`
+  - Formulario idéntico a create con valores pre-llenados
+  - Usa `old('campo', $evento->campo)` para persistir datos
+  - Método PUT con `@method('PUT')`
+  - Botones adicionales: Ver Detalles + Eliminar con confirmación
+  - Form delete oculto con método DELETE
+
+#### Problemas Resueltos:
+
+**1. Tabla eventos no existía**
+- Síntoma: Query exception "Table 'promptvault.eventos' doesn't exist"
+- Solución: Creada migración + ejecutada `php artisan migrate`
+- Validación: Script check-events.php confirmó tabla existe
+
+**2. Route Model Binding fallaba**
+- Síntoma: Usuario no llegaba ni al dd() en show(), error 404
+- Causa: `Route::resource('calendario')` crea {calendario} pero show(Evento $evento) esperaba {evento}
+- Solución: Cambió 4 métodos (show, edit, update, destroy) a `$id` + `Evento::findOrFail($id)`
+- Resultado: Ahora funciona correctamente
+
+**3. Error ucfirst() con Enum**
+- Síntoma: "ucfirst(): Argument #1 must be of type string, App\Enums\TipoEvento given"
+- Causa: `{{ ucfirst($evento->tipo) }}` en show.blade.php
+- Solución: Cambió a `{{ ucfirst($evento->tipo->value) }}`
+- Prevención: Agregado 'reunion' a getTipoClass() en index.blade.php
+
+**4. Eventos multi-día no se visualizaban**
+- Síntoma: Calendario Alpine manual no mostraba eventos correctamente
+- Causa: Implementación manual (260 líneas) no soportaba eventos multi-día
+- Solución: Reimplementó con FullCalendar CDN
+- Resultado: Eventos multi-día se arrastran visualmente, 4 vistas funcionales
+
+**5. FullCalendar CSS imports fallaban**
+- Síntoma: "@import 'fullcalendar/main.css' failed: Missing specifier"
+- Causa: npm package fullcalendar v6 NO incluye CSS, solo módulos JS
+- Investigación: `Get-ChildItem node_modules/fullcalendar` mostró solo .js, .d.ts, package.json
+- Solución: CDN approach con scripts globales + CSS inline
+- Resultado: Build exitoso, calendario renderiza perfectamente
+
+#### Dark Mode Implementación:
+
+**CSS Custom para FullCalendar:**
+```css
+.dark .fc {
+    --fc-border-color: rgb(51 65 85);
+    --fc-button-bg-color: rgb(225 29 72);
+    --fc-button-border-color: rgb(225 29 72);
+    --fc-button-hover-bg-color: rgb(190 18 60);
+    --fc-button-hover-border-color: rgb(190 18 60);
+    --fc-button-active-bg-color: rgb(159 18 57);
+    --fc-today-bg-color: rgba(225, 29, 72, 0.1);
+    color: rgb(226 232 240);
+}
+```
+
+- Borders: slate-700
+- Botones: rose-600 → rose-700 (hover) → rose-800 (active)
+- Hoy: rose con alpha 0.1
+- Text: slate-200
+
+#### Validación Completa:
+
+- ✅ `/calendario`: Calendario interactivo con FullCalendar renderiza
+- ✅ Eventos se guardan en DB (verificado con check-events.php)
+- ✅ `/calendario/create`: Formulario guarda eventos correctamente
+- ✅ `/calendario/1`: Detalle muestra con $evento->tipo->value
+- ✅ `/calendario/1/edit`: Edita y actualiza correctamente
+- ✅ Eventos multi-día se arrastran visualmente por múltiples días
+- ✅ 4 vistas de calendario funcionales: mes, semana, día, lista
+- ✅ Dark mode CSS custom aplica correctamente
+- ✅ Click en evento → redirige a /calendario/{id}
+- ✅ Click en fecha → redirige a create?fecha=...
+- ✅ Locale español: días, meses, botones traducidos
+- ✅ Stats cards muestran: total, mes, semana, hoy
+- ✅ Próximos eventos lista con badges coloreados
+- ✅ No hay errores en consola
+- ✅ No hay 404 en assets
+- ✅ npm run build: ✅ SUCCESS (app-DswcchBe.css, 3.83s)
+
+#### Archivos Creados:
+
+**Backend:**
+1. `database/migrations/2026_01_19_*_create_eventos_table.php`
+2. `app/Models/Evento.php`
+3. `app/Enums/TipoEvento.php`
+4. `app/Http/Controllers/CalendarioController.php`
+
+**Frontend:**
+5. `resources/views/calendario/index.blade.php` (reimplementado)
+6. `resources/views/calendario/create.blade.php`
+7. `resources/views/calendario/show.blade.php`
+8. `resources/views/calendario/edit.blade.php`
+
+**Scripts Debug (eliminados):**
+9. `check-events.php` ❌ (script CLI temporal)
+10. `check-auth.php` ❌ (script CLI temporal)
+
+#### Decisiones Técnicas:
+
+**¿Por qué CDN en lugar de npm?**
+- FullCalendar v6 cambió arquitectura: packages separados (@fullcalendar/core, @fullcalendar/daygrid, etc.)
+- npm package `fullcalendar` es solo un bundle JS, NO incluye CSS
+- Intentar importar CSS falló: "Missing './main.css' specifier"
+- CDN provee bundle completo: JS + CSS en un solo archivo
+- Más simple: 2 script tags vs configurar 10+ paquetes npm
+
+**¿Por qué $id en lugar de route model binding?**
+- `Route::resource('calendario')` genera parámetro `{calendario}` no `{evento}`
+- Laravel busca Evento con slug 'calendario' → falla
+- Opción 1: Cambiar Route::resource('calendario') → Route::resource('eventos')
+- Opción 2: Usar $id + findOrFail() manualmente
+- Elegimos Opción 2: Mantiene URL `/calendario` más semántica
+
+**¿Por qué enum backed en lugar de constantes?**
+- PHP 8.1+ soporta backed enums nativos
+- Type safety: $evento->tipo es TipoEvento, no string
+- Métodos helper: label(), color() centralizados
+- Cast automático: Eloquent convierte string ↔ enum
+- Mejor DX: IDE autocomplete, no magic strings
+
+#### Próximos Pasos:
+
+- [ ] FASE 2.4: Perfil Module (4 vistas: index, show, edit, security)
+- [ ] FASE 2.5: Configuraciones Module (7 vistas)
+- [ ] FASE 3: Admin Module (18 vistas total)
+- [ ] Eliminar CSS/JS obsoletos: calendario/*.css, calendario/*.js
+
+---
+
+#### Total de Cambios Fase 2.3:
+- **Backend:** 1 migración + 1 modelo + 1 enum + 1 controller = 4 archivos
+- **Frontend:** 4 vistas Blade migradas con FullCalendar CDN
+- **Líneas código:** ~500 líneas nuevas (backend + frontend)
+- **Problemas resueltos:** 5 (tabla, route binding, enum, multi-día, CSS imports)
+- **Features agregadas:** CRUD completo de eventos + calendario interactivo con 4 vistas + dark mode + multi-día + español
+- **Total procesados:** 32/71 archivos Blade (45%)
