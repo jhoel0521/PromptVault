@@ -1,211 +1,240 @@
-@php
-    use Illuminate\Support\Facades\Auth;
-    $user = Auth::user();
-    $userRole = $user && $user->role ? $user->role->nombre : 'guest';
-    
-    // Mapear roles a nombres de componentes
-    $roleComponentMap = [
-        'admin' => 'administrador',
-        'user' => 'usuario',
-        'collaborator' => 'colaborador',
-        'guest' => 'invitado'
-    ];
-    
-    $componentName = 'components.' . ($roleComponentMap[$userRole] ?? 'invitado');
-@endphp
-
-@component($componentName, ['title' => 'Mi Perfil', 'recentUsers' => $recentUsers ?? collect()])
-
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/perfil/index.css') }}">
-@endsection
-
-@section('content')
-    <!-- Header Tipo Panel de Control -->
-    <div class="control-panel">
-        <div class="panel-header">
-            <div class="header-title">
-                <div class="icon-wrapper">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="title-content">
-                    <h2>Mi Perfil</h2>
-                    <p class="subtitle">Gestiona tu información personal y seguridad de cuenta</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="{{ route('perfil.edit') }}" class="btn-primary-action">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Editar Perfil</span>
-                </a>
-            </div>
-        </div>
-
-        <div class="panel-content">
-            <!-- Barra de Estado (Simulando la barra de filtros/búsqueda) -->
-            <div class="stats-group">
-                <div class="stat-pill">
-                    <i class="fas fa-id-card"></i>
-                    <div class="info">
-                        <span class="label">Rol</span>
-                        <span class="value">{{ $user->role ? $user->role->nombre : 'Usuario' }}</span>
-                    </div>
-                </div>
-                
-                <div class="stat-pill">
-                    <i class="fas fa-toggle-on"></i>
-                    <div class="info">
-                        <span class="label">Estado</span>
-                        <span class="value {{ $user->cuenta_activa ? 'text-success' : 'text-danger' }}">{{ $user->cuenta_activa ? 'Activo' : 'Inactivo' }}</span>
-                    </div>
-                </div>
-
-                <div class="stat-pill">
-                    <i class="fas fa-calendar-alt"></i>
-                    <div class="info">
-                        <span class="label">Miembro Desde</span>
-                        <span class="value">{{ $user->created_at ? $user->created_at->format('d/m/Y') : '-' }}</span>
-                    </div>
-                </div>
-
-                <div class="stat-pill">
-                    <i class="fas fa-clock"></i>
-                    <div class="info">
-                        <span class="label">Último Acceso</span>
-                        <span class="value">{{ $user->ultimo_acceso ? $user->ultimo_acceso->diffForHumans() : 'Ahora' }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-<div class="dashboard-section">
-    <!-- Contenedor Principal Perfil (Header removido de aquí) -->
-    <div class="profile-container">
-        
-        <!-- Izquierda: Tarjeta de Perfil -->
-        <div class="profile-card">
-            <div class="profile-avatar-wrapper">
-                <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.svg') }}" alt="Foto de Perfil" class="profile-avatar">
-                <label for="avatarInput" class="avatar-edit-btn" title="Cambiar foto">
-                    <i class="fas fa-camera"></i>
-                </label>
-                <input type="file" id="avatarInput" hidden accept="image/*">
-            </div>
-            
-            <h2 class="profile-name">{{ $user->name }}</h2>
-            <span class="profile-role">{{ $user->role ? $user->role->nombre : 'Usuario' }}</span>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">{{ $user->email }}</p>
-
-            <div class="profile-stats">
-                <div class="stat-item">
-                    <span class="stat-value">{{ $user->created_at ? $user->created_at->format('d/m/Y') : '-' }}</span>
-                    <span class="stat-label">Miembro Desde</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value text-success">{{ $user->cuenta_activa ? 'Activo' : 'Inactivo' }}</span>
-                    <span class="stat-label">Estado</span>
-                </div>
-            </div>
-            <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
-                Último acceso: {{ $user->ultimo_acceso ? $user->ultimo_acceso->diffForHumans() : 'Nunca' }}
-            </div>
-        </div>
-
-        <!-- Derecha: Dashboard de Acciones y Resumen -->
-        <div class="profile-content">
-            
-            <!-- Resumen de Datos -->
-            <div class="settings-card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <div class="card-title">
-                        <h3>Información Personal</h3>
-                        <p>Resumen de tus datos registrados</p>
-                    </div>
-                </div>
-
-                <div class="info-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;">
-                    <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Nombre Completo</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->name }}</span>
-                    </div>
-                    <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Correo Electrónico</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->email }}</span>
-                    </div>
-                    <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Rol del Sistema</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->role ? ucfirst($user->role->nombre) : 'Usuario' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Estado de Cuenta</label>
-                        <span class="{{ $user->cuenta_activa ? 'text-success' : 'text-danger' }}" style="font-weight:600; font-size:1.1rem;">{{ $user->cuenta_activa ? 'Activa' : 'Inactiva' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Registro en el Sistema</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->created_at ? $user->created_at->format('d/m/Y H:i') : 'N/A' }}</span>
-                    </div>
-                    <div class="info-item">
-                        <label style="display:block; color:var(--text-muted); font-size:0.8rem; margin-bottom:0.2rem;">Email Verificado</label>
-                        <span style="font-weight:600; font-size:1.1rem; color:var(--text-dark);">{{ $user->email_verified_at ? 'Sí (' . $user->email_verified_at->format('d/m/Y') . ')' : 'No verificado' }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Botones de Acción Compactos -->
-            <div class="actions-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem;">
-                <a href="{{ route('perfil.edit') }}" class="action-btn-red">
-                    <i class="fas fa-user-edit"></i>
-                    <span>Editar Perfil</span>
-                </a>
-
-                <a href="{{ route('perfil.security') }}" class="action-btn-red">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Seguridad</span>
-                </a>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Actividad Reciente (Contenedor Separado) -->
-<div class="dashboard-section" style="margin-top: 2rem;">
-    <div class="settings-card">
-        <div class="card-header">
-            <div class="card-icon">
-                <i class="fas fa-history"></i>
-            </div>
-            <div class="card-title">
-                <h3>Actividad Reciente</h3>
-                <p>Últimos movimientos en el sistema</p>
-            </div>
-        </div>
-
-        <ul class="activity-list" style="list-style: none; padding: 0;">
-            @forelse($logs as $log)
-                <li style="display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-color);">
-                    <div style="min-width: 40px; height: 40px; background: var(--bg-body); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">
-                        <i class="fas fa-dot-circle" style="color: var(--primary-red);"></i>
+<x-app-layout>
+    <div class="space-y-6">
+        {{-- Header del Perfil --}}
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-rose-500 to-pink-500 rounded-xl flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-user-circle text-2xl"></i>
                     </div>
                     <div>
-                        <h4 style="font-size: 0.95rem; color: var(--text-dark); margin-bottom: 0.2rem;">{{ $log->accion }} - {{ $log->modulo }}</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-muted);">{{ $log->ip_address }} &bull; {{ $log->created_at->diffForHumans() }}</p>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Mi Perfil</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gestiona tu información personal y seguridad de cuenta</p>
                     </div>
-                </li>
-            @empty
-                <li style="text-align: center; color: var(--text-muted); padding: 1rem;">No hay actividad reciente.</li>
-            @endforelse
-        </ul>
+                </div>
+                <a href="{{ route('perfil.edit') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-user-edit"></i>
+                    <span>Editar Perfil</span>
+                </a>
+            </div>
+
+            {{-- Stats Pills --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-id-card text-blue-600 dark:text-blue-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Rol</span>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ Auth::user()->role ? Auth::user()->role->nombre : 'Usuario' }}</span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-toggle-on text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Estado</span>
+                        <span class="text-sm font-semibold {{ Auth::user()->cuenta_activa ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                            {{ Auth::user()->cuenta_activa ? 'Activo' : 'Inactivo' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Miembro Desde</span>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">
+                            {{ Auth::user()->created_at ? Auth::user()->created_at->format('d/m/Y') : '-' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clock text-amber-600 dark:text-amber-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Último Acceso</span>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">
+                            {{ Auth::user()->ultimo_acceso ? Auth::user()->ultimo_acceso->diffForHumans() : 'Ahora' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Grid Principal: Tarjeta de Perfil + Dashboard --}}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {{-- Tarjeta de Perfil --}}
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 text-center" x-data="{ uploading: false }">
+                    {{-- Avatar --}}
+                    <div class="relative inline-block mb-4">
+                        <img src="{{ Auth::user()->foto_perfil && file_exists(public_path(Auth::user()->foto_perfil)) ? asset(Auth::user()->foto_perfil) : asset('images/default-avatar.svg') }}" 
+                             alt="Foto de Perfil" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-slate-200 dark:border-slate-700 shadow-lg">
+                        <label for="avatarInput" 
+                               class="absolute bottom-0 right-0 w-10 h-10 bg-gradient-to-r from-rose-600 to-pink-600 rounded-full flex items-center justify-center text-white cursor-pointer hover:from-rose-700 hover:to-pink-700 transition-all shadow-lg"
+                               title="Cambiar foto">
+                            <i class="fas fa-camera text-sm"></i>
+                        </label>
+                        <input type="file" 
+                               id="avatarInput" 
+                               hidden 
+                               accept="image/*"
+                               @change="uploading = true; setTimeout(() => uploading = false, 2000)">
+                    </div>
+
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">{{ Auth::user()->name }}</h2>
+                    <span class="inline-block px-3 py-1 bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 text-sm font-medium rounded-full mb-2">
+                        {{ Auth::user()->role ? Auth::user()->role->nombre : 'Usuario' }}
+                    </span>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-6">{{ Auth::user()->email }}</p>
+
+                    {{-- Stats Compactos --}}
+                    <div class="grid grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-slate-800 rounded-xl">
+                        <div>
+                            <div class="text-lg font-bold text-slate-900 dark:text-white">
+                                {{ Auth::user()->created_at ? Auth::user()->created_at->format('d/m/Y') : '-' }}
+                            </div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Miembro Desde</div>
+                        </div>
+                        <div>
+                            <div class="text-lg font-bold {{ Auth::user()->cuenta_activa ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                                {{ Auth::user()->cuenta_activa ? 'Activo' : 'Inactivo' }}
+                            </div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Estado</div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-xs text-slate-500 dark:text-slate-400">
+                        Último acceso: {{ Auth::user()->ultimo_acceso ? Auth::user()->ultimo_acceso->diffForHumans() : 'Nunca' }}
+                    </div>
+                </div>
+            </div>
+
+            {{-- Dashboard de Información --}}
+            <div class="lg:col-span-2 space-y-6">
+                {{-- Información Personal --}}
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-info-circle text-blue-600 dark:text-blue-400"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Información Personal</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Resumen de tus datos registrados</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="text-xs text-slate-600 dark:text-slate-400 block mb-1">Nombre Completo</label>
+                            <span class="text-base font-semibold text-slate-900 dark:text-white">{{ Auth::user()->name }}</span>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-600 dark:text-slate-400 block mb-1">Correo Electrónico</label>
+                            <span class="text-base font-semibold text-slate-900 dark:text-white">{{ Auth::user()->email }}</span>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-600 dark:text-slate-400 block mb-1">Rol del Sistema</label>
+                            <span class="text-base font-semibold text-slate-900 dark:text-white">
+                                {{ Auth::user()->role ? ucfirst(Auth::user()->role->nombre) : 'Usuario' }}
+                            </span>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-600 dark:text-slate-400 block mb-1">Estado de Cuenta</label>
+                            <span class="text-base font-semibold {{ Auth::user()->cuenta_activa ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
+                                {{ Auth::user()->cuenta_activa ? 'Activa' : 'Inactiva' }}
+                            </span>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-600 dark:text-slate-400 block mb-1">Registro en el Sistema</label>
+                            <span class="text-base font-semibold text-slate-900 dark:text-white">
+                                {{ Auth::user()->created_at ? Auth::user()->created_at->format('d/m/Y H:i') : 'N/A' }}
+                            </span>
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-600 dark:text-slate-400 block mb-1">Email Verificado</label>
+                            <span class="text-base font-semibold text-slate-900 dark:text-white">
+                                {{ Auth::user()->email_verified_at ? 'Sí (' . Auth::user()->email_verified_at->format('d/m/Y') . ')' : 'No verificado' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Botones de Acción --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <a href="{{ route('perfil.edit') }}" class="flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-user-edit text-xl"></i>
+                        <span class="font-semibold">Editar Perfil</span>
+                    </a>
+
+                    <a href="{{ route('perfil.security') }}" class="flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-shield-alt text-xl"></i>
+                        <span class="font-semibold">Seguridad</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {{-- Actividad Reciente --}}
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-history text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Actividad Reciente</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Últimos movimientos en el sistema</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                @forelse($logs ?? [] as $log)
+                    <div class="flex items-start gap-4 pb-4 border-b border-slate-200 dark:border-slate-700 last:border-0 last:pb-0">
+                        <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-dot-circle text-rose-600 dark:text-rose-400"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-semibold text-slate-900 dark:text-white mb-1">
+                                {{ $log->accion }} - {{ $log->modulo }}
+                            </h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                {{ $log->ip_address }} &bull; {{ $log->created_at->diffForHumans() }}
+                            </p>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-history text-2xl text-slate-400 dark:text-slate-600"></i>
+                        </div>
+                        <p class="text-slate-600 dark:text-slate-400">No hay actividad reciente</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
     </div>
-</div>
-@endsection
 
-@section('js')
-    <script src="{{ asset('JavaScript/perfil/index.js') }}"></script>
-@endsection
-
-@endcomponent
+    @push('scripts')
+    <script>
+        // Alpine component para upload de avatar
+        document.getElementById('avatarInput')?.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.querySelector('img[alt="Foto de Perfil"]');
+                    if (img) img.src = event.target.result;
+                };
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        });
+    </script>
+    @endpush
+</x-app-layout>

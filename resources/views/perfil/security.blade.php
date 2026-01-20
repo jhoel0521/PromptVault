@@ -1,337 +1,321 @@
-@php
-    use Illuminate\Support\Facades\Auth;
-    $user = Auth::user();
-    $userRole = $user && $user->role ? $user->role->nombre : 'guest';
-    
-    // Mapear roles a nombres de componentes
-    $roleComponentMap = [
-        'admin' => 'administrador',
-        'user' => 'usuario',
-        'collaborator' => 'colaborador',
-        'guest' => 'invitado'
-    ];
-    
-    $componentName = 'components.' . ($roleComponentMap[$userRole] ?? 'invitado');
-@endphp
-
-@component($componentName, ['title' => 'Seguridad - Cambiar Contraseña', 'recentUsers' => $recentUsers ?? collect()])
-
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/perfil/edit.css') }}">
-@endsection
-
-@section('content')
-    <!-- Header Tipo Panel de Control -->
-    <div class="control-panel">
-        <div class="panel-header">
-            <div class="header-title">
-                <div class="icon-wrapper" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">
-                    <i class="fas fa-shield-alt"></i>
+<x-app-layout>
+    <div class="space-y-6">
+        {{-- Header --}}
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-red-600 to-red-800 rounded-xl flex items-center justify-center text-white shadow-lg">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Seguridad</h2>
+                        <p class="text-sm text-slate-600 dark:text-slate-400">Gestiona tu contraseña y protección de cuenta</p>
+                    </div>
                 </div>
-                <div class="title-content">
-                    <h2>Seguridad</h2>
-                    <p class="subtitle">Gestiona tu contraseña y protección de cuenta</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="{{ route('perfil.index') }}" class="action-btn-red">
+                <a href="{{ route('perfil.index') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-800 border-2 border-rose-600 text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all duration-200">
                     <i class="fas fa-arrow-left"></i>
                     <span>Volver al Perfil</span>
                 </a>
             </div>
-        </div>
 
-        <div class="panel-content">
-            <!-- Barra de Estado -->
-            <div class="stats-group">
-                <div class="stat-pill">
-                    <i class="fas fa-id-card"></i>
-                    <div class="info">
-                        <span class="label">Rol</span>
-                        <span class="value">{{ $user->rol ?? 'Usuario' }}</span>
+            {{-- Stats Pills --}}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-id-card text-blue-600 dark:text-blue-400"></i>
                     </div>
-                </div>
-                
-                <div class="stat-pill">
-                    <i class="fas fa-toggle-on"></i>
-                    <div class="info">
-                        <span class="label">Estado</span>
-                        <span class="value" style="color: #10b981;">Activo</span>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Rol</span>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ Auth::user()->role ? Auth::user()->role->nombre : 'Usuario' }}</span>
                     </div>
                 </div>
 
-                <div class="stat-pill">
-                    <i class="fas fa-calendar-alt"></i>
-                    <div class="info">
-                        <span class="label">Miembro Desde</span>
-                        <span class="value">{{ $user->created_at ? $user->created_at->format('d/m/Y') : '-' }}</span>
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-toggle-on text-green-600 dark:text-green-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Estado</span>
+                        <span class="text-sm font-semibold text-green-600 dark:text-green-400">Activo</span>
                     </div>
                 </div>
 
-                <div class="stat-pill">
-                    <i class="fas fa-clock"></i>
-                    <div class="info">
-                        <span class="label">Último Acceso</span>
-                        <span class="value">{{ $user->ultimo_acceso ? \Carbon\Carbon::parse($user->ultimo_acceso)->diffForHumans() : 'Ahora' }}</span>
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-alt text-purple-600 dark:text-purple-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Miembro Desde</span>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">
+                            {{ Auth::user()->created_at ? Auth::user()->created_at->format('d/m/Y') : '-' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 px-4 py-3 bg-slate-50 dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <div class="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-clock text-amber-600 dark:text-amber-400"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-600 dark:text-slate-400 block">Último Acceso</span>
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">
+                            {{ Auth::user()->ultimo_acceso ? Auth::user()->ultimo_acceso->diffForHumans() : 'Ahora' }}
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Contenedor Principal -->
-    <div class="dashboard-section">
-        <div class="profile-container">
-            
-            <!-- Izquierda: Sidebar Sticky con Multiple Cards -->
-            <!-- FIX: Apply sticky here, and align-self start to prevent stretching -->
-            <div class="profile-sidebar" style="display: flex; flex-direction: column; gap: 0; position: sticky; top: 2rem; height: fit-content;">
-                
-                <!-- Card 1: Avatar -->
-                <div class="profile-card" style="width: 100%; position: relative; top: 0; padding: 1rem; border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom: none;">
-                    <div class="profile-avatar-wrapper">
-                        <img src="{{ $user->foto_perfil && file_exists(public_path($user->foto_perfil)) ? asset($user->foto_perfil) : asset('images/default-avatar.svg') }}" alt="Foto de Perfil" class="profile-avatar" id="avatarPreview">
-                        
-                        <!-- Removed edit button for security view context or keep it if desired, but user asked for "IGUAL". 
-                             If "IGUAL", I should probably keep it even if it doesn't work or hide it? 
-                             The prompt says "CARDS ... SEAN IGUAL". I will keep the structure exactly. 
-                             However, the avatar upload form is specific to the edit page. 
-                             I will keep the VISUALS but maybe disable the functional part if it requires JS not present? 
-                             The JS is in 'js/perfil/edit.js' or similar. 
-                             In security view, renaming the form ID might be safer if we don't want conflicts, but for "IGUAL" I'll stick to the structure.
-                             I will change the link at the bottom to "Editar Perfil" though, as discussed. -->
-                        
-                        <!-- Keeping the edit button visual but maybe it shouldn't be functional on security page? 
-                             The user said "IGUAL". I will copy it. -->
-                        <button type="button" class="avatar-edit-btn" style="cursor: default; opacity: 0.5;" title="Ir a editar perfil para cambiar foto">
-                            <i class="fas fa-camera"></i>
-                        </button>
+        {{-- Grid Principal: Sidebar + Formulario --}}
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {{-- Sidebar Sticky (idéntico a edit) --}}
+            <div class="lg:col-span-1 space-y-0 lg:sticky lg:top-6 lg:self-start">
+                {{-- Card Avatar --}}
+                <div class="bg-white dark:bg-slate-900 rounded-t-2xl shadow-sm border border-slate-200 dark:border-slate-700 border-b-0 p-4 text-center">
+                    <div class="relative inline-block mb-3">
+                        <img src="{{ Auth::user()->foto_perfil && file_exists(public_path(Auth::user()->foto_perfil)) ? asset(Auth::user()->foto_perfil) : asset('images/default-avatar.svg') }}" 
+                             alt="Foto de Perfil" 
+                             class="w-32 h-32 rounded-full object-cover border-4 border-slate-200 dark:border-slate-700 shadow-lg">
+                        <div class="absolute bottom-0 right-0 w-10 h-10 bg-gradient-to-r from-slate-400 to-slate-500 rounded-full flex items-center justify-center text-white opacity-50 cursor-default" 
+                             title="Ir a editar perfil para cambiar foto">
+                            <i class="fas fa-camera text-sm"></i>
+                        </div>
                     </div>
 
-                    <h2 class="profile-name">{{ $user->name }}</h2>
-                    <span class="profile-role">
-                        <i class="fas fa-user-shield"></i> {{ $user->rol ?? 'Administrador' }}
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">{{ Auth::user()->name }}</h2>
+                    <span class="inline-block px-3 py-1 bg-rose-100 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 text-sm font-medium rounded-full mb-2">
+                        {{ Auth::user()->role ? Auth::user()->role->nombre : 'Usuario' }}
                     </span>
-                    
-                    <p style="color: var(--text-muted); margin-bottom: 0.5rem; font-size: 0.9rem;">{{ $user->email }}</p>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-3">{{ Auth::user()->email }}</p>
 
-                    <div class="profile-stats" style="margin-bottom: 0.5rem; padding: 0.8rem 0; padding-top: 0.8rem; margin-top: 0.5rem;">
-                        <div class="stat-item">
-                            <span class="stat-value">{{ intval(\Carbon\Carbon::parse($user->created_at)->diffInDays()) }}</span>
-                            <span class="stat-label">Días</span>
+                    <div class="grid grid-cols-2 gap-4 p-3 bg-slate-50 dark:bg-slate-800 rounded-xl mb-3">
+                        <div>
+                            <div class="text-lg font-bold text-slate-900 dark:text-white">
+                                {{ Auth::user()->created_at ? Auth::user()->created_at->diffInDays() : 0 }}
+                            </div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Días</div>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-value" style="color: #10b981;">Active</span>
-                            <span class="stat-label">Estado</span>
+                        <div>
+                            <div class="text-lg font-bold text-green-600 dark:text-green-400">Activo</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-400">Estado</div>
                         </div>
                     </div>
-                    
-                    <div style="margin-top: 0.8rem; width: 100%; text-align: left;">
-                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                            <a href="{{ route('perfil.edit') }}" class="action-btn-red" style="justify-content: center; display: flex; align-items: center; gap: 0.5rem; padding: 0.8rem; border-radius: 12px; text-decoration: none; transition: all 0.2s;">
-                                <i class="fas fa-user-edit"></i> Editar Perfil
-                            </a>
-                        </div>
+
+                    <div class="pt-3">
+                        <a href="{{ route('perfil.edit') }}" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-lg transition-all duration-200">
+                            <i class="fas fa-user-edit"></i>
+                            <span class="text-sm font-medium">Editar Perfil</span>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Card 2: Nivel de Perfil y Detalles de Cuenta -->
-                <div class="profile-card" style="width: 100%; position: relative; padding: 1.5rem; align-items: flex-start; text-align: left; border-top-left-radius: 0; border-top-right-radius: 0;">
-                    <!-- Header: Nivel -->
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; width: 100%; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
-                        <div style="width: 45px; height: 45px; background: rgba(220, 38, 38, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary-red); font-size: 1.2rem;">
-                            <i class="fas fa-chart-line"></i>
+                {{-- Card Nivel de Perfil (idéntico a edit) --}}
+                <div class="bg-white dark:bg-slate-900 rounded-b-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-200 dark:border-slate-700">
+                        <div class="w-10 h-10 bg-rose-100 dark:bg-rose-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-rose-600 dark:text-rose-400"></i>
                         </div>
                         <div>
-                            <h3 style="font-size: 1.1rem; margin: 0; color: var(--text-dark); font-weight: 700;">Nivel de Perfil</h3>
-                            <span style="font-size: 0.85rem; color: var(--text-muted);">Estadísticas de cuenta</span>
+                            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Nivel de Perfil</h3>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Estadísticas de cuenta</p>
                         </div>
                     </div>
 
-                    <!-- Progreso -->
-                    <div style="width: 100%; margin-bottom: 1.5rem;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem;">
-                            <span style="color: var(--text-dark); font-weight: 600;">Intermedio</span>
-                            <span style="color: var(--primary-red); font-weight: 700;">85%</span>
+                    <div class="mb-4">
+                        <div class="flex justify-between text-xs font-medium mb-2">
+                            <span class="text-slate-900 dark:text-white">Intermedio</span>
+                            <span class="text-rose-600 dark:text-rose-400">85%</span>
                         </div>
-                        <div style="width: 100%; height: 6px; background: var(--bg-body); border-radius: 3px; overflow: hidden;">
-                            <div style="width: 85%; height: 100%; background: var(--primary-red); border-radius: 3px; box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);"></div>
+                        <div class="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div class="w-[85%] h-full bg-gradient-to-r from-rose-600 to-pink-600 shadow-[0_0_10px_rgba(220,38,38,0.4)]"></div>
                         </div>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                        <p class="text-xs text-slate-600 dark:text-slate-400 mt-2">
                             <i class="fas fa-info-circle"></i> Completa tu biografía para llegar al 100%.
                         </p>
                     </div>
 
-                    <!-- Grid de Badges -->
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; width: 100%; margin-bottom: 1.5rem;">
-                        <div style="background: var(--bg-body); padding: 0.8rem; border-radius: 10px; text-align: center;">
-                            <i class="fas fa-check-circle" style="color: #10b981; font-size: 1.2rem; margin-bottom: 0.3rem;"></i>
-                            <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">Email</span>
-                            <span style="font-weight: 600; color: var(--text-dark); font-size: 0.85rem;">Verificado</span>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg text-center">
+                            <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl mb-1"></i>
+                            <span class="block text-xs text-slate-600 dark:text-slate-400">Email</span>
+                            <span class="text-sm font-semibold text-slate-900 dark:text-white">Verificado</span>
                         </div>
-                        <div style="background: var(--bg-body); padding: 0.8rem; border-radius: 10px; text-align: center;">
-                            <i class="fas fa-shield-alt" style="color: #f59e0b; font-size: 1.2rem; margin-bottom: 0.3rem;"></i>
-                            <span style="display: block; font-size: 0.75rem; color: var(--text-muted);">Seguridad</span>
-                            <span style="font-weight: 600; color: var(--text-dark); font-size: 0.85rem;">Alta</span>
+                        <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-lg text-center">
+                            <i class="fas fa-shield-alt text-amber-600 dark:text-amber-400 text-xl mb-1"></i>
+                            <span class="block text-xs text-slate-600 dark:text-slate-400">Seguridad</span>
+                            <span class="text-sm font-semibold text-slate-900 dark:text-white">Alta</span>
                         </div>
                     </div>
 
-                    <!-- Lista de Detalles Adicionales -->
-                    <div style="width: 100%;">
-                        <h4 style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin-bottom: 1rem; letter-spacing: 0.5px;">Detalles de Cuenta</h4>
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-700 space-y-3">
+                        <h4 class="text-xs text-slate-600 dark:text-slate-400 uppercase font-bold">Detalles de Cuenta</h4>
                         
-                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
-                                <span style="color: var(--text-muted);"><i class="fas fa-fingerprint" style="width: 20px;"></i> ID Usuario</span>
-                                <span style="color: var(--text-dark); font-family: monospace; background: var(--bg-body); padding: 0.2rem 0.5rem; border-radius: 4px;">#{{ str_pad($user->id, 6, '0', STR_PAD_LEFT) }}</span>
-                            </div>
-                            
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
-                                <span style="color: var(--text-muted);"><i class="fas fa-globe-americas" style="width: 20px;"></i> Región</span>
-                                <span style="color: var(--text-dark);">Bolivia (BOT)</span>
-                            </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-600 dark:text-slate-400"><i class="fas fa-fingerprint w-4"></i> ID Usuario</span>
+                            <span class="text-slate-900 dark:text-white font-mono bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded">#{{ str_pad(Auth::user()->id, 6, '0', STR_PAD_LEFT) }}</span>
+                        </div>
 
-                            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;">
-                                <span style="color: var(--text-muted);"><i class="fas fa-key" style="width: 20px;"></i> 2FA</span>
-                                <a href="#" class="action-btn-red" style="padding: 0.3rem 0.8rem; font-size: 0.75rem; width: auto; min-width: auto; border-radius: 8px;">
-                                    Activar <i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i>
-                                </a>
-                            </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-600 dark:text-slate-400"><i class="fas fa-globe-americas w-4"></i> Región</span>
+                            <span class="text-slate-900 dark:text-white">Bolivia (BOT)</span>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-slate-600 dark:text-slate-400"><i class="fas fa-key w-4"></i> 2FA</span>
+                            <button class="px-3 py-1 bg-gradient-to-r from-rose-600 to-pink-600 text-white text-xs rounded-lg hover:from-rose-700 hover:to-pink-700">
+                                Activar <i class="fas fa-chevron-right text-[10px]"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
-
             </div>
 
-            <!-- Derecha: Formulario de Seguridad -->
-            <div class="profile-content">
-                <div class="settings-card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-lock"></i>
+            {{-- Formulario Seguridad --}}
+            <div class="lg:col-span-3 space-y-6">
+                {{-- Formulario Cambiar Contraseña --}}
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-lock text-red-600 dark:text-red-400"></i>
                         </div>
-                        <div class="card-title">
-                            <h3>Cambiar Contraseña</h3>
-                            <p>Actualiza y fortalece la seguridad de tu cuenta</p>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Cambiar Contraseña</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Actualiza y fortalece la seguridad de tu cuenta</p>
                         </div>
                     </div>
 
-                    <form action="{{ route('perfil.update-password') }}" method="POST">
+                    <form action="{{ route('perfil.password') }}" method="POST">
                         @csrf
-                        @method('PUT')
                         
-                        <div class="form-grid" style="grid-template-columns: 1fr; margin-bottom: 2rem;">
-                            <div class="form-group">
-                                <label class="form-label"><i class="fas fa-key"></i> Contraseña Actual</label>
-                                <div class="password-group">
-                                    <input type="password" name="current_password" class="form-input" required placeholder="Ingresa tu contraseña actual">
-                                    <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+                        <div class="space-y-6 mb-6">
+                            <div>
+                                <label class="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                    <i class="fas fa-key text-slate-500"></i> Contraseña Actual
+                                </label>
+                                <div class="relative" x-data="{ show: false }">
+                                    <input :type="show ? 'text' : 'password'" 
+                                           name="current_password" 
+                                           class="w-full px-4 py-3 pr-12 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all" 
+                                           placeholder="Ingresa tu contraseña actual" 
+                                           required>
+                                    <button type="button" 
+                                            @click="show = !show" 
+                                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                                        <i :class="show ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                    </button>
                                 </div>
+                                @error('current_password')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
-                            
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 1rem;">
-                                <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-lock"></i> Nueva Contraseña</label>
-                                    <div class="password-group">
-                                        <input type="password" name="new_password" class="form-input" required placeholder="Mínimo 6 caracteres">
-                                        <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                        <i class="fas fa-lock text-slate-500"></i> Nueva Contraseña
+                                    </label>
+                                    <div class="relative" x-data="{ show: false }">
+                                        <input :type="show ? 'text' : 'password'" 
+                                               name="new_password" 
+                                               class="w-full px-4 py-3 pr-12 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all" 
+                                               placeholder="Mínimo 6 caracteres" 
+                                               required>
+                                        <button type="button" 
+                                                @click="show = !show" 
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                                            <i :class="show ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                        </button>
                                     </div>
+                                    @error('new_password')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label"><i class="fas fa-check-circle"></i> Confirmar Contraseña</label>
-                                    <div class="password-group">
-                                        <input type="password" name="new_password_confirmation" class="form-input" required placeholder="Repite la nueva contraseña">
-                                        <button type="button" class="toggle-password"><i class="fas fa-eye"></i></button>
+
+                                <div>
+                                    <label class="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                                        <i class="fas fa-check-circle text-slate-500"></i> Confirmar Contraseña
+                                    </label>
+                                    <div class="relative" x-data="{ show: false }">
+                                        <input :type="show ? 'text' : 'password'" 
+                                               name="new_password_confirmation" 
+                                               class="w-full px-4 py-3 pr-12 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500 focus:border-transparent transition-all" 
+                                               placeholder="Repite la nueva contraseña" 
+                                               required>
+                                        <button type="button" 
+                                                @click="show = !show" 
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">
+                                            <i :class="show ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Botones Grid -->
-                        <div class="actions-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
-                            <a href="{{ route('perfil.index') }}" class="action-btn-red" style="background: transparent; border: 2px solid var(--primary-red); color: var(--primary-red); box-shadow: none; justify-content: center;">
-                                Cancelar
+                        {{-- Botones --}}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-slate-200 dark:border-slate-700">
+                            <a href="{{ route('perfil.index') }}" class="flex items-center justify-center gap-2 px-6 py-3 bg-white dark:bg-slate-800 border-2 border-rose-600 text-rose-600 dark:text-rose-400 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-900/20 transition-all duration-200 font-semibold">
+                                <i class="fas fa-times"></i>
+                                <span>Cancelar</span>
                             </a>
-                            <button type="submit" class="action-btn-red" style="width: 100%; border: none; cursor: pointer; justify-content: center;">
-                                <i class="fas fa-shield-alt"></i> Actualizar Contraseña
+
+                            <button type="submit" class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl font-semibold">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Actualizar Contraseña</span>
                             </button>
                         </div>
                     </form>
                 </div>
-                
-                <!-- Card Informativa Adicional -->
-                <div class="settings-card" style="margin-top: 1.5rem;">
-                     <div class="card-header">
-                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981; box-shadow: inset 0 0 10px rgba(16, 185, 129, 0.1);">
-                            <i class="fas fa-user-shield"></i>
+
+                {{-- Card Recomendaciones --}}
+                <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-user-shield text-green-600 dark:text-green-400"></i>
                         </div>
-                        <div class="card-title">
-                            <h3>Recomendaciones de Seguridad</h3>
-                            <p>Mantén tu cuenta protegida en todo momento</p>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Recomendaciones de Seguridad</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Mantén tu cuenta protegida en todo momento</p>
                         </div>
                     </div>
-                    
-                    <ul style="list-style: none; padding: 0; color: var(--text-dark); display: grid; gap: 1rem;">
-                        <li style="display: flex; gap: 0.8rem; align-items: start;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 4px;"></i>
+
+                    <ul class="space-y-4">
+                        <li class="flex gap-3 items-start">
+                            <i class="fas fa-check text-green-600 dark:text-green-400 mt-1"></i>
                             <div>
-                                <strong style="display: block; font-size: 0.95rem;">Usa una contraseña única</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">No reutilices contraseñas de otros sitios.</span>
+                                <strong class="block text-sm text-slate-900 dark:text-white">Usa una contraseña única</strong>
+                                <span class="text-xs text-slate-600 dark:text-slate-400">No reutilices contraseñas de otros sitios.</span>
                             </div>
                         </li>
-                        <li style="display: flex; gap: 0.8rem; align-items: start;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 4px;"></i>
+                        <li class="flex gap-3 items-start">
+                            <i class="fas fa-check text-green-600 dark:text-green-400 mt-1"></i>
                             <div>
-                                <strong style="display: block; font-size: 0.95rem;">Activa la autenticación de dos factores (2FA)</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">Añade una capa extra de seguridad a tu login.</span>
+                                <strong class="block text-sm text-slate-900 dark:text-white">Activa la autenticación de dos factores (2FA)</strong>
+                                <span class="text-xs text-slate-600 dark:text-slate-400">Añade una capa extra de seguridad a tu login.</span>
                             </div>
                         </li>
-                        <li style="display: flex; gap: 0.8rem; align-items: start;">
-                            <i class="fas fa-check" style="color: #10b981; margin-top: 4px;"></i>
+                        <li class="flex gap-3 items-start">
+                            <i class="fas fa-check text-green-600 dark:text-green-400 mt-1"></i>
                             <div>
-                                <strong style="display: block; font-size: 0.95rem;">Cierra sesión en dispositivos compartidos</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">Asegúrate de no dejar tu cuenta abierta en equipos públicos.</span>
+                                <strong class="block text-sm text-slate-900 dark:text-white">Cierra sesión en dispositivos compartidos</strong>
+                                <span class="text-xs text-slate-600 dark:text-slate-400">Asegúrate de no dejar tu cuenta abierta en equipos públicos.</span>
                             </div>
                         </li>
-                         <li style="display: flex; gap: 0.8rem; align-items: start;">
-                            <i class="fas fa-bell" style="color: #10b981; margin-top: 4px;"></i>
+                        <li class="flex gap-3 items-start">
+                            <i class="fas fa-bell text-green-600 dark:text-green-400 mt-1"></i>
                             <div>
-                                <strong style="display: block; font-size: 0.95rem;">Alertas de Inicio de Sesión</strong>
-                                <span style="font-size: 0.85rem; color: var(--text-muted);">Recibe notificaciones ante accesos sospechosos.</span>
+                                <strong class="block text-sm text-slate-900 dark:text-white">Alertas de Inicio de Sesión</strong>
+                                <span class="text-xs text-slate-600 dark:text-slate-400">Recibe notificaciones ante accesos sospechosos.</span>
                             </div>
                         </li>
-                        <li style="margin-top: 0.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.9rem; font-weight: 600; color: var(--text-dark);">Historial de Actividad</span>
-                            <a href="#" class="action-btn-red" style="padding: 0.4rem 1rem; font-size: 0.8rem; width: auto; min-width: auto; border-radius: 8px;">Ver Todo <i class="fas fa-arrow-right" style="font-size: 0.7rem;"></i></a>
+                        <li class="flex justify-between items-center pt-4 mt-4 border-t border-slate-200 dark:border-slate-700">
+                            <span class="text-sm font-semibold text-slate-900 dark:text-white">Historial de Actividad</span>
+                            <a href="#" class="inline-flex items-center gap-1 px-4 py-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white text-xs rounded-lg transition-all duration-200">
+                                Ver Todo <i class="fas fa-arrow-right text-[10px]"></i>
+                            </a>
                         </li>
                     </ul>
                 </div>
-
             </div>
         </div>
     </div>
-@endcomponent
-
-@section('js')
-    <script src="{{ asset('js/perfil/index.js') }}"></script>
-    <script>
-        // Toggle Password Visibility Script inline for simplicity or reuse existing logic
-        document.querySelectorAll('.toggle-password').forEach(button => {
-            button.addEventListener('click', function() {
-                const input = this.previousElementSibling;
-                const icon = this.querySelector('i');
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
-        });
-    </script>
-@endsection
-
-@endcomponent
+</x-app-layout>

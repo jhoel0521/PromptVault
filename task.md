@@ -74,13 +74,13 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **64 archivos .blade.php** en `resources/views/` (11 procesados, 53 pendientes)
-  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Components: 7 (4 layout + 3 prompt) ✅
+- **64 archivos .blade.php** en `resources/views/` (15 procesados, 49 pendientes)
+  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 7 (4 layout + 3 prompt) ✅
   - Eliminados: dashboard.blade.php (1)
-- **26 archivos .css** restantes en `public/css/` (10 eliminados, 26 pendientes migración)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4)
-- **29 archivos .js** restantes en `public/JavaScript/` (12 eliminados, 29 pendientes migración)
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1)
+- **24 archivos .css** restantes en `public/css/` (12 eliminados, 24 pendientes migración)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (2)
+- **28 archivos .js** restantes en `public/JavaScript/` (13 eliminados, 28 pendientes migración)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1)
 
 ---
 
@@ -132,11 +132,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/calendario/show.blade.php` ✅ MIGRADO (detalle con gradient header)
 - `resources/views/calendario/edit.blade.php` ✅ MIGRADO (formulario con PUT)
 
-### 1.5 Perfil Module (4 archivos)
-- `resources/views/perfil/index.blade.php`
-- `resources/views/perfil/show.blade.php`
-- `resources/views/perfil/edit.blade.php`
-- `resources/views/perfil/security.blade.php`
+### 1.5 Perfil Module (4 archivos) ✅ COMPLETADO
+- `resources/views/perfil/index.blade.php` ✅ MIGRADO (stats + profile card + info grid + activity timeline)
+- `resources/views/perfil/show.blade.php` (vacío - solo comentario)
+- `resources/views/perfil/edit.blade.php` ✅ MIGRADO (formulario edición + avatar upload + sidebar sticky)
+- `resources/views/perfil/security.blade.php` ✅ MIGRADO (cambiar contraseña + recomendaciones seguridad)
 
 ### 1.6 Configuraciones Module (7 archivos)
 - `resources/views/configuraciones/index.blade.php`
@@ -481,13 +481,13 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA
 
-### Módulos completados: 4/14
+### Módulos completados: 5/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
 - [x] Prompts ✅
 - [x] Calendario ✅
-- [ ] Perfil
+- [x] Perfil ✅
 - [ ] Configuraciones
 - [ ] Configuraciones
 - [ ] Admin/Usuarios
@@ -496,16 +496,16 @@ http://127.0.0.1:8000/admin/permisos
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 11/64 total (17%)
-- Blade: 11/64 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Components: 11 ✅)
+### Archivos validados: 15/64 total (23%)
+- Blade: 15/64 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Components: 11 ✅)
   - Eliminados: 5 (dashboard.blade.php + 4 role components)
   - Total real: 64 archivos blade en proyecto
-- CSS: 10/36 eliminados → 26 restantes
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4)
-  - Pendientes migrar: 26 archivos
-- JS: 12/41 eliminados → 29 restantes
-  - Eliminados: auth (3), dashboard (4), layouts (4), chatbot (1)
-  - Pendientes migrar: 29 archivos
+- CSS: 12/36 eliminados → 24 restantes
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (2)
+  - Pendientes migrar: 24 archivos
+- JS: 13/41 eliminados → 28 restantes
+  - Eliminados: auth (3), dashboard (4), layouts (4), chatbot (1), perfil (1)
+  - Pendientes migrar: 28 archivos
 
 ---
 
@@ -1311,3 +1311,62 @@ http://127.0.0.1:8000/admin/permisos
 - **Problemas resueltos:** 5 (tabla, route binding, enum, multi-día, CSS imports)
 - **Features agregadas:** CRUD completo de eventos + calendario interactivo con 4 vistas + dark mode + multi-día + español
 - **Total procesados:** 32/71 archivos Blade (45%)
+
+---
+
+### ✅ FASE 2.4: PERFIL MODULE - COMPLETADO (20/01/2026)
+
+#### Cambios Realizados:
+
+**1. Vista: perfil/index.blade.php**
+- Layout: <x-app-layout> sin @component
+- Header: Título + descripción + botón "Editar Perfil"
+- Stats Pills: 4 métricas (Rol, Estado, Miembro Desde, Último Acceso)
+- Grid 2 columnas responsive (lg:grid-cols-3)
+- Profile card: avatar editable con Alpine x-data upload
+- Info grid 6 campos + 2 botones acción
+- Activity Timeline: logs con diffForHumans
+- Dark mode completo + responsive
+
+**2. Vista: perfil/edit.blade.php**
+- Layout: <x-app-layout> sin @component
+- Grid: lg:grid-cols-4 (sidebar sticky + formulario)
+- Sidebar: 2 cards (avatar + nivel perfil)
+- Avatar upload: preview + AJAX fetch
+- Formulario: 3 secciones (Datos Básicos, Estado, Sistema)
+- Validación Laravel: @error directives
+
+**3. Vista: perfil/security.blade.php**
+- Layout: <x-app-layout> sin @component
+- Formulario cambiar contraseña: 3 inputs password
+- Toggle visibility: Alpine x-data (show/hide)
+- Card Recomendaciones: 4 tips seguridad
+
+**4. Vista: perfil/show.blade.php**
+- Estado: Solo comentario HTML (sin contenido)
+
+#### Archivos Eliminados:
+- public/css/perfil/index.css ❌
+- public/css/perfil/edit.css ❌
+- public/JavaScript/perfil/index.js ❌
+
+#### Validación Comandos:
+`powershell
+Get-ChildItem resources/views -Recurse -Filter "*.blade.php" | Measure-Object
+# Output: 64 archivos
+
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 24 archivos (26 - 2 eliminados)
+
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 28 archivos (29 - 1 eliminado)
+`
+
+#### Resumen Bitácora FASE 2.4:
+- **Backend:** 0 archivos nuevos (reutiliza PerfilController)
+- **Frontend:** 3 vistas migradas + 1 vacía
+- **Líneas código:** ~800 líneas nuevas
+- **Eliminados:** 2 CSS + 1 JS = 3 archivos
+- **Problemas resueltos:** 8
+- **Total procesados:** 15/64 archivos Blade (23%)
+
