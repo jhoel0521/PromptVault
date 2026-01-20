@@ -1,61 +1,151 @@
+{{-- Chatbot Widget - Tailwind + Alpine --}}
+<script>
+function parseMarkdown(text) {
+    return text
+        .replace(/\*\*(.+?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/\n\* /g, '\n• ')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="text-rose-400 hover:text-rose-300 underline" target="_blank">$1</a>')
+        .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" class="text-rose-400 hover:text-rose-300 underline break-all" target="_blank">$1</a>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>');
+}
+</script>
+
 @auth
-<div id="chatbot-widget" style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; font-family: 'Inter', sans-serif;">
-    <!-- Botón flotante -->
-    <button id="chatbot-btn" style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #e11d48 0%, #be123c 100%); 
-                                     color: #fff; border: none; box-shadow: 0 4px 20px rgba(225, 29, 72, 0.4); cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
-        <i class="fas fa-robot" style="font-size: 24px;"></i>
+<div x-data="{ open: false, messages: [], input: '', loading: false }" 
+     class="fixed bottom-8 right-8 z-50 font-sans">
+    
+    {{-- Botón flotante --}}
+    <button @click="open = !open" 
+            class="w-16 h-16 rounded-full bg-gradient-to-br from-rose-600 to-rose-700 text-white shadow-lg shadow-rose-500/40 hover:shadow-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+        <i class="fas fa-robot text-2xl" x-show="!open"></i>
+        <i class="fas fa-times text-2xl" x-show="open" style="display:none;"></i>
     </button>
     
-    <!-- Ventana chat (oculta) -->
-    <div id="chatbot-window" style="display: none; position: absolute; bottom: 80px; right: 0; 
-                                     width: 380px; height: 600px; background: #111827; 
-                                     border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
-                                     border: 1px solid rgba(255, 255, 255, 0.1); flex-direction: column; overflow: hidden; transform-origin: bottom right;">
-        <!-- Header -->
-        <div style="padding: 1.25rem; background: rgba(31, 41, 55, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.05); display: flex; justify-content: space-between; align-items: center; backdrop-filter: blur(10px);">
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(225, 29, 72, 0.2); display: flex; align-items: center; justify-content: center; color: #e11d48;">
+    {{-- Ventana del chat --}}
+    <div x-show="open" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 scale-75 translate-y-4"
+         x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 scale-100"
+         x-transition:leave-end="opacity-0 scale-75"
+         style="display:none;"
+         class="absolute bottom-20 right-0 w-96 h-[600px] bg-slate-900 rounded-3xl shadow-2xl border border-slate-700 flex flex-col overflow-hidden origin-bottom-right">
+        
+        {{-- Header --}}
+        <div class="p-5 bg-slate-800/50 border-b border-slate-700 flex justify-between items-center backdrop-blur-sm">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-rose-600/20 flex items-center justify-center text-rose-500">
                     <i class="fas fa-brain"></i>
                 </div>
                 <div>
-                    <h4 style="margin: 0; color: #fff; font-size: 1rem; font-weight: 600;">Asistente IA</h4>
-                    <small style="color: #9ca3af; font-size: 0.75rem; display: block;">Powered by Groq</small>
+                    <h4 class="text-white font-semibold">Asistente IA</h4>
+                    <small class="text-slate-400 text-xs block">Powered by Groq</small>
                 </div>
             </div>
-            <button id="chatbot-close" style="width: 32px; height: 32px; border-radius: 8px; background: transparent; border: none; color: #9ca3af; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">
+            <button @click="open = false" 
+                    class="w-8 h-8 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors flex items-center justify-center">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <!-- Messages -->
-        <div id="chatbot-messages" style="flex: 1; overflow-y: auto; padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; scroll-behavior: smooth;">
-            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
-                <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(225, 29, 72, 0.2); display: flex; align-items: center; justify-content: center; color: #e11d48; flex-shrink: 0; font-size: 0.75rem;">
+        {{-- Messages --}}
+        <div x-ref="messageContainer"
+             class="flex-1 overflow-y-auto p-5 flex flex-col gap-4 scroll-smooth"
+             x-init="messages.push({ role: 'assistant', content: '¡Hola! Soy tu asistente inteligente. Puedo ayudarte a encontrar, mejorar o analizar tus prompts. ¿Qué necesitas hoy?' })">
+            
+            <template x-for="(message, index) in messages" :key="index">
+                <div class="flex gap-3 items-start" :class="message.role === 'user' ? 'flex-row-reverse' : ''">
+                    <div class="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs"
+                         :class="message.role === 'assistant' ? 'bg-rose-600/20 text-rose-500' : 'bg-blue-600/20 text-blue-500'">
+                        <i :class="message.role === 'assistant' ? 'fas fa-robot' : 'fas fa-user'"></i>
+                    </div>
+                    <div class="max-w-[85%]">
+                        <div class="px-4 py-3 rounded-2xl text-sm"
+                             :class="message.role === 'assistant' ? 'bg-slate-800 border border-slate-700 text-slate-200 rounded-tl-sm' : 'bg-rose-600 text-white rounded-tr-sm'">
+                            <p x-html="message.role === 'assistant' ? parseMarkdown(message.content) : message.content" class="leading-relaxed"></p>
+                        </div>
+                        
+                        {{-- Related Prompts --}}
+                        <template x-if="message.related_prompts && message.related_prompts.length > 0">
+                            <div class="mt-2 space-y-2">
+                                <template x-for="prompt in message.related_prompts" :key="prompt.id">
+                                    <a :href="prompt.url" 
+                                       class="block px-3 py-2 bg-slate-800/50 border border-slate-700 rounded-lg hover:bg-slate-700/50 hover:border-rose-500/50 transition-all group">
+                                        <div class="flex items-center gap-2">
+                                            <i class="fas fa-bookmark text-rose-500 text-xs"></i>
+                                            <span class="text-sm text-slate-200 group-hover:text-white font-medium" x-text="prompt.titulo"></span>
+                                        </div>
+                                        <p class="text-xs text-slate-400 mt-1 pl-5" x-text="prompt.descripcion"></p>
+                                    </a>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+            
+            {{-- Loading --}}
+            <div x-show="loading" class="flex gap-3 items-start" style="display:none;">
+                <div class="w-7 h-7 rounded-full bg-rose-600/20 text-rose-500 flex items-center justify-center flex-shrink-0 text-xs">
                     <i class="fas fa-robot"></i>
                 </div>
-                <div style="padding: 0.85rem 1rem; background: rgba(31, 41, 55, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 0 16px 16px 16px; color: #e5e7eb; font-size: 0.95rem; line-height: 1.5; max-width: 85%;">
-                    ¡Hola! Soy tu asistente inteligente. Puedo ayudarte a encontrar, mejorar o analizar tus prompts. ¿Qué necesitas hoy?
+                <div class="px-4 py-3 bg-slate-800 border border-slate-700 rounded-2xl rounded-tl-sm text-slate-200">
+                    <div class="flex gap-1">
+                        <span class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0s"></span>
+                        <span class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                        <span class="w-2 h-2 bg-slate-600 rounded-full animate-bounce" style="animation-delay: 0.4s"></span>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Input Area -->
-        <div style="padding: 1rem; background: rgba(31, 41, 55, 0.5); border-top: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);">
-            <form id="chatbot-form" style="position: relative;">
-                <input type="text" id="chatbot-input" placeholder="Pregunta sobre tus prompts..." 
-                       style="width: 100%; padding: 0.85rem 3rem 0.85rem 1rem; background: rgba(17, 24, 39, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); 
-                              border-radius: 12px; color: #fff; outline: none; transition: border-color 0.2s; font-size: 0.95rem;">
-                <button type="submit" id="chatbot-submit-btn" style="position: absolute; right: 6px; top: 6px; width: 34px; height: 34px; background: #e11d48; color: #fff; border: none; 
-                                             border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;">
-                    <i class="fas fa-paper-plane" style="font-size: 0.85rem;"></i>
+        {{-- Input Area --}}
+        <div class="p-4 bg-slate-800/50 border-t border-slate-700 backdrop-blur-sm">
+            <form @submit.prevent="
+                if (input.trim()) {
+                    messages.push({ role: 'user', content: input });
+                    const userMessage = input;
+                    input = '';
+                    loading = true;
+                    
+                    fetch('{{ route('chatbot.ask') }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]').content
+                        },
+                        body: JSON.stringify({ message: userMessage })
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        loading = false;
+                        messages.push({ 
+                            role: 'assistant', 
+                            content: data.response || 'Lo siento, hubo un error.',
+                            related_prompts: data.related_prompts || []
+                        });
+                        $nextTick(() => $refs.messageContainer.scrollTop = $refs.messageContainer.scrollHeight);
+                    })
+                    .catch(() => {
+                        loading = false;
+                        messages.push({ role: 'assistant', content: 'Error de conexión. Inténtalo de nuevo.' });
+                    });
+                }
+            " class="relative">
+                <input x-model="input" 
+                       type="text" 
+                       placeholder="Pregunta sobre tus prompts..." 
+                       class="w-full pl-4 pr-12 py-3 bg-slate-900/80 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 transition-all">
+                <button type="submit" 
+                        class="absolute right-1.5 top-1.5 w-9 h-9 bg-rose-600 hover:bg-rose-700 text-white rounded-lg transition-colors flex items-center justify-center">
+                    <i class="fas fa-paper-plane text-sm"></i>
                 </button>
             </form>
-            <div style="text-align: center; margin-top: 0.5rem;">
-                <small style="color: #6b7280; font-size: 0.7rem;">La IA puede cometer errores. Verifica la información importante.</small>
-            </div>
+            <p class="text-center mt-2 text-xs text-slate-500">La IA puede cometer errores. Verifica la información importante.</p>
         </div>
     </div>
 </div>
-
-<script src="{{ asset('JavaScript/components/chatbot.js') }}"></script>
 @endauth

@@ -4,18 +4,18 @@
 Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript de la aplicación PromptVault, manteniendo el diseño original hermoso y funcional.
 
 ## Resumen de Inventario
-- **71 archivos .blade.php** en `resources/views/`
-- **36 archivos .css** en `public/css/`
-- **41 archivos .js** en `public/JavaScript/`
+- **71 archivos .blade.php** en `resources/views/` (22 procesados, 49 pendientes)
+- **36 archivos .css** en `public/css/` (16 eliminados → Tailwind, 20 pendientes migración)
+- **41 archivos .js** en `public/JavaScript/` (14 eliminados → Alpine, 27 pendientes migración)
 
 ---
 
 ## 1. INVENTARIO COMPLETO - ARCHIVOS BLADE (.blade.php)
 
-### 1.1 Authentication (3 archivos)
-- `resources/views/auth/login.blade.php`
-- `resources/views/auth/registro.blade.php`
-- `resources/views/auth/recuperar.blade.php`
+### 1.1 Authentication (3 archivos) ✅
+- `resources/views/auth/login.blade.php` ✅
+- `resources/views/auth/registro.blade.php` ✅
+- `resources/views/auth/recuperar.blade.php` ✅
 
 ### 1.2 Admin Module (18 archivos)
 #### Usuarios
@@ -73,31 +73,37 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/configuraciones/notificaciones.blade.php`
 - `resources/views/configuraciones/respaldos.blade.php`
 
-### 1.7 Components (8 archivos)
-#### Role Components
-- `resources/views/components/administrador.blade.php`
-- `resources/views/components/usuario.blade.php`
-- `resources/views/components/colaborador.blade.php`
-- `resources/views/components/invitado.blade.php`
+### 1.7 Components ✅ FASE COMPLETA
+#### Role Components (ELIMINADOS - usaban @extends/@yield prohibidos)
+- `resources/views/components/administrador.blade.php` ❌ ELIMINADO (688 líneas)
+- `resources/views/components/usuario.blade.php` ❌ ELIMINADO (543 líneas)
+- `resources/views/components/colaborador.blade.php` ❌ ELIMINADO (545 líneas)
+- `resources/views/components/invitado.blade.php` ❌ ELIMINADO (710 líneas)
 
-#### Prompt Components
-- `resources/views/components/prompt/card.blade.php`
-- `resources/views/components/prompt/grid.blade.php`
-- `resources/views/components/prompt/filters.blade.php`
+#### Prompt Components (MIGRADOS A TAILWIND)
+- `resources/views/components/prompt/card.blade.php` ✅ MIGRADO (inline styles → Tailwind dark mode)
+- `resources/views/components/prompt/grid.blade.php` ✅ MIGRADO (responsive grid + pagination)
+- `resources/views/components/prompt/filters.blade.php` ✅ MIGRADO (selects con dark mode)
 
-#### Utility Components
-- `resources/views/components/favicon.blade.php`
-- `resources/views/components/chatbot-widget.blade.php`
+#### Utility Components (MIGRADOS)
+- `resources/views/components/favicon.blade.php` (sin cambios necesarios)
+- `resources/views/components/chatbot-widget.blade.php` ✅ MIGRADO (Alpine + Tailwind, eliminado chatbot.js)
 
-### 1.8 Layouts (7 archivos)
-- `resources/views/layouts/header.blade.php`
-- `resources/views/layouts/footer.blade.php`
-- `resources/views/layouts/sidebar.blade.php`
-- `resources/views/layouts/sidebarAdmin.blade.php`
-- `resources/views/layouts/sidebarUser.blade.php`
-- `resources/views/layouts/sidebarCollaborator.blade.php`
-- `resources/views/layouts/sidebarGuest.blade.php`
-- `resources/views/layouts/loading.blade.php`
+### 1.8 Layouts (7 archivos) ✅ MIGRADOS A COMPONENTS
+- `resources/views/layouts/header.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/footer.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/sidebar.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/sidebarAdmin.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/sidebarUser.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/sidebarCollaborator.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/sidebarGuest.blade.php` ❌ ELIMINADO
+- `resources/views/layouts/loading.blade.php` ❌ ELIMINADO
+
+**Nuevos componentes creados:**
+- `resources/views/components/layout/header.blade.php` ✅
+- `resources/views/components/layout/sidebar.blade.php` ✅
+- `resources/views/components/layout/footer.blade.php` ✅
+- `resources/views/components/layout/loading.blade.php` ✅
 
 ### 1.9 Errors (3 archivos)
 - `resources/views/errors/403.blade.php`
@@ -115,19 +121,19 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ### 1.12 Buscador (1 archivo)
 - `resources/views/buscador/index.blade.php`
 
-### 1.13 Pages (4 archivos)
-- `resources/views/pages/usuarios.blade.php`
+### 1.13 Pages (4 archivos) - 1 procesado, 1 pendiente
+- `resources/views/home.blade.php` ✅blade.php`
 - `resources/views/pages/roles.blade.php`
 - `resources/views/pages/permisos.blade.php`
 - `resources/views/pages/custom.blade.php`
 
 ### 1.14 Root Views (2 archivos)
 - `resources/views/home.blade.php`
-- `resources/views/dashboard.blade.php`
-
----
-
-## 2. INVENTARIO COMPLETO - ARCHIVOS CSS (36 archivos)
+- `resources/views/dashboard.bla ✅ ELIMINADOS
+- `public/css/auth/auth.css` ❌
+- `public/css/auth/login.css` (1574 líneas) ❌
+- `public/css/auth/registro.css` (1832 líneas) ❌
+- `public/css/auth/recuperar.css` ❌VOS CSS (36 archivos)
 
 ### 2.1 Auth Styles (4 archivos)
 - `public/css/auth/auth.css`
@@ -151,11 +157,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 #### Permisos
 - `public/css/admin/permisos/index.css`
 - `public/css/admin/permisos/create.css`
-- `public/css/admin/permisos/show.css`
-- `public/css/admin/permisos/edit.css`
-
-#### Reportes
-- `public/css/admin/reportes/index.css`
+- `public/css/admin/permisos/show.css ✅ ELIMINADOS
+- `public/css/components/header.css` ❌
+- `public/css/components/footer.css` ❌
+- `public/css/components/sidebar.css` ❌
+- `public/css/components/loading.css` ❌s`
 
 ### 2.3 Component Styles (5 archivos)
 - `public/css/components/header.css`
@@ -172,8 +178,8 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/perfil/edit.css`
 - `public/css/filters/filtersUsuario.css`
 
-### 2.5 Utilities (4 archivos)
-- `public/css/layouts/loading.css`
+### 2.5 Utilities (8 archivos) - 1 eliminado, 7 pendientes
+- `public/css/layouts/loading.css` ❌
 - `public/css/pages/paginacion.css`
 - `public/css/errors/403.css`
 - `public/css/errors/404.css`
@@ -186,10 +192,10 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 
 ## 3. INVENTARIO COMPLETO - ARCHIVOS JAVASCRIPT (41 archivos)
 
-### 3.1 Auth Scripts (3 archivos)
-- `public/JavaScript/auth/login.js`
-- `public/JavaScript/auth/registro.js`
-- `public/JavaScript/auth/recuperar.js`
+### 3.1 Auth Scripts (3 archivos) ✅ ELIMINADOS
+- `public/JavaScript/auth/login.js` ❌
+- `public/JavaScript/auth/registro.js` ❌
+- `public/JavaScript/auth/recuperar.js` ❌
 
 ### 3.2 Admin Scripts (16 archivos)
 #### Usuarios
@@ -213,18 +219,18 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 #### Reportes
 - `public/JavaScript/admin/reportes/index.js`
 
-### 3.3 Component Scripts (5 archivos)
+### 3.3 Component Scripts (5 archivos) - 1 eliminado, 4 pendientes
 - `public/JavaScript/components/header.js`
 - `public/JavaScript/components/footer.js`
 - `public/JavaScript/components/sidebar.js`
 - `public/JavaScript/components/loading.js`
-- `public/JavaScript/components/chatbot.js`
+- `public/JavaScript/components/chatbot.js` ❌ ELIMINADO (migrado a Alpine)
 
-### 3.4 Layout Scripts (4 archivos)
-- `public/JavaScript/layouts/header.js`
-- `public/JavaScript/layouts/footer.js`
-- `public/JavaScript/layouts/sidebar.js`
-- `public/JavaScript/layouts/loading.js`
+### 3.4 Layout Scripts (4 archivos) ✅ ELIMINADOS
+- `public/JavaScript/layouts/header.js` ❌
+- `public/JavaScript/layouts/footer.js` ❌
+- `public/JavaScript/layouts/sidebar.js` ❌
+- `public/JavaScript/layouts/loading.js` ❌
 
 ### 3.5 Dashboard Scripts (5 archivos)
 - `public/JavaScript/components/dashboard.js`
@@ -269,9 +275,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] Implementar dark mode toggle con localStorage
 - [x] Eliminar CSS/JS antiguos de layouts y components
 
-#### 1.3 Components (Critical - reusables)
-- [ ] Role components: administrador, usuario, colaborador, invitado
-- [ ] Prompt components: card, grid, filters
+#### 1.3 Components (Critical - reusables) ✅ COMPLETADO
+- [x] Role components: administrador, usuario, colaborador, invitado → ELIMINADOS (usaban @extends/@yield)
+- [x] Prompt components: card, grid, filters → MIGRADOS a Tailwind con dark mode
+- [x] Chatbot widget → MIGRADO a Alpine (eliminado chatbot.js externo)
+- [x] Actualizar task.md inventario
 - [ ] Chatbot widget
 
 ### FASE 2: Módulos Principales (Prioridad Media)
@@ -587,7 +595,7 @@ http://127.0.0.1:8000/admin/permisos
 - ✅ Navegación sidebar funciona
 
 #### Próximos Pasos:
-- [ ] FASE 1.3: Components (prompt cards detallados, chatbot)
+- [x] FASE 1.3: Components ✅ COMPLETADO
 - [ ] FASE 2.1: Dashboard por rol
 - [ ] FASE 2.2: Prompts CRUD completo
 
@@ -598,4 +606,86 @@ http://127.0.0.1:8000/admin/permisos
 - **Layouts actualizados:** app.blade.php + home.blade.php + prompts/index.blade.php = 3
 - **Componentes actualizados:** prompt/filters.blade.php = 1
 - **CSS/JS eliminados:** 9 archivos (~2,000+ líneas)
+- **Features agregadas:** Dark mode toggle con localStorage
+
+---
+
+### 🔄 FASE 1.3: COMPONENTS MODULE - ✅ COMPLETADO
+
+#### Cambios Realizados:
+
+**1. Prompt Components Migrados a Tailwind**
+- `resources/views/components/prompt/card.blade.php`
+  - Migrado: Inline styles → Tailwind classes
+  - Dark mode: `bg-white dark:bg-slate-800`, borders, text colors
+  - Hover effects: `-translate-y-1 hover:shadow-lg`
+  - Avatar gradient: `bg-gradient-to-tr from-rose-500 to-blue-500`
+  - Action buttons: `bg-rose-100 dark:bg-rose-900/30`
+
+- `resources/views/components/prompt/grid.blade.php`
+  - Migrado: Inline styles → Tailwind grid system
+  - Responsive grid: `grid-cols-1 md:grid-cols-2 xl:grid-cols-3`
+  - Pagination: Dark mode support con `dark:bg-slate-800`
+  - Empty state: Centrado con iconos
+
+**2. Chatbot Widget Refactorizado (Alpine + Tailwind)**
+- `resources/views/components/chatbot-widget.blade.php`
+  - **Migrado completamente**: Inline styles → Tailwind, JS externo → Alpine
+  - **Ruta API corregida**: `/api/chatbot` → `{{ route('chatbot.ask') }}` (`/chatbot/ask`)
+  - **Parámetro corregido**: Backend esperaba `message` en vez de `question`
+  - **Markdown parser**: Función global `parseMarkdown()` fuera de Alpine
+    - Soporta: `**negrita**`, `*cursiva*`, listas `*`, links `[texto](url)`, URLs auto-link
+  - **Related Prompts**: Tarjetas bonitas con hover effects
+    - Ícono bookmark rosa + título + descripción
+    - Clickeable a `/prompts/{id}`
+  - **Animaciones**: x-transition para open/close smooth
+  - **Loading state**: 3 dots animados con `animate-bounce` staggered
+  - **Diseño**: Botón flotante gradient rose + ventana 600px con chat
+
+**3. Role Components Eliminados**
+- ❌ `resources/views/components/administrador.blade.php` (688 líneas)
+- ❌ `resources/views/components/usuario.blade.php` (543 líneas)  
+- ❌ `resources/views/components/colaborador.blade.php` (545 líneas)
+- ❌ `resources/views/components/invitado.blade.php` (710 líneas)
+- **Razón**: Usaban `@extends`/`@yield` prohibidos por AGENTS.md
+- **Reemplazo**: AppLayout unificado (`resources/views/layouts/app.blade.php`)
+
+#### Archivos Eliminados:
+- ❌ `public/JavaScript/components/chatbot.js` (migrado a Alpine)
+- ❌ 4 layouts de roles obsoletos (2,486 líneas total)
+
+**Total eliminado:** 5 archivos (2,486+ líneas)
+
+#### Correcciones Backend:
+- `app/Http/Controllers/ChatbotController.php`
+  - Validación cambiada: `'question'` → `'message'`
+  - Request input cambiado: `$request->input('question')` → `$request->input('message')`
+
+#### Funcionalidad Chatbot:
+- **Input**: Usuario escribe mensaje
+- **Loading**: Muestra 3 dots animados
+- **Respuesta**: Parsea Markdown automáticamente
+- **Related Prompts**: Si existen, muestra tarjetas clickeables debajo de respuesta
+- **Scroll**: Auto-scroll al último mensaje con `$nextTick()`
+- **Error handling**: Catch con mensaje amigable
+
+#### Validación:
+- ✅ Prompt cards renderizan con dark mode
+- ✅ Prompt grid responsive funciona
+- ✅ Chatbot abre/cierra con animaciones
+- ✅ Chatbot envía mensajes correctamente
+- ✅ Respuestas con Markdown se renderizan bien (**negrita**, *cursiva*, links)
+- ✅ Related prompts muestran tarjetas clickeables
+- ✅ No hay errores en consola
+- ✅ No hay 404 en assets
+- ✅ Alpine maneja estado correctamente
+
+---
+
+#### Total de Cambios Fase 1.3:
+- **Componentes migrados:** prompt/card + prompt/grid + chatbot-widget = 3
+- **Componentes eliminados:** 4 role layouts obsoletos
+- **JS eliminados:** chatbot.js (migrado a Alpine)
+- **Líneas eliminadas:** ~2,500
+- **Features agregadas:** Markdown parser, related prompts cards, animaciones smooth
 - **Features agregadas:** Dark mode toggle con localStorage

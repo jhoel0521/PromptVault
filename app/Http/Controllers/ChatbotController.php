@@ -17,7 +17,7 @@ class ChatbotController extends Controller
     public function ask(Request $request)
     {
         $request->validate([
-            'question' => 'required|string|max:500',
+            'message' => 'required|string|max:500',
         ]);
 
         try {
@@ -26,7 +26,7 @@ class ChatbotController extends Controller
 
             $response = $this->chatbotService->ask(
                 $user,
-                $request->input('question')
+                $request->input('message')
             );
 
             return response()->json($response);
