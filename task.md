@@ -4,7 +4,7 @@
 Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript de la aplicación PromptVault, manteniendo el diseño original hermoso y funcional.
 
 ## Resumen de Inventario
-- **71 archivos .blade.php** en `resources/views/` (25 procesados, 45 pendientes, 1 eliminado)
+- **71 archivos .blade.php** en `resources/views/` (28 procesados, 42 pendientes, 1 eliminado)
 - **36 archivos .css** en `public/css/` (17 eliminados → Tailwind, 19 pendientes migración)
 - **41 archivos .js** en `public/JavaScript/` (19 eliminados → Alpine, 22 pendientes migración)
 
@@ -44,13 +44,13 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 #### Backups
 - `resources/views/admin/backups/index.blade.php`
 
-### 1.3 Prompts Module (6 archivos) - 3 procesados, 3 pendientes
+### 1.3 Prompts Module (6 archivos) ✅ COMPLETADO
 - `resources/views/prompts/index.blade.php` ✅
 - `resources/views/prompts/create.blade.php` ✅ MIGRADO (Tailwind + dark mode)
 - `resources/views/prompts/show.blade.php` ✅ MIGRADO (layout 2 cols, compartir, historial)
-- `resources/views/prompts/edit.blade.php`
-- `resources/views/prompts/historial.blade.php`
-- `resources/views/prompts/compartidos.blade.php`
+- `resources/views/prompts/edit.blade.php` ✅ MIGRADO (formulario con PUT, mensaje_cambio)
+- `resources/views/prompts/historial.blade.php` ✅ MIGRADO (tabla de versiones, restaurar)
+- `resources/views/prompts/compartidos.blade.php` ✅ MIGRADO (grid de prompts compartidos)
 
 ### 1.4 Calendario Module (4 archivos)
 - `resources/views/calendario/index.blade.php`
@@ -687,4 +687,94 @@ http://127.0.0.1:8000/admin/permisos
 - **JS eliminados:** chatbot.js (migrado a Alpine)
 - **Líneas eliminadas:** ~2,500
 - **Features agregadas:** Markdown parser, related prompts cards, animaciones smooth
-- **Features agregadas:** Dark mode toggle con localStorage
+
+---
+
+### 🔄 FASE 2.2: PROMPTS MODULE - ✅ COMPLETADO
+
+#### Cambios Realizados:
+
+**1. Vista Create (Crear Prompt)**
+- `resources/views/prompts/create.blade.php`
+  - Migrado: `@extends('components.usuario')` → `<x-app-layout>`
+  - Formulario completo con dark mode
+  - Inputs/textareas: `bg-white dark:bg-slate-900` con borders slate
+  - Select visibilidad: opciones con `class="bg-white dark:bg-slate-900"`
+  - Select etiquetas multi-select: height 120px, options con bg dark
+  - Validación Laravel: `@error` con mensajes rojos
+  - Botones: Cancelar (ghost) + Guardar (rose-600 gradient shadow)
+
+**2. Vista Show (Detalle del Prompt)**
+- `resources/views/prompts/show.blade.php`
+  - Layout 2 columnas responsive: `grid-cols-1 lg:grid-cols-3`
+  - **Columna principal (2/3)**:
+    - Header con botón volver + título + descripción
+    - Caja del prompt: bg slate-50/900, header con badge "PROMPT", botón copiar
+    - Pre tag con `font-mono whitespace-pre-wrap`
+    - Sección comentarios: avatares gradient, cards con flex
+  - **Sidebar (1/3)**:
+    - Panel acciones CRUD: botones editar (blue-100/900) + eliminar (red-100/900)
+    - Metadatos: visibilidad badge, vistas, versión, fecha
+    - Etiquetas: chips con color_hex del backend
+    - Compartir: formulario + lista usuarios con botón quitar acceso
+  - **Historial versiones**: Tabla completa con hover, botón restaurar
+  - **Scripts**: copyPrompt(), toggleFavorite(), confirmDelete()
+
+**3. Vista Edit (Editar Prompt)**
+- `resources/views/prompts/edit.blade.php`
+  - Formulario idéntico a create pero con `@method('PUT')`
+  - Pre-llenado con `{{ old('campo', $prompt->campo) }}`
+  - Select etiquetas: pre-selección con `in_array($etiqueta->id, $prompt->etiquetas->pluck('id')->toArray())`
+  - Panel de versiones: textarea mensaje_cambio obligatorio
+  - Botón "Actualizar Prompt" en rose-600
+
+**4. Vista Historial (Versiones)**
+- `resources/views/prompts/historial.blade.php`
+  - Header con botón volver + título del prompt
+  - Stats cards: Total versiones, versión actual, última actualización
+  - Tabla completa de versiones con columnas: #, Fecha, Usuario, Mensaje, Acciones
+  - Badge "ACTUAL" en verde para versión activa
+  - Botones: Ver diff (yellow) + Restaurar (blue) con confirmación
+  - Modal/acordeón para diff: muestra contenido anterior vs nuevo
+  - Responsive: tabla con overflow-x-auto
+
+**5. Vista Compartidos Conmigo**
+- `resources/views/prompts/compartidos.blade.php`
+  - Grid de prompts compartidos: usa `<x-prompt.grid>`
+  - Filter por nivel de acceso: "Todos", "Lectura", "Edición"
+  - Empty state: mensaje cuando no hay prompts compartidos
+  - Badge de acceso: "Solo Lectura" (blue) o "Editor" (green)
+  - Stats: contador de prompts compartidos por tipo
+
+**6. Dashboard Obsoleto Eliminado**
+- ❌ `resources/views/dashboard.blade.php` - Intentaba incluir components eliminados
+- ❌ `public/css/dashboard/dashboard.css`
+- ❌ `public/JavaScript/dashboard/admin.js`
+- ❌ `public/JavaScript/dashboard/user.js`
+- ❌ `public/JavaScript/dashboard/collaborator.js`
+- ❌ `public/JavaScript/dashboard/guest.js`
+
+**Total eliminado:** 6 archivos dashboard obsoletos
+
+#### Validación:
+- ✅ `/prompts/create` renderiza sin errores
+- ✅ `/prompts/{id}` muestra detalle completo con sidebar
+- ✅ `/prompts/{id}/edit` pre-llena formulario correctamente
+- ✅ `/prompts/{id}/historial` muestra tabla de versiones
+- ✅ `/compartidos-conmigo` lista prompts compartidos
+- ✅ Todos los formularios validan con Laravel
+- ✅ Dark mode funciona en todas las vistas
+- ✅ Selects legibles en ambos modos
+- ✅ Botones con hover effects correctos
+- ✅ No hay 404 en assets
+- ✅ No hay errores en consola
+
+---
+
+#### Total de Cambios Fase 2.2:
+- **Vistas migradas:** create + show + edit + historial + compartidos = 5
+- **Dashboard eliminado:** 1 blade + 1 CSS + 5 JS = 7 archivos
+- **Total procesados:** 28/71 archivos Blade (39%)
+- **CSS eliminados:** 17/36 (47%)
+- **JS eliminados:** 19/41 (46%)
+- **Features agregadas:** CRUD completo de prompts con versionado, compartir, historial
