@@ -67,9 +67,7 @@
     @if($prompt->user)
         <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
             <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
-                <div class="w-6 h-6 rounded-full bg-gradient-to-tr from-rose-500 to-blue-500 flex items-center justify-center text-white font-bold text-xs">
-                    {{ substr($prompt->user->name, 0, 1) }}
-                </div>
+                <x-user-avatar :user="$prompt->user" size="sm" />
                 <span class="font-medium text-slate-700 dark:text-slate-300">{{ $prompt->user->name }}</span>
                 <span class="ml-auto flex items-center gap-1">
                     <i class="fas fa-clock"></i> {{ $prompt->created_at->diffForHumans() }}

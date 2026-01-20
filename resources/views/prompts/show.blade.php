@@ -52,9 +52,7 @@
                         <div class="space-y-4">
                             @foreach($prompt->comentarios as $comentario)
                                 <div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-700 flex gap-3">
-                                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-purple-600 to-blue-500 flex-shrink-0 flex items-center justify-center text-white font-bold text-sm">
-                                        {{ substr($comentario->user->name, 0, 1) }}
-                                    </div>
+                                    <x-user-avatar :user="$comentario->user" size="lg" class="flex-shrink-0" />
                                     <div>
                                         <p class="text-sm font-bold text-slate-900 dark:text-white">{{ $comentario->user->name }}</p>
                                         <p class="text-sm text-slate-600 dark:text-slate-400">{{ $comentario->contenido }}</p>

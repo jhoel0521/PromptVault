@@ -45,8 +45,7 @@
             <div class="relative">
                 <button class="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
                     @click="open = open === 'profile' ? null : 'profile'">
-                    <img src="{{ Auth::user()->avatar_url ?? asset('images/default-avatar.png') }}" alt="Avatar"
-                        class="w-8 h-8 rounded-full object-cover">
+                    <x-user-avatar :user="Auth::user()" size="md" />
                     <span
                         class="text-sm font-medium text-slate-800 dark:text-slate-100 truncate max-w-[120px]">{{ Auth::user()->name ?? 'Usuario' }}</span>
                     <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,8 +64,8 @@
                         <a href="{{ route('perfil.edit') }}"
                             class="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Mi
                             perfil</a>
-                        @if (Route::has('profile.security'))
-                            <a href="#"
+                        @if (Route::has('perfil.security'))
+                            <a href="{{ route('perfil.security') }}"
                                 class="px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Seguridad</a>
                         @endif
                     </div>

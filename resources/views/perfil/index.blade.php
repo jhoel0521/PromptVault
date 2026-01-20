@@ -75,19 +75,14 @@
                 <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 text-center" x-data="{ uploading: false }">
                     {{-- Avatar --}}
                     <div class="relative inline-block mb-4">
-                        <img src="{{ Auth::user()->foto_perfil && file_exists(public_path(Auth::user()->foto_perfil)) ? asset(Auth::user()->foto_perfil) : asset('images/default-avatar.svg') }}" 
+                        <img src="{{ Auth::user()->foto_perfil && file_exists(public_path(Auth::user()->foto_perfil)) ? asset(Auth::user()->foto_perfil) . '?v=' . time() : asset('images/default-avatar.svg') }}" 
                              alt="Foto de Perfil" 
                              class="w-32 h-32 rounded-full object-cover border-4 border-slate-200 dark:border-slate-700 shadow-lg">
-                        <label for="avatarInput" 
-                               class="absolute bottom-0 right-0 w-10 h-10 bg-gradient-to-r from-rose-600 to-pink-600 rounded-full flex items-center justify-center text-white cursor-pointer hover:from-rose-700 hover:to-pink-700 transition-all shadow-lg"
-                               title="Cambiar foto">
+                        <a href="{{ route('perfil.edit') }}" 
+                           class="absolute bottom-0 right-0 w-10 h-10 bg-gradient-to-r from-rose-600 to-pink-600 rounded-full flex items-center justify-center text-white hover:from-rose-700 hover:to-pink-700 transition-all shadow-lg"
+                           title="Ir a editar perfil para cambiar foto">
                             <i class="fas fa-camera text-sm"></i>
-                        </label>
-                        <input type="file" 
-                               id="avatarInput" 
-                               hidden 
-                               accept="image/*"
-                               @change="uploading = true; setTimeout(() => uploading = false, 2000)">
+                        </a>
                     </div>
 
                     <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-1">{{ Auth::user()->name }}</h2>
@@ -222,19 +217,3 @@
         </div>
     </div>
 
-    @push('scripts')
-    <script>
-        // Alpine component para upload de avatar
-        document.getElementById('avatarInput')?.addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.querySelector('img[alt="Foto de Perfil"]');
-                    if (img) img.src = event.target.result;
-                };
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-    </script>
-    @endpush
-</x-app-layout>
