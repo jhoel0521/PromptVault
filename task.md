@@ -74,9 +74,13 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **71 archivos .blade.php** en `resources/views/` (32 procesados, 38 pendientes, 1 eliminado)
-- **36 archivos .css** en `public/css/` (17 eliminados → Tailwind, 19 pendientes migración)
-- **41 archivos .js** en `public/JavaScript/` (19 eliminados → Alpine, 22 pendientes migración)
+- **64 archivos .blade.php** en `resources/views/` (11 procesados, 53 pendientes)
+  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Components: 7 (4 layout + 3 prompt) ✅
+  - Eliminados: dashboard.blade.php (1)
+- **26 archivos .css** restantes en `public/css/` (10 eliminados, 26 pendientes migración)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4)
+- **29 archivos .js** restantes en `public/JavaScript/` (12 eliminados, 29 pendientes migración)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1)
 
 ---
 
@@ -144,22 +148,17 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/configuraciones/respaldos.blade.php`
 
 ### 1.7 Components ✅ FASE COMPLETA
-#### Role Components (ELIMINADOS - usaban @extends/@yield prohibidos)
-- `resources/views/components/administrador.blade.php` ❌ ELIMINADO (688 líneas)
-- `resources/views/components/usuario.blade.php` ❌ ELIMINADO (543 líneas)
-- `resources/views/components/colaborador.blade.php` ❌ ELIMINADO (545 líneas)
-- `resources/views/components/invitado.blade.php` ❌ ELIMINADO (710 líneas)
+#### Layout Components (MIGRADOS A components/layout/)
+- `resources/views/components/layout/header.blade.php` ✅ MIGRADO (Tailwind + Alpine)
+- `resources/views/components/layout/sidebar.blade.php` ✅ MIGRADO (navegación por rol + dark mode toggle + link calendario)
+- `resources/views/components/layout/footer.blade.php` ✅ MIGRADO (contacto + copyright)
+- `resources/views/components/layout/loading.blade.php` ✅ MIGRADO (overlay Alpine)
 
-#### Prompt Components (MIGRADOS A TAILWIND)
-- `resources/views/components/prompt/card.blade.php` ✅ MIGRADO (inline styles → Tailwind dark mode)
-- `resources/views/components/prompt/grid.blade.php` ✅ MIGRADO (responsive grid + pagination)
-- `resources/views/components/prompt/filters.blade.php` ✅ MIGRADO (selects con dark mode)
+#### Layouts Principales (resources/views/layouts/)
+- `resources/views/layouts/app.blade.php` ✅ CREADO (layout principal dashboard con sidebar + header + footer)
+- `resources/views/layouts/app-auth.blade.php` ✅ CREADO (layout auth con branding panel)
 
-#### Utility Components (MIGRADOS)
-- `resources/views/components/favicon.blade.php` (sin cambios necesarios)
-- `resources/views/components/chatbot-widget.blade.php` ✅ MIGRADO (Alpine + Tailwind, eliminado chatbot.js)
-
-### 1.8 Layouts (7 archivos) ✅ MIGRADOS A COMPONENTS
+#### Layouts Obsoletos ELIMINADOS
 - `resources/views/layouts/header.blade.php` ❌ ELIMINADO
 - `resources/views/layouts/footer.blade.php` ❌ ELIMINADO
 - `resources/views/layouts/sidebar.blade.php` ❌ ELIMINADO
@@ -169,11 +168,27 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/layouts/sidebarGuest.blade.php` ❌ ELIMINADO
 - `resources/views/layouts/loading.blade.php` ❌ ELIMINADO
 
-**Nuevos componentes creados:**
-- `resources/views/components/layout/header.blade.php` ✅
-- `resources/views/components/layout/sidebar.blade.php` ✅
-- `resources/views/components/layout/footer.blade.php` ✅
-- `resources/views/components/layout/loading.blade.php` ✅
+#### Role Components (ELIMINADOS - usaban @extends/@yield prohibidos)
+- `resources/views/components/administrador.blade.php` ❌ ELIMINADO (688 líneas)
+- `resources/views/components/usuario.blade.php` ❌ ELIMINADO (543 líneas)
+- `resources/views/components/colaborador.blade.php` ❌ ELIMINADO (545 líneas)
+- `resources/views/components/invitado.blade.php` ❌ ELIMINADO (710 líneas)
+
+#### Prompt Components (MIGRADOS)
+- `resources/views/components/prompt/card.blade.php` ✅ MIGRADO (inline styles → Tailwind dark mode)
+- `resources/views/components/prompt/grid.blade.php` ✅ MIGRADO (responsive grid + pagination)
+- `resources/views/components/prompt/filters.blade.php` ✅ MIGRADO (selects con dark mode)
+
+#### Utility Components (MIGRADOS)
+- `resources/views/components/favicon.blade.php` ✅ (sin cambios necesarios)
+- `resources/views/components/chatbot-widget.blade.php` ✅ MIGRADO (Alpine + Tailwind, eliminado chatbot.js)
+
+### 1.8 Layouts - ❌ SECCIÓN OBSOLETA (ver 1.7 Components)
+**NOTA**: Esta sección está desactualizada. Los layouts se migraron como se documenta en sección 1.7 Components.
+
+- Layouts principales: `app.blade.php` + `app-auth.blade.php` en `resources/views/layouts/`
+- Componentes layout: migrados a `resources/views/components/layout/`
+- Layouts antiguos por rol: TODOS ELIMINADOS
 
 ### 1.9 Errors (3 archivos)
 - `resources/views/errors/403.blade.php`
@@ -196,21 +211,21 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/pages/permisos.blade.php`
 - `resources/views/pages/custom.blade.php`
 
-### 1.14 Root Views (2 archivos)
-- `resources/views/home.blade.php` ✅
+### 1.14 Root Views (1 archivo procesado, 1 eliminado)
+- `resources/views/home.blade.php` ✅ MIGRADO (Tailwind + Alpine + dark mode)
 - `resources/views/dashboard.blade.php` ❌ ELIMINADO (obsoleto, redirige a /prompts)
-- `public/css/auth/auth.css` ❌
-- `public/css/auth/login.css` (1574 líneas) ❌
-- `public/css/auth/registro.css` (1832 líneas) ❌
-- `public/css/auth/recuperar.css` ❌VOS CSS (36 archivos)
 
-### 2.1 Auth Styles (4 archivos)
-- `public/css/auth/auth.css`
-- `public/css/auth/login.css` (1574 líneas)
-- `public/css/auth/registro.css` (1832 líneas)
-- `public/css/auth/recuperar.css`
+---
 
-### 2.2 Admin Styles (16 archivos)
+## 2. INVENTARIO COMPLETO - ARCHIVOS CSS (26 restantes)
+
+### 2.1 Auth Styles (4 archivos) ✅ ELIMINADOS
+- `public/css/auth/auth.css` ❌ ELIMINADO
+- `public/css/auth/login.css` (1574 líneas) ❌ ELIMINADO
+- `public/css/auth/registro.css` (1832 líneas) ❌ ELIMINADO
+- `public/css/auth/recuperar.css` ❌ ELIMINADO
+
+### 2.2 Admin Styles (16 archivos) PENDIENTES MIGRACIÓN
 #### Usuarios
 - `public/css/admin/usuarios/index.css`
 - `public/css/admin/usuarios/create.css`
@@ -226,29 +241,29 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 #### Permisos
 - `public/css/admin/permisos/index.css`
 - `public/css/admin/permisos/create.css`
-- `public/css/admin/permisos/show.css ✅ ELIMINADOS
-- `public/css/components/header.css` ❌
-- `public/css/components/footer.css` ❌
-- `public/css/components/sidebar.css` ❌
-- `public/css/components/loading.css` ❌s`
+- `public/css/admin/permisos/show.css`
+- `public/css/admin/permisos/edit.css`
 
-### 2.3 Component Styles (5 archivos)
-- `public/css/components/header.css`
-- `public/css/components/footer.css`
-- `public/css/components/sidebar.css`
-- `public/css/components/loading.css`
+#### Reportes
+- `public/css/admin/reportes/index.css`
 
-### 2.4 Module Styles (8 archivos) - 1 eliminado, 7 pendientes
-- `public/css/dashboard/dashboard.css` ❌ ELIMINADO (dashboard.blade.php obsoleto)
-- `public/css/calendario/index.css`
+### 2.3 Component Styles (4 archivos) ✅ ELIMINADOS
+- `public/css/components/header.css` ❌ ELIMINADO
+- `public/css/components/footer.css` ❌ ELIMINADO
+- `public/css/components/sidebar.css` ❌ ELIMINADO
+- `public/css/components/loading.css` ❌ ELIMINADO
+
+### 2.4 Module Styles (6 archivos restantes) - 2 eliminados
+- `public/css/dashboard/dashboard.css` ❌ ELIMINADO
+- `public/css/layouts/loading.css` ❌ ELIMINADO
+- `public/css/calendario/index.css` (pendiente eliminar)
 - `public/css/buscador/index.css`
 - `public/css/configuraciones/configuraciones.css`
 - `public/css/perfil/index.css`
 - `public/css/perfil/edit.css`
 - `public/css/filters/filtersUsuario.css`
 
-### 2.5 Utilities (8 archivos) - 1 eliminado, 7 pendientes
-- `public/css/layouts/loading.css` ❌
+### 2.5 Utilities (6 archivos) PENDIENTES
 - `public/css/pages/paginacion.css`
 - `public/css/errors/403.css`
 - `public/css/errors/404.css`
@@ -259,14 +274,14 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 
 ---
 
-## 3. INVENTARIO COMPLETO - ARCHIVOS JAVASCRIPT (41 archivos)
+## 3. INVENTARIO COMPLETO - ARCHIVOS JAVASCRIPT (29 restantes)
 
 ### 3.1 Auth Scripts (3 archivos) ✅ ELIMINADOS
-- `public/JavaScript/auth/login.js` ❌
-- `public/JavaScript/auth/registro.js` ❌
-- `public/JavaScript/auth/recuperar.js` ❌
+- `public/JavaScript/auth/login.js` ❌ ELIMINADO
+- `public/JavaScript/auth/registro.js` ❌ ELIMINADO
+- `public/JavaScript/auth/recuperar.js` ❌ ELIMINADO
 
-### 3.2 Admin Scripts (16 archivos)
+### 3.2 Admin Scripts (16 archivos) PENDIENTES MIGRACIÓN
 #### Usuarios
 - `public/JavaScript/admin/usuarios/index.js`
 - `public/JavaScript/admin/usuarios/create.js`
@@ -288,34 +303,34 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 #### Reportes
 - `public/JavaScript/admin/reportes/index.js`
 
-### 3.3 Component Scripts (5 archivos) - 1 eliminado, 4 pendientes
+### 3.3 Component Scripts (4 archivos) - 1 eliminado, 4 pendientes
 - `public/JavaScript/components/header.js`
 - `public/JavaScript/components/footer.js`
 - `public/JavaScript/components/sidebar.js`
 - `public/JavaScript/components/loading.js`
+- `public/JavaScript/components/dashboard.js`
 - `public/JavaScript/components/chatbot.js` ❌ ELIMINADO (migrado a Alpine)
 
 ### 3.4 Layout Scripts (4 archivos) ✅ ELIMINADOS
-- `public/JavaScript/layouts/header.js` ❌
-- `public/JavaScript/layouts/footer.js` ❌
-- `public/JavaScript/layouts/sidebar.js` ❌
-- `public/JavaScript/layouts/loading.js` ❌
+- `public/JavaScript/layouts/header.js` ❌ ELIMINADO
+- `public/JavaScript/layouts/footer.js` ❌ ELIMINADO
+- `public/JavaScript/layouts/sidebar.js` ❌ ELIMINADO
+- `public/JavaScript/layouts/loading.js` ❌ ELIMINADO
 
-### 3.5 Dashboard Scripts (5 archivos) ✅ ELIMINADOS
-- `public/JavaScript/components/dashboard.js` ❌
-- `public/JavaScript/dashboard/admin.js` ❌
-- `public/JavaScript/dashboard/user.js` ❌
-- `public/JavaScript/dashboard/collaborator.js` ❌
-- `public/JavaScript/dashboard/guest.js` ❌
+### 3.5 Dashboard Scripts (4 archivos) ✅ ELIMINADOS
+- `public/JavaScript/dashboard/admin.js` ❌ ELIMINADO
+- `public/JavaScript/dashboard/user.js` ❌ ELIMINADO
+- `public/JavaScript/dashboard/collaborator.js` ❌ ELIMINADO
+- `public/JavaScript/dashboard/guest.js` ❌ ELIMINADO
 
-### 3.6 Module Scripts (5 archivos)
-- `public/JavaScript/calendario/index.js`
+### 3.6 Module Scripts (5 archivos) PENDIENTES
+- `public/JavaScript/calendario/index.js` (pendiente eliminar)
 - `public/JavaScript/buscador/index.js`
 - `public/JavaScript/configuraciones/configuraciones.js`
 - `public/JavaScript/perfil/index.js`
 - `public/JavaScript/filters/filtersUsuario.js`
 
-### 3.7 Utilities (6 archivos)
+### 3.7 Utilities (6 archivos) PENDIENTES
 - `public/JavaScript/errors/403.js`
 - `public/JavaScript/errors/404.js`
 - `public/JavaScript/errors/500.js`
@@ -352,21 +367,26 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [ ] Chatbot widget
 
 ### FASE 2: Módulos Principales (Prioridad Media)
-#### 2.1 Dashboard
-- [ ] `dashboard.blade.php` + CSS + JS por rol
-- [ ] `home.blade.php`
+#### 2.1 Dashboard (PENDIENTE - dashboard.blade.php eliminado)
+- [ ] Verificar rutas redirijan a /prompts correctamente
 
-#### 2.2 Prompts
-- [ ] index, create, show, edit, historial, compartidos
-- [ ] Verificar componentes de prompt funcionan
+#### 2.2 Prompts ✅ COMPLETADO
+- [x] index, create, show, edit, historial, compartidos (6 vistas)
+- [x] Verificar componentes de prompt funcionan
+- [x] Dark mode completo en todas las vistas
 
-#### 2.3 Perfil
-- [ ] index, show, edit, security
+#### 2.3 Calendario ✅ COMPLETADO
+- [x] index (FullCalendar CDN), create, show, edit (4 vistas)
+- [x] Backend: migración + modelo + enum + controller
+- [x] Eventos multi-día funcionales
+- [x] Link calendario en sidebar
+
+#### 2.4 Perfil (PENDIENTE)
+- [ ] index, show, edit, security (4 vistas)
 - [ ] Verificar CSS/JS correspondientes
 
-#### 2.4 Calendario
-- [ ] index, create, show, edit
-- [ ] Verificar calendario.css + calendario.js
+#### 2.5 Configuraciones (PENDIENTE)
+- [ ] 7 vistas pendientes migración
 
 ### FASE 3: Admin Module (Prioridad Media)
 - [ ] Admin/Usuarios: 4 vistas + CSS + JS
@@ -461,15 +481,14 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA
 
-### Módulos completados: 5/14
+### Módulos completados: 4/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
 - [x] Prompts ✅
 - [x] Calendario ✅
-- [ ] Dashboard
-- [ ] Home
 - [ ] Perfil
+- [ ] Configuraciones
 - [ ] Configuraciones
 - [ ] Admin/Usuarios
 - [ ] Admin/Roles
@@ -477,10 +496,16 @@ http://127.0.0.1:8000/admin/permisos
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 32/148 total
-- Blade: 32/71 (Auth: 3, Layouts: 8, Components: 7, Prompts: 6, Calendario: 4, Eliminados: 4)
-- CSS: 0/36 (migrando a Tailwind)
-- JS: 0/41 (migrando a Alpine)
+### Archivos validados: 11/64 total (17%)
+- Blade: 11/64 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Components: 11 ✅)
+  - Eliminados: 5 (dashboard.blade.php + 4 role components)
+  - Total real: 64 archivos blade en proyecto
+- CSS: 10/36 eliminados → 26 restantes
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4)
+  - Pendientes migrar: 26 archivos
+- JS: 12/41 eliminados → 29 restantes
+  - Eliminados: auth (3), dashboard (4), layouts (4), chatbot (1)
+  - Pendientes migrar: 29 archivos
 
 ---
 
@@ -1158,6 +1183,128 @@ http://127.0.0.1:8000/admin/permisos
 ---
 
 #### Total de Cambios Fase 2.3:
+- **Backend:** 1 migración + 1 modelo + 1 enum + 1 controller = 4 archivos
+- **Frontend:** 4 vistas Blade migradas con FullCalendar CDN
+- **Líneas código:** ~500 líneas nuevas (backend + frontend)
+- **Problemas resueltos:** 5 (tabla, route binding, enum, multi-día, CSS imports)
+- **Features agregadas:** CRUD completo de eventos + calendario interactivo con 4 vistas + dark mode + multi-día + español
+- **Total procesados:** 11/64 archivos Blade (17%)
+
+---
+
+## 10. AUDITORÍA COMPLETA - VERIFICACIÓN task.md vs REALIDAD
+
+**Fecha auditoría:** 20 de enero de 2026  
+**Estado:** ✅ COMPLETADA
+
+### Resumen Ejecutivo:
+- **Total archivos .blade.php:** 64 (no 71 como decía originalmente)
+- **Total archivos .css restantes:** 26 (no 36 originales, 10 eliminados confirmados)
+- **Total archivos .js restantes:** 29 (no 41 originales, 12 eliminados confirmados)
+
+### Archivos Verificados Eliminados:
+#### CSS (10 archivos):
+- ✅ `public/css/auth/auth.css`
+- ✅ `public/css/auth/login.css`
+- ✅ `public/css/auth/registro.css`
+- ✅ `public/css/auth/recuperar.css`
+- ✅ `public/css/dashboard/dashboard.css`
+- ✅ `public/css/layouts/loading.css`
+- ✅ `public/css/components/header.css`
+- ✅ `public/css/components/footer.css`
+- ✅ `public/css/components/sidebar.css`
+- ✅ `public/css/components/loading.css`
+
+#### JavaScript (12 archivos):
+- ✅ `public/JavaScript/auth/login.js`
+- ✅ `public/JavaScript/auth/registro.js`
+- ✅ `public/JavaScript/auth/recuperar.js`
+- ✅ `public/JavaScript/dashboard/admin.js`
+- ✅ `public/JavaScript/dashboard/user.js`
+- ✅ `public/JavaScript/dashboard/collaborator.js`
+- ✅ `public/JavaScript/dashboard/guest.js`
+- ✅ `public/JavaScript/layouts/header.js`
+- ✅ `public/JavaScript/layouts/footer.js`
+- ✅ `public/JavaScript/layouts/sidebar.js`
+- ✅ `public/JavaScript/layouts/loading.js`
+- ✅ `public/JavaScript/components/chatbot.js`
+
+#### Blade (5 archivos):
+- ✅ `resources/views/dashboard.blade.php`
+- ✅ `resources/views/components/administrador.blade.php`
+- ✅ `resources/views/components/usuario.blade.php`
+- ✅ `resources/views/components/colaborador.blade.php`
+- ✅ `resources/views/components/invitado.blade.php`
+
+#### Layouts Obsoletos (8 archivos):
+- ✅ `resources/views/layouts/header.blade.php`
+- ✅ `resources/views/layouts/footer.blade.php`
+- ✅ `resources/views/layouts/sidebar.blade.php`
+- ✅ `resources/views/layouts/sidebarAdmin.blade.php`
+- ✅ `resources/views/layouts/sidebarUser.blade.php`
+- ✅ `resources/views/layouts/sidebarCollaborator.blade.php`
+- ✅ `resources/views/layouts/sidebarGuest.blade.php`
+- ✅ `resources/views/layouts/loading.blade.php`
+
+### Archivos Verificados Creados:
+#### Layouts:
+- ✅ `resources/views/layouts/app.blade.php`
+- ✅ `resources/views/layouts/app-auth.blade.php`
+
+#### Components:
+- ✅ `resources/views/components/layout/header.blade.php`
+- ✅ `resources/views/components/layout/sidebar.blade.php` (incluye link calendario)
+- ✅ `resources/views/components/layout/footer.blade.php`
+- ✅ `resources/views/components/layout/loading.blade.php`
+
+#### Backend Calendario:
+- ✅ `database/migrations/2026_01_20_*_create_eventos_table.php`
+- ✅ `app/Models/Evento.php`
+- ✅ `app/Enums/TipoEvento.php`
+- ✅ `app/Http/Controllers/CalendarioController.php`
+
+### Vistas con @extends/@yield (PROHIBIDO por AGENTS.md):
+**Encontrados:** 53 archivos AÚN usan directivas antiguas
+
+#### Perfil (3 archivos):
+- ⚠️ `resources/views/perfil/index.blade.php` - usa @section/@extends
+- ⚠️ `resources/views/perfil/edit.blade.php` - usa @section/@extends
+- ⚠️ `resources/views/perfil/security.blade.php` - usa @section/@extends
+
+#### Admin (15+ archivos):
+- ⚠️ Todos los archivos en `admin/` usan @extends('layouts.admin')
+
+#### Otros módulos:
+- ⚠️ `buscador/index.blade.php`
+- ⚠️ `configuraciones/*`
+- ⚠️ `errors/*`
+- ⚠️ `mod/*`
+- ⚠️ `pages/*`
+
+### Archivos Pendientes Eliminar:
+- ⚠️ `public/css/calendario/index.css` - no usado (FullCalendar usa CDN)
+- ⚠️ `public/JavaScript/calendario/index.js` - no usado (FullCalendar usa CDN)
+
+### Discrepancias Encontradas y Corregidas:
+1. **task.md decía "71 archivos .blade.php"** → Corregido a: 64 archivos reales
+2. **task.md decía "32 procesados"** → Corregido a: 11 procesados (Auth 3 + Prompts 6 + Calendario 4 + Home 1 ≠ Components no cuentan)
+3. **task.md listaba sección 1.8 Layouts duplicada** → Marcada como obsoleta
+4. **task.md no mencionaba** → Agregados 8 layouts obsoletos eliminados
+
+### Correcciones Aplicadas a task.md:
+- ✅ Actualizado conteo real: 64 archivos blade
+- ✅ Corregido conteo CSS: 26 restantes (10 eliminados)
+- ✅ Corregido conteo JS: 29 restantes (12 eliminados)
+- ✅ Reorganizada sección 1.7 Components (incluye layouts)
+- ✅ Marcada sección 1.8 como obsoleta
+- ✅ Agregados layouts obsoletos a lista eliminados
+- ✅ Actualizado porcentaje procesados: 11/64 (17%)
+
+### Próximos Pasos Críticos:
+1. **MIGRAR VISTAS CON @extends:** 53 archivos aún usan directivas prohibidas
+2. **ELIMINAR CSS/JS OBSOLETOS:** `public/css/calendario/index.css`, `public/JavaScript/calendario/index.js`
+3. **CONTINUAR FASE 2.4:** Perfil Module (4 vistas)
+4. **AUDITORÍA SEGURIDAD:** Implementar checklist de autorización del inicio del documento
 - **Backend:** 1 migración + 1 modelo + 1 enum + 1 controller = 4 archivos
 - **Frontend:** 4 vistas Blade migradas con FullCalendar CDN
 - **Líneas código:** ~500 líneas nuevas (backend + frontend)
