@@ -253,11 +253,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ## 4. PLAN DE REFACTOR - FASES
 
 ### FASE 1: Auditoría por Módulo (Prioridad Alta)
-#### 1.1 Auth Module
-- [ ] Verificar `login.blade.php` + `login.css` + `login.js`
-- [ ] Verificar `registro.blade.php` + `registro.css` + `registro.js`
-- [ ] Verificar `recuperar.blade.php` + `recuperar.css` + `recuperar.js`
-- [ ] Probar en navegador: /login, /register, /password/reset
+#### 1.1 Auth Module ✅ COMPLETADO
+- [x] Verificar `login.blade.php` + `login.css` + `login.js`
+- [x] Verificar `registro.blade.php` + `registro.css` + `registro.js`
+- [x] Verificar `recuperar.blade.php` + `recuperar.css` + `recuperar.js`
+- [x] Probar en navegador: /login, /register, /password/reset
 
 #### 1.2 Layouts (Critical - afecta todo)
 - [ ] Verificar `header.blade.php` + `header.css` + `header.js`
