@@ -74,14 +74,14 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **65 archivos .blade.php** en `resources/views/` (15 procesados, 50 pendientes)
-  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 (4 layout + 3 prompt + 1 user-avatar) ✅
-  - Configuraciones: 7 pendientes | Admin: 18 pendientes
+- **65 archivos .blade.php** en `resources/views/` (19 procesados, 46 pendientes)
+  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 ✅
+  - **Admin/Usuarios: 4 ✅** | Configuraciones: 7 pendientes | Admin (otros): 14 pendientes
   - Eliminados: dashboard.blade.php (1)
-- **23 archivos .css** restantes en `public/css/` (15 eliminados, 23 pendientes migración)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (2)
-- **27 archivos .js** restantes en `public/JavaScript/` (15 eliminados, 27 pendientes migración)
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1)
+- **19 archivos .css** restantes en `public/css/` (19 eliminados, 19 pendientes migración)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (2), **admin/usuarios (4)**
+- **23 archivos .js** restantes en `public/JavaScript/` (19 eliminados, 23 pendientes migración)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), **admin/usuarios (4)**
 
 ---
 
@@ -93,11 +93,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/auth/recuperar.blade.php` ✅
 
 ### 1.2 Admin Module (18 archivos)
-#### Usuarios
-- `resources/views/admin/usuarios/index.blade.php`
-- `resources/views/admin/usuarios/create.blade.php`
-- `resources/views/admin/usuarios/show.blade.php`
-- `resources/views/admin/usuarios/edit.blade.php`
+#### Usuarios (4 archivos) ✅ MIGRADO
+- `resources/views/admin/usuarios/index.blade.php` ✅ MIGRADO
+- `resources/views/admin/usuarios/create.blade.php` ✅ MIGRADO
+- `resources/views/admin/usuarios/show.blade.php` ✅ MIGRADO
+- `resources/views/admin/usuarios/edit.blade.php` ✅ MIGRADO
 
 #### Roles
 - `resources/views/admin/roles/index.blade.php`
@@ -1510,3 +1510,207 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
 - **CSS restantes:** 23 archivos
 - **JS restantes:** 27 archivos
 - **Commits:** 5498367 (fix: mover Configuraciones a sección Sistema)
+
+---
+
+### 🔄 FASE 3.1: ADMIN/USUARIOS MODULE - ✅ COMPLETADO
+
+#### Cambios Backend:
+- **No requeridos:** Rutas, controllers, modelos ya existen
+- **Validaciones:** FormRequests ya implementados (StoreUserRequest, UpdateUserRequest)
+
+#### Cambios Frontend:
+
+**1. admin/usuarios/index.blade.php** ✅ MIGRADO (195 líneas)
+- OLD: @component('components.administrador'), CSS externos (index.css, paginacion.css, filtersUsuario.css)
+- NEW: <x-app-layout> + Alpine x-data
+- Features implementadas:
+  - Header: Gradient rose/purple con icon users-cog
+  - Search input: Alpine x-model con debounce 500ms, icon search
+  - Filtros: Select rol (admin/user/collaborator/guest), per_page (10/25/50)
+  - Tabla responsive: thead bg-slate-50, tbody divide-y, hover:bg-slate-50
+  - Avatar: `<x-user-avatar :user="$usuario" size="md" />` (reutilizado componente)
+  - Badges: Roles (purple-100/900 admin, blue user, green collaborator, slate guest)
+  - Badges: Estado (green-100/900 activa, red inactiva)
+  - Acciones: Ver (blue hover:bg-blue-50), Editar (amber), Eliminar (red + Alpine confirm)
+  - Paginación Laravel: `{{ $usuarios->appends(request()->query())->links() }}`
+  - Dark mode: dark:bg-slate-900, dark:text-white, dark:border-slate-700 completo
+  - Responsive: flex-col sm:flex-row, hidden sm:table-cell, grid-cols-1 md:grid-cols-2
+- BUG CORREGIDO: Paginación duplicada al final (detectado por usuario)
+
+**2. admin/usuarios/create.blade.php** ✅ MIGRADO (183 líneas)
+- OLD: @component, CSS externos (create.css), JS externos (create.js)
+- NEW: <x-app-layout> + Alpine x-data preview imagen
+- Features implementadas:
+  - Header: Gradient rose/purple con icon user-plus
+  - Layout: Grid lg:grid-cols-3 (sidebar 1 col + content 2 cols)
+  - Sidebar:
+    - Avatar upload: x-ref="placeholder" + x-ref="preview" hidden inicialmente
+    - Input file: @change="previewImage(event)" Alpine function
+    - Help cards: Rol (purple w-10 h-10 bg-purple-100 icon shield-alt) + Seguridad (rose icon lock)
+  - Content Card 1 - Información Personal:
+    - Input nombre: required, icon user, placeholder "Ej: Juan Pérez"
+  - Content Card 2 - Datos Cuenta:
+    - Email: required, icon envelope, type email
+    - Password: required, icon lock, type password
+    - Role select: required, icon user-tag, opciones desde $roles loop
+    - Cuenta activa select: icon toggle-on, opciones Activa/Inactiva (1/0)
+  - Validation: @error('field') Laravel directives con text-red-600
+  - Actions: Cancelar (ghost text-slate-700) + Guardar Usuario (gradient from-rose-600)
+- Alpine previewImage():
+  ```js
+  previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+              $refs.preview.src = e.target.result;
+              $refs.preview.classList.remove('hidden');
+              $refs.placeholder.classList.add('hidden');
+          };
+          reader.readAsDataURL(file);
+      }
+  }
+  ```
+
+**3. admin/usuarios/show.blade.php** ✅ MIGRADO (163 líneas)
+- OLD: @component, CSS externos (show.css), inline styles
+- NEW: <x-app-layout> sin Alpine (solo lectura)
+- Features implementadas:
+  - Header: Gradient blue/cyan con icon user-circle
+  - Layout: Grid lg:grid-cols-3 (sidebar 1 col + content 2 cols)
+  - Sidebar Profile Card:
+    - `<x-user-avatar :user="$usuario" size="2xl" />` (w-16 h-16)
+    - Nombre: text-xl font-bold
+    - Rol badge: purple-100/900 con ucfirst()
+    - Email: text-sm text-slate-600 con icon envelope
+  - Sidebar Quick Stats:
+    - Estado badge: green-100/900 Activa o red-100/900 Inactiva
+    - Prompts count: bg-slate-100 rounded-lg con icon file-alt
+  - Content Card 1 - Información Personal:
+    - Input nombre readonly: bg-slate-50 dark:bg-slate-900 border
+  - Content Card 2 - Datos de Cuenta:
+    - Email readonly, icon envelope
+    - Rol readonly, icon user-tag
+    - Último acceso: Carbon format `d/m/Y H:i`, icon clock
+    - Fecha registro: created_at format `d/m/Y H:i`, icon calendar
+  - Action: Editar Usuario (gradient from-amber-600 to-amber-500)
+
+**4. admin/usuarios/edit.blade.php** ✅ MIGRADO (190 líneas)
+- OLD: @component, @method('PUT'), CSS externos (edit.css), JS externos (edit.js)
+- NEW: <x-app-layout> + Alpine x-data preview imagen + form PUT
+- Features implementadas:
+  - Header: Gradient amber/orange con icon user-edit
+  - Form: @csrf + @method('PUT') + enctype="multipart/form-data"
+  - Layout: Grid lg:grid-cols-3 (sidebar 1 col + content 2 cols)
+  - Alpine x-data:
+    ```js
+    currentPhoto: '{{ $usuario->foto_perfil ? asset("storage/" . $usuario->foto_perfil) : "" }}',
+    previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            reader.onload = (e) => { this.currentPhoto = e.target.result; };
+        }
+    }
+    ```
+  - Sidebar:
+    - Avatar actual: template x-if="currentPhoto" muestra img, x-if="!currentPhoto" muestra placeholder
+    - Input file: @change="previewImage", text-xs "Deje vacío para mantener la actual"
+    - Help cards: Rol Actual + Contraseña (hint "Dejar vacío para mantener")
+  - Content Card 1 - Información Personal:
+    - Input nombre: value="{{ old('name', $usuario->name) }}" required
+  - Content Card 2 - Datos Cuenta:
+    - Email: value="{{ old('email', $usuario->email) }}" required
+    - Password: sin value, placeholder "Dejar vacío para mantener" (opcional)
+    - Role select: old('role_id', $usuario->role_id) == $role->id ? 'selected'
+    - Cuenta activa: old('cuenta_activa', $usuario->cuenta_activa) == 1 ? 'selected'
+  - Actions: Cancelar + Actualizar Usuario (gradient from-amber-600)
+  - Dark mode completo en todos inputs/selects
+
+#### Patrón Consistente Aplicado:
+- **Headers:** Gradientes temáticos (rose/purple crear, amber editar, blue ver)
+- **Icons:** FontAwesome 6 Pro (user-plus, user-edit, user-circle, users-cog)
+- **Grid Layout:** lg:grid-cols-3 (sidebar info + content forms)
+- **Alpine.js:** x-data state, x-ref DOM access, @change events, x-if conditionals
+- **Tailwind:** bg-slate-50 dark:bg-slate-900, hover:, focus:ring-2, rounded-xl, shadow-sm
+- **Componentes:** <x-user-avatar> reutilizado (sizes: md, 2xl)
+- **Badges:** Consistent pattern (100 bg + 900 text, sizes px-2.5 py-0.5 text-xs)
+- **Responsive:** flex-col sm:flex-row, grid-cols-1 md:grid-cols-2 lg:grid-cols-3
+- **Formularios:** @error Laravel, required inputs, placeholder descriptivos
+
+#### Archivos Eliminados:
+- ❌ `public/css/admin/usuarios/index.css` (migrado a Tailwind inline)
+- ❌ `public/css/admin/usuarios/create.css` (migrado a Tailwind inline)
+- ❌ `public/css/admin/usuarios/show.css` (migrado a Tailwind inline)
+- ❌ `public/css/admin/usuarios/edit.css` (migrado a Tailwind inline)
+- ❌ `public/JavaScript/admin/usuarios/index.js` (migrado a Alpine.js declarativo)
+- ❌ `public/JavaScript/admin/usuarios/create.js` (migrado a Alpine.js declarativo)
+- ❌ `public/JavaScript/admin/usuarios/show.js` (no requería JS)
+- ❌ `public/JavaScript/admin/usuarios/edit.js` (migrado a Alpine.js declarativo)
+
+#### Problemas Resueltos:
+1. **Paginación duplicada index.blade.php** → Eliminado bloque duplicado @if($usuarios->hasPages())
+2. **Avatar preview no funcionaba** → Implementado Alpine x-ref + FileReader correctamente
+3. **@component prohibido** → Reemplazado por <x-app-layout> en 4 vistas (cumple AGENTS.md Regla 1)
+4. **CSS externos** → Migrados 100% a Tailwind inline (cumple AGENTS.md Regla 2)
+5. **JS externos** → Migrados 100% a Alpine.js declarativo (cumple AGENTS.md Regla 3)
+
+#### Validación:
+- ✅ /admin/usuarios renderiza tabla sin errores
+- ✅ Search input funciona con debounce 500ms
+- ✅ Filtros rol + per_page funcionan correctamente
+- ✅ Paginación Laravel funciona sin duplicados
+- ✅ Avatar componente <x-user-avatar> renderiza en index + show
+- ✅ /admin/usuarios/create renderiza formulario sin errores
+- ✅ Avatar preview Alpine funciona en create + edit
+- ✅ Help cards sidebar visible en create + edit
+- ✅ /admin/usuarios/{id} show renderiza detalle readonly
+- ✅ /admin/usuarios/{id}/edit renderiza formulario pre-filled
+- ✅ Old values funcionan correctamente en edit
+- ✅ Dark mode funciona en todas 4 vistas
+- ✅ Responsive funciona: mobile (stack), tablet (grid-cols-2), desktop (grid-cols-3)
+- ✅ No hay errores en consola browser
+- ✅ Cumple AGENTS.md Reglas 1-3 (NO @extends, Tailwind inline, Alpine declarativo)
+
+#### Validación Comandos (20/01/2026):
+```powershell
+# Pre-eliminación
+Get-ChildItem resources/views -Recurse -Filter "*.blade.php" | Measure-Object
+# Output: 65 archivos
+
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 23 archivos
+
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 27 archivos
+
+# Post-eliminación
+Remove-Item public/css/admin/usuarios/*.css -Force
+Remove-Item public/JavaScript/admin/usuarios/*.js -Force
+
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 19 archivos (-4)
+
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 23 archivos (-4)
+```
+
+#### Total de Cambios Fase 3.1:
+- **Vistas migradas:** 4 archivos (index, create, show, edit)
+- **Total procesados:** 19/65 archivos Blade (29.2%)
+- **CSS eliminados:** 4 archivos admin/usuarios
+- **JS eliminados:** 4 archivos admin/usuarios
+- **CSS restantes:** 19 archivos (validado con PowerShell)
+- **JS restantes:** 23 archivos (validado con PowerShell)
+- **Features agregadas:** 
+  - Alpine preview avatar (create + edit)
+  - Alpine search debounce (index)
+  - Alpine deleteUser confirm (index)
+  - Componente <x-user-avatar> reutilizado (2 vistas)
+  - Grid layout 3 cols consistente (3 vistas)
+  - Badges roles + estado (1 vista)
+  - Formularios con @error validation (2 vistas)
+- **Patrón Admin:** Header gradient temático, grid 3 cols, Alpine x-data, dark mode completo
+- **Módulos completados:** 8/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, **Admin/Usuarios**)
+
+

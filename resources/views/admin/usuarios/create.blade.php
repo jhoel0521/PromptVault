@@ -1,141 +1,165 @@
-@component('components.administrador', ['title' => 'Nuevo Usuario', 'recentUsers' => collect()])
-
-@section('title', 'Nuevo Usuario')
-
-@section('css')
-    <link rel="stylesheet" href="{{ asset('css/admin/usuarios/create.css') }}">
-@endsection
-
-@section('content')
-<div class="create-usuario-container">
-    <!-- Header -->
-    <div class="panel-header">
-        <div class="header-title">
-            <div class="icon-wrapper">
-                <i class="fas fa-user-plus"></i>
+<x-app-layout>
+    <x-slot:header>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-gradient-to-tr from-rose-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-user-plus text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Nuevo Usuario</h1>
+                    <p class="text-sm text-slate-600 dark:text-slate-400">Registre un nuevo usuario en el sistema</p>
+                </div>
             </div>
-            <div class="title-content">
-                <h2>Nuevo Usuario</h2>
-                <p class="subtitle">Registre un nuevo usuario en el sistema</p>
-            </div>
-        </div>
-        <div class="header-actions">
-            <a href="{{ route('admin.usuarios.index') }}" class="btn-secondary-action">
+            <a href="{{ route('admin.usuarios.index') }}" 
+               class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg transition-colors">
                 <i class="fas fa-arrow-left"></i>
-                <span>Volver a la lista</span>
+                <span>Volver</span>
             </a>
         </div>
-    </div>
+    </x-slot:header>
 
-    <!-- Main Form -->
-    <form action="{{ route('admin.usuarios.store') }}" method="POST" enctype="multipart/form-data" id="createUsuarioForm">
+    <form action="{{ route('admin.usuarios.store') }}" method="POST" enctype="multipart/form-data" 
+          x-data="{
+              previewImage(event) {
+                  const file = event.target.files[0];
+                  if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (e) => {
+                          $refs.preview.src = e.target.result;
+                          $refs.preview.classList.remove('hidden');
+                          $refs.placeholder.classList.add('hidden');
+                      };
+                      reader.readAsDataURL(file);
+                  }
+              }
+          }" 
+          class="space-y-6">
         @csrf
-        
-        <div class="form-content">
-            <!-- Left Column: Avatar & Help -->
-            <div class="left-column">
-                <!-- Avatar Card -->
-                <div class="form-card profile-card">
-                    <div class="photo-preview-container">
-                         <!-- Placeholder or Default Image -->
-                        <div class="photo-placeholder">
-                            <i class="fas fa-user"></i>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {{-- Left Sidebar --}}
+            <div class="space-y-6">
+                {{-- Avatar Upload --}}
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-32 h-32 mb-4">
+                            <div x-ref="placeholder" class="w-32 h-32 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-4xl text-slate-400 dark:text-slate-500"></i>
+                            </div>
+                            <img x-ref="preview" src="" alt="Preview" class="hidden w-32 h-32 rounded-full object-cover">
                         </div>
-                        <img src="" alt="Vista previa" class="photo-preview" style="display: none;">
-                    </div>
-                    
-                    <div class="photo-upload-btn-wrapper">
-                        <button type="button" class="btn-upload-photo">
+                        <label for="avatar" class="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 rounded-lg transition-colors">
                             <i class="fas fa-camera"></i>
-                            Subir Foto
-                        </button>
-                        <input type="file" name="foto_perfil" id="avatar" class="file-input" accept="image/*">
+                            <span>Subir Foto</span>
+                        </label>
+                        <input type="file" id="avatar" name="foto_perfil" @change="previewImage" accept="image/*" class="hidden">
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2">JPG, PNG o GIF. Máx 2MB</p>
                     </div>
-                    <p class="photo-help-text">JPG, PNG o GIF. Máx 2MB</p>
                 </div>
 
-                <!-- Help/Status Cards -->
-                <div class="help-section-container">
-                    <div class="help-cards-list">
-                        <div class="help-card-item">
-                            <div class="help-icon">
-                                <i class="fas fa-shield-alt"></i>
-                            </div>
-                            <div class="help-text">
-                                <h4>Rol de Usuario</h4>
-                                <p>Define los permisos y acceso al sistema.</p>
-                            </div>
+                {{-- Help Cards --}}
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6 space-y-4">
+                    <div class="flex gap-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-purple-600 dark:text-purple-400"></i>
                         </div>
-                        <div class="help-card-item">
-                            <div class="help-icon">
-                                <i class="fas fa-key"></i>
-                            </div>
-                            <div class="help-text">
-                                <h4>Seguridad</h4>
-                                <p>Asigne una contraseña segura al usuario.</p>
-                            </div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-slate-900 dark:text-white">Rol de Usuario</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Define los permisos y acceso al sistema.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="flex-shrink-0 w-10 h-10 bg-rose-100 dark:bg-rose-900/30 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-key text-rose-600 dark:text-rose-400"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-semibold text-slate-900 dark:text-white">Seguridad</h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">Asigne una contraseña segura al usuario.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column: Form Sections -->
-            <div class="right-column">
-                
-                <!-- Card 1: User Info -->
-                <div class="form-card">
-                    <div class="card-header">
-                        <h3>
-                            <i class="fas fa-user"></i>
-                            Información Personal
-                        </h3>
-                        <p>Datos básicos del usuario</p>
+            {{-- Right Content --}}
+            <div class="lg:col-span-2 space-y-6">
+                {{-- Personal Info --}}
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fas fa-user text-rose-600"></i>
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Información Personal</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Datos básicos del usuario</p>
+                        </div>
                     </div>
 
-                    <div class="form-grid">
-                        <div class="form-group span-4">
-                            <label for="name">Nombre Completo <span>*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-user"></i>
-                                <input type="text" id="name" name="name" class="form-input" placeholder="Ej: Juan Pérez" required value="{{ old('name') }}">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                Nombre Completo <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-user absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="text" id="name" name="name" value="{{ old('name') }}" required
+                                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                       placeholder="Ej: Juan Pérez">
                             </div>
+                            @error('name')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
-                
-                <!-- Card 2: Account Info -->
-                <div class="form-card">
-                    <div class="card-header">
-                        <h3>
-                            <i class="fas fa-user-shield"></i>
-                            Datos de Cuenta
-                        </h3>
-                        <p>Credenciales y Acceso</p>
+
+                {{-- Account Info --}}
+                <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="fas fa-user-shield text-rose-600"></i>
+                        <div>
+                            <h3 class="text-lg font-semibold text-slate-900 dark:text-white">Datos de Cuenta</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Credenciales y Acceso</p>
+                        </div>
                     </div>
 
-                    <div class="form-grid">
-                        <div class="form-group span-2">
-                            <label for="email">Correo Electrónico <span>*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-envelope"></i>
-                                <input type="email" id="email" name="email" class="form-input" placeholder="usuario@ejemplo.com" required>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                Correo Electrónico <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                       placeholder="usuario@ejemplo.com">
                             </div>
+                            @error('email')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="form-group span-2">
-                            <label for="password">Contraseña <span>*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" id="password" name="password" class="form-input" placeholder="********" required>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                Contraseña <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-lock absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                <input type="password" id="password" name="password" required
+                                       class="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                                       placeholder="********">
                             </div>
+                            @error('password')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="form-group span-2">
-                            <label for="role_id">Rol en el Sistema <span>*</span></label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-user-tag"></i>
-                                <select id="role_id" name="role_id" class="form-select" required>
-                                    <option value="" disabled selected>Seleccione un rol...</option>
+                        <div>
+                            <label for="role_id" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                Rol en el Sistema <span class="text-rose-500">*</span>
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-user-tag absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                                <select id="role_id" name="role_id" required
+                                        class="w-full pl-10 pr-8 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500 appearance-none cursor-pointer">
+                                    <option value="">Seleccione un rol...</option>
                                     @foreach($roles ?? [] as $role)
                                         <option value="{{ $role->id }}" {{ old('role_id') == $role->id ? 'selected' : '' }}>
                                             {{ ucfirst($role->nombre) }}
@@ -143,41 +167,46 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @error('role_id')
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                            @enderror
                         </div>
 
-                        <div class="form-group span-2">
-                            <label for="cuenta_activa">Estado de Cuenta</label>
-                            <div class="input-wrapper">
-                                <i class="fas fa-toggle-on"></i>
-                                <select id="cuenta_activa" name="cuenta_activa" class="form-select">
+                        <div>
+                            <label for="cuenta_activa" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
+                                Estado de Cuenta
+                            </label>
+                            <div class="relative">
+                                <i class="fas fa-toggle-on absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                                <select id="cuenta_activa" name="cuenta_activa"
+                                        class="w-full pl-10 pr-8 py-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500 appearance-none cursor-pointer">
                                     <option value="1" selected>Activa</option>
                                     <option value="0">Inactiva</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-
-                    <div class="form-actions">
-                        <div class="form-status-badge">
-                            <i class="fas fa-user-clock"></i>
-                            <span>Nuevo Registro</span>
-                        </div>
-                        <div class="action-buttons">
-                            <a href="{{ route('admin.usuarios.index') }}" class="btn-cancel">Cancelar</a>
-                            <button type="submit" class="btn-submit">
-                                <i class="fas fa-save"></i>
-                                <span>Guardar Usuario</span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
+                {{-- Form Actions --}}
+                <div class="flex items-center justify-between bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6">
+                    <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                        <i class="fas fa-user-clock"></i>
+                        <span>Nuevo Registro</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <a href="{{ route('admin.usuarios.index') }}" 
+                           class="px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors">
+                            Cancelar
+                        </a>
+                        <button type="submit" 
+                                class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-600 to-rose-500 hover:from-rose-700 hover:to-rose-600 text-white font-medium rounded-lg shadow-sm transition-all">
+                            <i class="fas fa-save"></i>
+                            <span>Guardar Usuario</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
-</div>
-@endsection
-@section('js')
-    <script src="{{ asset('JavaScript/admin/usuarios/create.js') }}"></script>
-@endsection
-@endcomponent
+</x-app-layout>
