@@ -74,12 +74,12 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **64 archivos .blade.php** en `resources/views/` (15 procesados, 49 pendientes)
-  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 7 (4 layout + 3 prompt) ✅
+- **65 archivos .blade.php** en `resources/views/` (15 procesados, 50 pendientes)
+  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 (4 layout + 3 prompt + 1 user-avatar) ✅
   - Eliminados: dashboard.blade.php (1)
-- **24 archivos .css** restantes en `public/css/` (12 eliminados, 24 pendientes migración)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (2)
-- **28 archivos .js** restantes en `public/JavaScript/` (13 eliminados, 28 pendientes migración)
+- **23 archivos .css** restantes en `public/css/` (13 eliminados, 23 pendientes migración)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3)
+- **27 archivos .js** restantes en `public/JavaScript/` (14 eliminados, 27 pendientes migración)
   - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1)
 
 ---
@@ -481,7 +481,7 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA
 
-### Módulos completados: 5/14
+### Módulos completados: 6/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
@@ -489,23 +489,22 @@ http://127.0.0.1:8000/admin/permisos
 - [x] Calendario ✅
 - [x] Perfil ✅
 - [ ] Configuraciones
-- [ ] Configuraciones
 - [ ] Admin/Usuarios
 - [ ] Admin/Roles
 - [ ] Admin/Permisos
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 15/64 total (23%)
-- Blade: 15/64 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Components: 11 ✅)
+### Archivos validados: 15/65 total (23%)
+- Blade: 15/65 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Components: 12 ✅)
   - Eliminados: 5 (dashboard.blade.php + 4 role components)
-  - Total real: 64 archivos blade en proyecto
-- CSS: 12/36 eliminados → 24 restantes
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (2)
-  - Pendientes migrar: 24 archivos
-- JS: 13/41 eliminados → 28 restantes
-  - Eliminados: auth (3), dashboard (4), layouts (4), chatbot (1), perfil (1)
-  - Pendientes migrar: 28 archivos
+  - Total real: 65 archivos blade en proyecto (validado 20/01/2026)
+- CSS: 13/36 eliminados → 23 restantes
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3)
+  - Pendientes migrar: 23 archivos
+- JS: 14/41 eliminados → 27 restantes
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1)
+  - Pendientes migrar: 27 archivos
 
 ---
 
@@ -1369,4 +1368,79 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
 - **Eliminados:** 2 CSS + 1 JS = 3 archivos
 - **Problemas resueltos:** 8
 - **Total procesados:** 15/64 archivos Blade (23%)
+
+---
+
+### 🔄 FASE 2.6: PREPARACIÓN CONFIGURACIONES - ✅ COMPLETADO
+
+#### Cambios Frontend:
+- **sidebar.blade.php**: Agregado link Configuraciones en sección Sistema
+  - Ubicación: Dentro de dropdown "Sistema" (solo visible para admin)
+  - Icon: SVG engranaje (settings) con paths rounded
+  - Route: `configuraciones.index`
+  - Active state: `configuraciones.*` con bg-red-50 dark:bg-red-900/30
+  - Orden: Configuraciones (1°) → Usuarios (2°) → Roles (3°) → Permisos (4°)
+
+#### Componentes Creados:
+- **user-avatar.blade.php**: Componente reutilizable avatar usuario
+  - Props: `:user` (modelo User), `size` (xs|sm|md|lg|xl|2xl)
+  - Lógica: Muestra `foto_perfil` si existe + `file_exists()`, fallback inicial gradiente
+  - Cache busting: `?v={{ time() }}` previene cache browser
+  - Sizes Tailwind: xs(5x5), sm(6x6), md(8x8), lg(10x10), xl(12x12), 2xl(16x16)
+  - Usado en: header, prompt/card, prompts/index, prompts/show
+
+#### Componentes Reutilizados:
+- **prompt/card.blade.php**: Eliminadas 60+ líneas duplicadas en prompts/index
+  - Avatar usuario: Ahora usa `<x-user-avatar :user="$prompt->user" size="sm" />`
+  - Beneficios: DRY, consistencia, mantenibilidad
+  - Usado en: home (/) via `<x-prompt.grid>`, prompts/index directamente
+
+#### Archivos Eliminados:
+- ❌ `app/Http/Controllers/ProfileController.php` (duplicado con PerfilController)
+- ❌ `public/css/perfil/index.css` (migrado a Tailwind)
+- ❌ `public/css/perfil/edit.css` (migrado a Tailwind)
+- ❌ `public/JavaScript/perfil/index.js` (script upload obsoleto)
+
+#### Problemas Resueltos:
+1. **ProfileController duplicado** → Eliminado, consolidado en PerfilController
+2. **Avatares no se mostraban** → Creado componente user-avatar reutilizable
+3. **Avatar no actualizaba en tiempo real** → Cache busting con `?v=time()`
+4. **Cards home mostraban inicial** → Componente verifica `file_exists()` antes mostrar foto
+5. **Código duplicado prompt cards** → Reutilizado `<x-prompt.card>` en index y home
+6. **Falta link Configuraciones** → Agregado en sidebar sección Sistema
+
+#### Validación:
+- ✅ Link Configuraciones visible solo para admin
+- ✅ Active state funciona con route `configuraciones.*`
+- ✅ Icon settings renderiza correctamente
+- ✅ Dark mode funciona en link
+- ✅ Orden lógico en dropdown Sistema
+- ✅ Avatar componente funciona en 6 lugares
+- ✅ Cache busting previene avatares obsoletos
+- ✅ Prompt/card reutilizado elimina duplicación
+
+#### Validación Comandos (20/01/2026):
+```powershell
+Get-ChildItem resources/views -Recurse -Filter "*.blade.php" | Measure-Object
+# Output: 65 archivos
+
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 23 archivos
+
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 27 archivos
+```
+
+#### Total de Cambios Fase 2.6:
+- **Vistas actualizadas:** sidebar.blade.php (1)
+- **Componentes creados:** user-avatar.blade.php (1)
+- **Componentes reutilizados:** prompt/card (eliminadas 60 líneas duplicadas)
+- **Controllers eliminados:** ProfileController.php (1)
+- **Routes eliminadas:** 3 rutas /profile
+- **CSS eliminados:** 3 archivos perfil
+- **JS eliminados:** 1 archivo perfil
+- **Total procesados:** 15/65 archivos Blade (23%)
+- **CSS restantes:** 23 archivos (validado con PowerShell)
+- **JS restantes:** 27 archivos (validado con PowerShell)
+- **Features agregadas:** Link Configuraciones admin, componente avatar reutilizable, consolidación ProfileController
 
