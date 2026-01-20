@@ -123,10 +123,10 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/prompts/compartidos.blade.php` ✅ MIGRADO (grid de prompts compartidos)
 
 ### 1.4 Calendario Module (4 archivos) ✅ COMPLETADO
-- `resources/views/calendario/index.blade.php` ✅ MIGRADO (calendario grid + eventos sidebar)
-- `resources/views/calendario/create.blade.php` ✅ MIGRADO (formulario crear evento)
-- `resources/views/calendario/show.blade.php` ✅ MIGRADO (detalle evento con gradient header)
-- `resources/views/calendario/edit.blade.php` ✅ MIGRADO (formulario editar + delete button)
+- `resources/views/calendario/index.blade.php` ✅ MIGRADO (FullCalendar CDN)
+- `resources/views/calendario/create.blade.php` ✅ MIGRADO (formulario con datetime-local)
+- `resources/views/calendario/show.blade.php` ✅ MIGRADO (detalle con gradient header)
+- `resources/views/calendario/edit.blade.php` ✅ MIGRADO (formulario con PUT)
 
 ### 1.5 Perfil Module (4 archivos)
 - `resources/views/perfil/index.blade.php`
