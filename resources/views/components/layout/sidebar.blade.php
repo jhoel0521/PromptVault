@@ -130,7 +130,7 @@
                 </svg>
             </button>
             <div x-show="open.user" x-transition class="space-y-1">
-                <a href="{{ route('profile.edit') }}"
+                <a href="{{ route('perfil.edit') }}"
                     class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -139,7 +139,7 @@
                     <span>Mi Perfil</span>
                 </a>
                 @if (Route::has('profile.security'))
-                    <a href="{{ route('profile.security') }}"
+                    <a href="{{ route('perfil.security') }}"
                         class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />

@@ -5,7 +5,6 @@ use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerfilController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PromptController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,12 +37,7 @@ Route::get('/dashboard', function () {
 */
 
 Route::middleware('auth')->group(function () {
-    // Profile (Laravel Breeze)
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Perfil personalizado
+    // Perfil
     Route::get('/perfil', [PerfilController::class, 'index'])->name('perfil.index');
     Route::get('/perfil/editar', [PerfilController::class, 'edit'])->name('perfil.edit');
     Route::put('/perfil/actualizar', [PerfilController::class, 'update'])->name('perfil.update');
