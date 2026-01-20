@@ -259,13 +259,15 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] Verificar `recuperar.blade.php` + `recuperar.css` + `recuperar.js`
 - [x] Probar en navegador: /login, /register, /password/reset
 
-#### 1.2 Layouts (Critical - afecta todo) ✅ EN PROGRESO
+#### 1.2 Layouts (Critical - afecta todo) ✅ COMPLETADO
 - [x] Verificar `header.blade.php` + `header.css` + `header.js`
 - [x] Verificar `footer.blade.php` + `footer.css` + `footer.js`
 - [x] Verificar `sidebar.blade.php` + variantes por rol
 - [x] Verificar `loading.blade.php`
 - [x] Crear componente `AppLayout` unificado
-- [ ] Probar en / y /prompts
+- [x] Probar en / y /prompts
+- [x] Implementar dark mode toggle con localStorage
+- [x] Eliminar CSS/JS antiguos de layouts y components
 
 #### 1.3 Components (Critical - reusables)
 - [ ] Role components: administrador, usuario, colaborador, invitado
@@ -384,7 +386,7 @@ http://127.0.0.1:8000/admin/permisos
 
 ### Módulos completados: 2/14
 - [x] Auth ✅
-- [x] Layouts ✅ EN PROGRESO
+- [x] Layouts ✅
 - [ ] Components  
 - [ ] Dashboard
 - [ ] Home
@@ -474,7 +476,7 @@ http://127.0.0.1:8000/admin/permisos
 
 ---
 
-### 🔄 FASE 1.2: LAYOUTS MODULE - EN PROGRESO
+### 🔄 FASE 1.2: LAYOUTS MODULE - ✅ COMPLETADO
 
 #### Cambios Realizados:
 
@@ -485,75 +487,115 @@ http://127.0.0.1:8000/admin/permisos
   - Uso: `<x-app-layout>` en todas las vistas principales
 
 **2. Layout Principal Refactorizado**
-- Actualizado: `resources/views/layouts/app.blade.php`
+- Creado: `resources/views/layouts/app.blade.php`
   - Diseño dashboard: sidebar + header + main + footer
-  - Fondo gradiente: `from-[#450a0a] to-[#7f1d1d]` (red theme)
+  - Dark mode por defecto con toggle funcional
   - Layout flex con gap-6 y padding
-  - Main content: bg-white, rounded-3xl, shadow
+  - Main content: responsive bg (dark/light mode)
   - Integración: FontAwesome 6.4 + Montserrat font
   - Stack support: `@stack('styles')` y `@stack('scripts')`
+  - **Dark mode toggle**: Alpine + localStorage persistence
 
 **3. Componentes de Layout (Tailwind/Alpine)**
 - `resources/views/components/layout/header.blade.php`
   - Header sticky con búsqueda global
-  - Quick actions dropdown (Alpine)
-  - Notificaciones + perfil dropdown
-  - Tailwind: bg-white, border, rounded, shadow
+  - Quick actions: crear prompt
+  - Notificaciones + perfil dropdown (Alpine)
+  - Dark mode support: `dark:bg-slate-900 dark:text-slate-100`
 
 - `resources/views/components/layout/sidebar.blade.php`
-  - Sidebar sticky con logo
+  - Sidebar sticky con logo y rol
   - Navegación por rol (admin/user/collaborator/guest)
-  - Secciones colapsables (Alpine)
-  - Tailwind: bg-white, w-60, rounded, sticky top
+  - Secciones colapsables (Alpine x-data)
+  - **Theme toggle button**: Cambia dark/light mode
+  - Dark mode support: `dark:bg-slate-900 dark:border-slate-700`
 
 - `resources/views/components/layout/footer.blade.php`
   - Footer con contacto + info PromptVault
-  - Feature badges + redes sociales
-  - Copyright dinámico
-  - Tailwind: bg-white, border-t, rounded
+  - Links + copyright dinámico
+  - Dark mode support: `dark:bg-slate-900 dark:text-slate-400`
 
 - `resources/views/components/layout/loading.blade.php`
   - Overlay de carga (Alpine)
-  - Animación spinner + logo
-  - Tailwind: fixed, inset-0, backdrop-blur
+  - Animación spinner
+  - Dark mode aware
 
-**4. Vistas Migradas**
+**4. Home Page Migrada**
+- `resources/views/home.blade.php`
+  - Refactorizado: Tailwind + Alpine (sin Bootstrap)
+  - Navbar con toggle dark/light mode funcional
+  - Hero section con gradient text
+  - Filtros de prompts migrados a Tailwind
+  - Dark mode: Fondo azul slate `#0f172a → #1e293b`
+  - Light mode: Fondo gris `#f1f5f9 → #e2e8f0`
+
+**5. Vistas Migradas con Dark Mode**
 - `resources/views/prompts/index.blade.php`
   - Refactorizado: Usa `<x-app-layout>`
   - Búsqueda + filtrado por etiquetas (Alpine)
   - Grid responsive de prompts
-  - Tailwind: max-w-7xl, grid, rounded-xl cards
-  - **Fix Blade**: Todos los `@php(...)`  → `@php ... @endphp`
+  - **Dark mode completo**: Cards, inputs, botones, empty state
+  - Tailwind: `dark:bg-slate-800 dark:text-slate-100`
+  - **Fix Blade**: Todos los `@php(...)` → `@php ... @endphp`
 
-#### Archivos Mantenidos (referencia CSS):
-- ⚠️ `public/css/dashboard/dashboard.css` (2450 líneas - referencia de colores)
-- ⚠️ `public/css/components/header.css` (942 líneas - referencia)
-- ⚠️ `public/css/components/sidebar.css` (434 líneas - referencia)
-- ⚠️ `public/css/components/footer.css` (referencia)
-- ⚠️ `public/JavaScript/layouts/*.js` (pendiente migración a Alpine)
+**6. Componentes Migrados**
+- `resources/views/components/prompt/filters.blade.php`
+  - Migrado a Tailwind puro (sin estilos inline)
+  - Selects legibles: `bg-white dark:bg-slate-800` con options visibles
+  - Focus states: `focus:border-rose-500 focus:ring-2`
 
-#### Estrategia de Migración:
-- **CSS**: Extraer colores/valores de CSS existente → Tailwind utilities
-- **Colores Theme**:
-  - Primary red: `#e11d48` → `rose-600`
-  - Hover red: `#be123c` → `rose-700`
-  - Background: `#450a0a` / `#7f1d1d` → gradiente custom
-  - Text: `#1e293b` → `slate-900`
-  - Muted: `#64748b` → `slate-500`
-  - Border: `#e2e8f0` → `slate-200`
-- **JS**: Todo comportamiento interactivo → Alpine.js (x-data, @click, x-show)
+#### Archivos Eliminados:
+- ❌ `public/css/layouts/loading.css`
+- ❌ `public/css/components/header.css` (942 líneas)
+- ❌ `public/css/components/sidebar.css` (434 líneas)
+- ❌ `public/css/components/footer.css`
+- ❌ `public/css/components/loading.css`
+- ❌ `public/JavaScript/layouts/header.js`
+- ❌ `public/JavaScript/layouts/footer.js`
+- ❌ `public/JavaScript/layouts/sidebar.js`
+- ❌ `public/JavaScript/layouts/loading.js`
+
+**Total eliminado:** 9 archivos CSS/JS antiguos (~2,000+ líneas)
+
+#### Configuración Tailwind:
+- Agregado: `darkMode: 'class'` en `tailwind.config.js`
+- Variables CSS mantenidas para compatibilidad temporal
+
+#### Estrategia Dark Mode:
+- **Implementación**: Alpine function `themeToggle()` en body
+- **Persistencia**: localStorage key `theme`
+- **Colores Dark**:
+  - Background: `#0f172a → #1e293b` (slate-900 → slate-800)
+  - Cards: `bg-slate-900` / `bg-slate-800`
+  - Text: `text-slate-100` / `text-slate-400`
+  - Borders: `border-slate-700`
+- **Colores Light**:
+  - Background: `#f1f5f9 → #e2e8f0` (slate-50 → slate-200)
+  - Cards: `bg-white`
+  - Text: `text-slate-900` / `text-slate-600`
+  - Borders: `border-slate-200`
+
+#### Validación:
+- ✅ `/` renderiza sin errores con dark mode
+- ✅ `/prompts` renderiza sin errores con dark mode
+- ✅ Toggle theme funciona y persiste
+- ✅ Selects legibles en ambos modos
+- ✅ No hay 404 en assets
+- ✅ No hay errores en consola
+- ✅ Alpine carga correctamente
+- ✅ Responsive design funciona
+- ✅ Navegación sidebar funciona
 
 #### Próximos Pasos:
-- [ ] Probar `/` (home/dashboard) con nuevo layout
-- [ ] Probar `/prompts` con nuevo layout  
-- [ ] Verificar header search funciona
-- [ ] Verificar sidebar navigation funciona
-- [ ] Verificar responsive design
-- [ ] FASE 1.3: Components (prompt cards, filters, chatbot)
+- [ ] FASE 1.3: Components (prompt cards detallados, chatbot)
+- [ ] FASE 2.1: Dashboard por rol
+- [ ] FASE 2.2: Prompts CRUD completo
 
 ---
 
 #### Total de Cambios Fase 1.2:
 - **Componentes creados:** AppLayout class + 4 layout components = 5
-- **Layouts actualizados:** app.blade.php + prompts/index.blade.php = 2
-- **CSS mantenido temporalmente:** 4 archivos (referencia)
+- **Layouts actualizados:** app.blade.php + home.blade.php + prompts/index.blade.php = 3
+- **Componentes actualizados:** prompt/filters.blade.php = 1
+- **CSS/JS eliminados:** 9 archivos (~2,000+ líneas)
+- **Features agregadas:** Dark mode toggle con localStorage
