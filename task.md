@@ -4,9 +4,9 @@
 Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript de la aplicación PromptVault, manteniendo el diseño original hermoso y funcional.
 
 ## Resumen de Inventario
-- **71 archivos .blade.php** en `resources/views/` (22 procesados, 49 pendientes)
-- **36 archivos .css** en `public/css/` (16 eliminados → Tailwind, 20 pendientes migración)
-- **41 archivos .js** en `public/JavaScript/` (14 eliminados → Alpine, 27 pendientes migración)
+- **71 archivos .blade.php** en `resources/views/` (25 procesados, 45 pendientes, 1 eliminado)
+- **36 archivos .css** en `public/css/` (17 eliminados → Tailwind, 19 pendientes migración)
+- **41 archivos .js** en `public/JavaScript/` (19 eliminados → Alpine, 22 pendientes migración)
 
 ---
 
@@ -44,10 +44,10 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 #### Backups
 - `resources/views/admin/backups/index.blade.php`
 
-### 1.3 Prompts Module (6 archivos)
-- `resources/views/prompts/index.blade.php`
-- `resources/views/prompts/create.blade.php`
-- `resources/views/prompts/show.blade.php`
+### 1.3 Prompts Module (6 archivos) - 3 procesados, 3 pendientes
+- `resources/views/prompts/index.blade.php` ✅
+- `resources/views/prompts/create.blade.php` ✅ MIGRADO (Tailwind + dark mode)
+- `resources/views/prompts/show.blade.php` ✅ MIGRADO (layout 2 cols, compartir, historial)
 - `resources/views/prompts/edit.blade.php`
 - `resources/views/prompts/historial.blade.php`
 - `resources/views/prompts/compartidos.blade.php`
@@ -121,15 +121,14 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ### 1.12 Buscador (1 archivo)
 - `resources/views/buscador/index.blade.php`
 
-### 1.13 Pages (4 archivos) - 1 procesado, 1 pendiente
-- `resources/views/home.blade.php` ✅blade.php`
+### 1.13 Pages (3 archivos)
 - `resources/views/pages/roles.blade.php`
 - `resources/views/pages/permisos.blade.php`
 - `resources/views/pages/custom.blade.php`
 
 ### 1.14 Root Views (2 archivos)
-- `resources/views/home.blade.php`
-- `resources/views/dashboard.bla ✅ ELIMINADOS
+- `resources/views/home.blade.php` ✅
+- `resources/views/dashboard.blade.php` ❌ ELIMINADO (obsoleto, redirige a /prompts)
 - `public/css/auth/auth.css` ❌
 - `public/css/auth/login.css` (1574 líneas) ❌
 - `public/css/auth/registro.css` (1832 líneas) ❌
@@ -169,8 +168,8 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/components/sidebar.css`
 - `public/css/components/loading.css`
 
-### 2.4 Module Styles (8 archivos)
-- `public/css/dashboard/dashboard.css`
+### 2.4 Module Styles (8 archivos) - 1 eliminado, 7 pendientes
+- `public/css/dashboard/dashboard.css` ❌ ELIMINADO (dashboard.blade.php obsoleto)
 - `public/css/calendario/index.css`
 - `public/css/buscador/index.css`
 - `public/css/configuraciones/configuraciones.css`
@@ -232,12 +231,12 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/JavaScript/layouts/sidebar.js` ❌
 - `public/JavaScript/layouts/loading.js` ❌
 
-### 3.5 Dashboard Scripts (5 archivos)
-- `public/JavaScript/components/dashboard.js`
-- `public/JavaScript/dashboard/admin.js`
-- `public/JavaScript/dashboard/user.js`
-- `public/JavaScript/dashboard/collaborator.js`
-- `public/JavaScript/dashboard/guest.js`
+### 3.5 Dashboard Scripts (5 archivos) ✅ ELIMINADOS
+- `public/JavaScript/components/dashboard.js` ❌
+- `public/JavaScript/dashboard/admin.js` ❌
+- `public/JavaScript/dashboard/user.js` ❌
+- `public/JavaScript/dashboard/collaborator.js` ❌
+- `public/JavaScript/dashboard/guest.js` ❌
 
 ### 3.6 Module Scripts (5 archivos)
 - `public/JavaScript/calendario/index.js`
