@@ -11,105 +11,80 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            min-height: 100vh;
-            color: #fff;
+    <script>
+        function themeToggle() {
+            return {
+                darkMode: localStorage.getItem('theme') !== 'light',
+                toggleTheme() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+                    document.body.classList.toggle('dark', this.darkMode);
+                }
+            }
         }
-        
-        .navbar {
-            background: rgba(15, 15, 35, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(225, 29, 72, 0.3);
-        }
-        
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #e11d48 !important;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 3rem 0;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff 0%, #e11d48 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            transition: all 0.3s;
-        }
-        
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(225, 29, 72, 0.5);
-            box-shadow: 0 8px 30px rgba(225, 29, 72, 0.15);
-        }
-    </style>
+    </script>
 </head>
-<body>
+<body x-data="themeToggle()" 
+      :class="darkMode ? 'dark' : ''" 
+      class="min-h-screen font-['Montserrat']"
+      x-bind:style="darkMode ? 'background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%)' : 'background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'">
     {{-- Navbar --}}
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-bolt"></i> PromptVault
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+    <nav class="sticky top-0 z-50 backdrop-blur-sm border-b" :class="darkMode ? 'bg-slate-900 border-slate-700' : 'bg-white border-slate-200'">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="{{ route('home') }}" class="flex items-center gap-2 text-2xl font-bold text-rose-600 hover:text-rose-500 transition">
+                    <i class="fas fa-bolt"></i>
+                    <span>PromptVault</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <button @click="toggleTheme()"
+                        class="p-2 rounded-lg transition"
+                        :class="darkMode ? 'text-slate-300 hover:text-slate-100 hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'">
+                        <i class="fas fa-moon text-lg" x-show="darkMode"></i>
+                        <i class="fas fa-sun text-lg" x-show="!darkMode" style="display:none;"></i>
+                    </button>
+                    
                     @auth
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('prompts.index') }}">
-                                <i class="fas fa-folder"></i> Mis Prompts
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('perfil.index') }}">
-                                <i class="fas fa-user"></i> Perfil
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm ms-2">
-                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                                </button>
-                            </form>
-                        </li>
+                        <a href="{{ route('prompts.index') }}" 
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition"
+                           :class="darkMode ? 'text-slate-300 hover:text-slate-100 hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'">
+                            <i class="fas fa-folder"></i> Mis Prompts
+                        </a>
+                        <a href="{{ route('perfil.index') }}" 
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition"
+                           :class="darkMode ? 'text-slate-300 hover:text-slate-100 hover:bg-slate-800' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'">
+                            <i class="fas fa-user"></i> Perfil
+                        </a>
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="px-4 py-2 rounded-lg text-sm font-semibold bg-rose-600 text-white hover:bg-rose-700 transition">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </form>
                     @else
-                        <li class="nav-item">
-                            <a class="btn btn-primary btn-sm" href="{{ route('login') }}">
-                                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
-                            </a>
-                        </li>
+                        <a href="{{ route('login') }}" 
+                           class="px-4 py-2 rounded-lg text-sm font-semibold bg-rose-600 text-white hover:bg-rose-700 transition">
+                            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                        </a>
+                        </a>
                     @endauth
-                </ul>
+                </div>
             </div>
         </div>
     </nav>
     
-    <main class="container py-5">
+    <main class="max-w-7xl mx-auto px-6 py-12">
         {{-- Hero --}}
-        <section class="hero">
-            <h1>Biblioteca de Prompts</h1>
-            <p class="lead text-muted">Descubre y comparte los mejores prompts para IA</p>
+        <section class="text-center mb-12">
+            <h1 class="text-5xl md:text-6xl font-bold mb-4" 
+                :class="darkMode ? 'bg-gradient-to-r from-white to-rose-600' : 'bg-gradient-to-r from-slate-900 to-rose-600'"
+                style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Biblioteca de Prompts
+            </h1>
+            <p class="text-xl" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">Descubre y comparte los mejores prompts para IA</p>
         </section>
         
         {{-- Filtros --}}
@@ -123,7 +98,6 @@
         />
     </main>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <x-chatbot-widget />
 </body>
 </html>

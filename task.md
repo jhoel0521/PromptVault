@@ -259,11 +259,13 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] Verificar `recuperar.blade.php` + `recuperar.css` + `recuperar.js`
 - [x] Probar en navegador: /login, /register, /password/reset
 
-#### 1.2 Layouts (Critical - afecta todo) ✅ COMPLETADO
+#### 1.2 Layouts (Critical - afecta todo) ✅ EN PROGRESO
 - [x] Verificar `header.blade.php` + `header.css` + `header.js`
 - [x] Verificar `footer.blade.php` + `footer.css` + `footer.js`
 - [x] Verificar `sidebar.blade.php` + variantes por rol
 - [x] Verificar `loading.blade.php`
+- [x] Crear componente `AppLayout` unificado
+- [ ] Probar en / y /prompts
 
 #### 1.3 Components (Critical - reusables)
 - [ ] Role components: administrador, usuario, colaborador, invitado
@@ -382,7 +384,7 @@ http://127.0.0.1:8000/admin/permisos
 
 ### Módulos completados: 2/14
 - [x] Auth ✅
-- [x] Layouts ✅
+- [x] Layouts ✅ EN PROGRESO
 - [ ] Components  
 - [ ] Dashboard
 - [ ] Home
@@ -396,10 +398,10 @@ http://127.0.0.1:8000/admin/permisos
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 13/148 total
-- Blade: 13/71 (Auth: 3, Layouts: 7, Components: 3)
-- CSS: 0/36 (refactor en progreso)
-- JS: 0/41 (refactor en progreso)
+### Archivos validados: 18/148 total
+- Blade: 18/71 (Auth: 3, Layouts: 8, Components: 7)
+- CSS: 0/36 (migrando a Tailwind)
+- JS: 0/41 (migrando a Alpine)
 
 ---
 
@@ -470,74 +472,88 @@ http://127.0.0.1:8000/admin/permisos
 - ✅ Responsive design funciona (mobile, tablet, desktop)
 - ✅ Formularios validan correctamente
 
+---
+
+### 🔄 FASE 1.2: LAYOUTS MODULE - EN PROGRESO
+
+#### Cambios Realizados:
+
+**1. Componente AppLayout Unificado**
+- Creado: `app/View/Components/AppLayout.php`
+  - Clase que renderiza `layouts.app`
+  - Props: `$title`
+  - Uso: `<x-app-layout>` en todas las vistas principales
+
+**2. Layout Principal Refactorizado**
+- Actualizado: `resources/views/layouts/app.blade.php`
+  - Diseño dashboard: sidebar + header + main + footer
+  - Fondo gradiente: `from-[#450a0a] to-[#7f1d1d]` (red theme)
+  - Layout flex con gap-6 y padding
+  - Main content: bg-white, rounded-3xl, shadow
+  - Integración: FontAwesome 6.4 + Montserrat font
+  - Stack support: `@stack('styles')` y `@stack('scripts')`
+
+**3. Componentes de Layout (Tailwind/Alpine)**
+- `resources/views/components/layout/header.blade.php`
+  - Header sticky con búsqueda global
+  - Quick actions dropdown (Alpine)
+  - Notificaciones + perfil dropdown
+  - Tailwind: bg-white, border, rounded, shadow
+
+- `resources/views/components/layout/sidebar.blade.php`
+  - Sidebar sticky con logo
+  - Navegación por rol (admin/user/collaborator/guest)
+  - Secciones colapsables (Alpine)
+  - Tailwind: bg-white, w-60, rounded, sticky top
+
+- `resources/views/components/layout/footer.blade.php`
+  - Footer con contacto + info PromptVault
+  - Feature badges + redes sociales
+  - Copyright dinámico
+  - Tailwind: bg-white, border-t, rounded
+
+- `resources/views/components/layout/loading.blade.php`
+  - Overlay de carga (Alpine)
+  - Animación spinner + logo
+  - Tailwind: fixed, inset-0, backdrop-blur
+
+**4. Vistas Migradas**
+- `resources/views/prompts/index.blade.php`
+  - Refactorizado: Usa `<x-app-layout>`
+  - Búsqueda + filtrado por etiquetas (Alpine)
+  - Grid responsive de prompts
+  - Tailwind: max-w-7xl, grid, rounded-xl cards
+  - **Fix Blade**: Todos los `@php(...)`  → `@php ... @endphp`
+
+#### Archivos Mantenidos (referencia CSS):
+- ⚠️ `public/css/dashboard/dashboard.css` (2450 líneas - referencia de colores)
+- ⚠️ `public/css/components/header.css` (942 líneas - referencia)
+- ⚠️ `public/css/components/sidebar.css` (434 líneas - referencia)
+- ⚠️ `public/css/components/footer.css` (referencia)
+- ⚠️ `public/JavaScript/layouts/*.js` (pendiente migración a Alpine)
+
+#### Estrategia de Migración:
+- **CSS**: Extraer colores/valores de CSS existente → Tailwind utilities
+- **Colores Theme**:
+  - Primary red: `#e11d48` → `rose-600`
+  - Hover red: `#be123c` → `rose-700`
+  - Background: `#450a0a` / `#7f1d1d` → gradiente custom
+  - Text: `#1e293b` → `slate-900`
+  - Muted: `#64748b` → `slate-500`
+  - Border: `#e2e8f0` → `slate-200`
+- **JS**: Todo comportamiento interactivo → Alpine.js (x-data, @click, x-show)
+
 #### Próximos Pasos:
-- [ ] FASE 1.3: Auditar y refactor Components
-- [ ] FASE 2: Dashboard + Home
-- [ ] FASE 3: Prompts module
+- [ ] Probar `/` (home/dashboard) con nuevo layout
+- [ ] Probar `/prompts` con nuevo layout  
+- [ ] Verificar header search funciona
+- [ ] Verificar sidebar navigation funciona
+- [ ] Verificar responsive design
+- [ ] FASE 1.3: Components (prompt cards, filters, chatbot)
 
 ---
 
-### ✅ FASE 1.2: LAYOUTS MODULE - COMPLETADO
-
-#### Estructura Nueva:
-- **Carpeta:** `resources/views/components/layout/`
-- **Componentes:**
-  - `header.blade.php` - Header optimizado con @auth/@else
-  - `footer.blade.php` - Footer mejorado (sin JS pesado)
-  - `sidebar.blade.php` - Sidebar dinámico por rol (@auth con condicionales)
-  - `loading.blade.php` - Loading overlay minimalista
-
-#### Layout Principal:
-- **Archivo:** `resources/views/layouts/app.blade.php`
-  - Estructura completa del dashboard
-  - Integra header, sidebar, footer, loading
-  - Usa Vite para CSS/JS
-  - Slots para contenido dinámico
-
-#### Estrategia de Seguridad (@auth guards):
-- **Header:** @auth para acciones, @else para login/registro
-- **Sidebar:** @auth completo (admin, user, guest), @else minimal (login/registro)
-- **Footer:** Sin autenticación (público)
-- **App Layout:** Sin restricción (renderiza header/sidebar según auth)
-
-#### Archivos Eliminados (Legacy):
-- ❌ `resources/views/layouts/header.blade.php` (viejo)
-- ❌ `resources/views/layouts/footer.blade.php` (viejo)
-- ❌ `resources/views/layouts/loading.blade.php` (viejo)
-- ❌ `resources/views/layouts/sidebar.blade.php` (viejo)
-- ❌ `resources/views/layouts/sidebarAdmin.blade.php`
-- ❌ `resources/views/layouts/sidebarUser.blade.php`
-- ❌ `resources/views/layouts/sidebarCollaborator.blade.php`
-- ❌ `resources/views/layouts/sidebarGuest.blade.php`
-- ❌ `public/css/components/header.css`
-- ❌ `public/css/components/footer.css`
-- ❌ `public/css/components/sidebar.css`
-- ❌ `public/css/components/loading.css`
-- ❌ `public/JavaScript/components/header.js`
-- ❌ `public/JavaScript/components/footer.js`
-- ❌ `public/JavaScript/components/sidebar.js`
-- ❌ `public/JavaScript/components/loading.js`
-
-#### Mejoras Implementadas:
-- ✅ Componentes Blade + Alpine (sin JS redundante)
-- ✅ Condiciones @auth para evitar errores 500
-- ✅ Sidebar dinámico según rol (admin/user/collaborator/guest)
-- ✅ Dropdowns interactivos con Alpine
-- ✅ Sidebar expandible por sección con x-data
-- ✅ Footer optimizado (SVG inline, sin datos de JS)
-- ✅ Loading overlay con Alpine (controlado por x-show)
-- ✅ Tema oscuro soportado (localStorage + appData)
-
-#### Validación:
-- ✅ Header renderiza correctamente (@auth y @else)
-- ✅ Sidebar dinámico por rol
-- ✅ Footer sin errores
-- ✅ No hay 404 en CSS/JS nuevos
-- ✅ No hay conflictos con assets viejos
-- ✅ Alpine funciona en todos los componentes
-- ✅ Responsive design mantiene funcionalidad
-
-#### Total de Cambios:
-- **Nuevos archivos:** 4 componentes + 1 layout principal = 5
-- **Archivos eliminados:** 7 viejos layouts + 8 CSS/JS = 15
-- **Líneas eliminadas:** ~5000 líneas de código redundante
+#### Total de Cambios Fase 1.2:
+- **Componentes creados:** AppLayout class + 4 layout components = 5
+- **Layouts actualizados:** app.blade.php + prompts/index.blade.php = 2
+- **CSS mantenido temporalmente:** 4 archivos (referencia)
