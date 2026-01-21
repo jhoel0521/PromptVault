@@ -4,12 +4,13 @@ import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 
-const THEME_KEY = 'pv-theme';
+const THEME_KEY = 'theme';
 
+// Aplica la clase 'dark' en html/body y sincroniza el switch
 function applyTheme(mode) {
 	const isDark = mode === 'dark';
-	document.body.classList.toggle('dark-mode', isDark);
-	document.documentElement.classList.toggle('dark-mode', isDark);
+	document.documentElement.classList.toggle('dark', isDark);
+	document.body.classList.toggle('dark', isDark);
 
 	const toggle = document.getElementById('themeSwitch');
 	if (toggle) {
@@ -17,6 +18,7 @@ function applyTheme(mode) {
 	}
 }
 
+// Inicializa el tema leyendo localStorage o prefers-color-scheme
 function initThemeToggle() {
 	const stored = localStorage.getItem(THEME_KEY);
 	const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

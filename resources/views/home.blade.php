@@ -14,12 +14,23 @@
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
+        (() => {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initial = stored || (prefersDark ? 'dark' : 'light');
+            if (initial === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark');
+            }
+        })();
+
         function themeToggle() {
             return {
                 darkMode: localStorage.getItem('theme') !== 'light',
                 toggleTheme() {
                     this.darkMode = !this.darkMode;
                     localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+                    document.documentElement.classList.toggle('dark', this.darkMode);
                     document.body.classList.toggle('dark', this.darkMode);
                 }
             }

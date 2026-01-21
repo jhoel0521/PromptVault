@@ -16,12 +16,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
+        // Pre-carga: asegura que la clase dark se aplique antes de pintar para evitar flicker
+        (() => {
+            const stored = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initial = stored || (prefersDark ? 'dark' : 'light');
+            if (initial === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('dark');
+            }
+        })();
+
         function themeToggle() {
             return {
                 darkMode: localStorage.getItem('theme') !== 'light',
                 toggleTheme() {
                     this.darkMode = !this.darkMode;
                     localStorage.setItem('theme', this.darkMode ? 'dark' : 'light');
+                    document.documentElement.classList.toggle('dark', this.darkMode);
                     document.body.classList.toggle('dark', this.darkMode);
                 }
             }
@@ -30,8 +42,8 @@
     @stack('styles')
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-[#450a0a] to-[#7f1d1d] font-['Montserrat'] dark" 
-      x-data="themeToggle()" 
+<body class="min-h-screen bg-gradient-to-br from-[#450a0a] to-[#7f1d1d] font-['Montserrat']" 
+    x-data="themeToggle()" 
       @theme-toggle.window="toggleTheme()">
     <div class="flex min-h-screen w-full gap-6 p-6 items-start">
         <x-layout.sidebar />
