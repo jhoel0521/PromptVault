@@ -45,52 +45,98 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 ## Fase 3: Refactorización SOLID de Controladores
 
 ### 12. Auditoría de Controladores Existentes
-- [ ] Inventariar todos los controladores (app/Http/Controllers + Admin + Auth)
-- [ ] Clasificar responsabilidades (lógica de negocio vs presentación)
-- [ ] Identificar violaciones SOLID (God Objects, dependencias directas, etc.)
-- [ ] Documentar dependencias actuales (modelos, repositorios, servicios)
-- [ ] Priorizar orden de refactorización por impacto
+- [x] Inventariar todos los controladores (app/Http/Controllers + Admin + Auth)
+- [x] Clasificar responsabilidades (lógica de negocio vs presentación)
+- [x] Identificar violaciones SOLID (God Objects, dependencias directas, etc.)
+- [x] Documentar dependencias actuales (modelos, repositorios, servicios)
+- [x] Priorizar orden de refactorización por impacto
 
-### 13. Refactorización Módulo Usuario/Perfil
-- [ ] Crear `UserServiceInterface` y `ProfileServiceInterface` en `app/Contracts/Services`
-- [ ] Implementar `UserService` y `ProfileService` en `app/Services`
-- [ ] Extraer lógica de negocio de `UsuarioController` a `UserService`
-- [ ] Extraer lógica de negocio de `PerfilController` a `ProfileService`
-- [ ] Inyectar servicios en constructores de controladores
-- [ ] Validar que controladores solo coordinen (request → service → response)
-
-### 14. Refactorización Módulo Configuraciones
+### 13. ConfiguracionesController → BackupService + ConfigurationService (CRÍTICO)
+- [ ] Crear `BackupServiceInterface` en `app/Contracts/Services`
+- [ ] Implementar `BackupService` en `app/Services` (extraer exec() mysqldump seguro)
 - [ ] Crear `ConfigurationServiceInterface` en `app/Contracts/Services`
-- [ ] Implementar `ConfigurationService` en `app/Services`
-- [ ] Extraer lógica de `ConfiguracionesController` (backups, validaciones, .env)
-- [ ] Separar responsabilidad de backup en `BackupService` independiente
-- [ ] Inyectar servicios y validar single responsibility
+- [ ] Implementar `ConfigurationService` en `app/Services` (manejar AppSetting CRUD)
+- [ ] Refactorizar `ConfiguracionesController`: inyectar ambos servicios
+- [ ] Eliminar lógica filesystem directo (scandir, filesize, filemtime)
+- [ ] Validar que controlador solo coordine vistas y servicios
+- [ ] **Razón**: ⚠️ Código exec() es riesgo seguridad, 298 LOC, 6 responsabilidades
 
-### 15. Refactorización Módulo Admin
+### 14. PromptController → Extraer CalificacionService (CRÍTICO)
+- [ ] Crear `CalificacionServiceInterface` en `app/Contracts/Services`
+- [ ] Implementar `CalificacionService` en `app/Services`
+- [ ] Extraer lógica `calificar()` de PromptController (líneas 222-238)
+- [ ] Eliminar acceso directo a `Calificacion::updateOrCreate()`
+- [ ] Eliminar query directo `User::where('email',...)->first()` (línea 165)
+- [ ] Refactorizar validación propietario (líneas 166-169) a Policy
+- [ ] Validar inyección de CalificacionService en constructor
+- [ ] **Razón**: God Object 282 LOC, 13 métodos, 6 responsabilidades
+
+### 15. UsuarioController → UsuarioService + Refactorización (ALTA)
+- [ ] Crear `UsuarioServiceInterface` en `app/Contracts/Services`
+- [ ] Implementar `UsuarioService` en `app/Services`
+- [ ] Extraer lógica de filtros complejos (líneas 17-43) a servicio
+- [ ] Extraer manejo de archivos (líneas 76, 117, 122) a UploadService existente
+- [ ] Mover validación "no eliminarte" (línea 139) a servicio
+- [ ] Inyectar UsuarioService en constructor del controlador
+- [ ] Eliminar acceso directo a User, Role, Hash, Storage
+- [ ] **Razón**: 163 LOC sin servicios, lógica storage y queries complejos
+
+### 16. ReportesController → 3 Servicios Especializados (ALTA)
+- [ ] Crear `ReporteServiceInterface` en `app/Contracts/Services`
+- [ ] Implementar `PromptReporteService` para reportes de prompts
+- [ ] Implementar `EventoReporteService` para reportes de eventos
+- [ ] Implementar `UsuarioReporteService` para reportes de usuarios
+- [ ] Refactorizar métodos index(), eventos(), usuarios() usando servicios
+- [ ] Eliminar queries complejos withCount/groupBy del controlador
+- [ ] Eliminar cálculos de charts (líneas 66-69, 152-154) del controlador
+- [ ] **Razón**: God Object 171 LOC, accede 6 modelos, queries sin abstracción
+
+### 17. CalendarioController → EventoService + EventoPolicy (MEDIA)
+- [ ] Crear `EventoServiceInterface` en `app/Contracts/Services`
+- [ ] Implementar `EventoService` en `app/Services`
+- [ ] Crear `EventoPolicy` para autorización
+- [ ] Extraer queries estadísticas (líneas 17-37) a servicio
+- [ ] Reemplazar validaciones manuales repetidas con Policy
+- [ ] Extraer cálculo de métricas complejas a servicio
+- [ ] Inyectar EventoService en constructor
+- [ ] **Razón**: 163 LOC sin servicios, validaciones repetidas 5 veces
+
+### 18. PerfilController → PerfilService (MEDIA)
+- [ ] Crear `PerfilServiceInterface` en `app/Contracts/Services`
+- [ ] Implementar `PerfilService` en `app/Services`
+- [ ] Extraer métodos privados getUserStatistics(), getRecentPrompts() a servicio
+- [ ] Mover lógica subirAvatar() a UploadService existente
+- [ ] Eliminar acceso directo a filesystem (líneas 115-133)
+- [ ] Inyectar PerfilService y UploadService en constructor
+- [ ] **Razón**: 138 LOC, lógica estadísticas y upload sin abstracción
+
+### 19. RoleController + PermisosController → Servicios (BAJA)
 - [ ] Crear `RoleServiceInterface` y `PermissionServiceInterface`
 - [ ] Implementar `RoleService` y `PermissionService`
-- [ ] Refactorizar `RoleController`, `PermisosController`, `ReportesController`
-- [ ] Extraer lógica de reportes a `ReportService`
-- [ ] Validar inyección de dependencias
+- [ ] Refactorizar RoleController: eliminar queries (líneas 12-25)
+- [ ] Refactorizar PermisosController: eliminar filtros complejos (líneas 9-23)
+- [ ] Eliminar métodos stub vacíos (store, update, destroy)
+- [ ] Inyectar servicios en constructores
+- [ ] **Razón**: 69+64 LOC, métodos dead code, queries en controladores
 
-### 16. Refactorización Módulos Complementarios
-- [ ] Refactorizar `CalendarioController` → `CalendarService`
-- [ ] Refactorizar `HomeController` (si tiene lógica compleja)
-- [ ] Revisar `ChatbotController` y alinear con `ChatbotService` existente
-- [ ] Validar que `Auth/` controllers estén alineados con Fortify/Breeze
+### 20. Registro de Servicios en Providers
+- [ ] Verificar bindings actuales en AppServiceProvider
+- [ ] Registrar BackupService, ConfigurationService
+- [ ] Registrar CalificacionService
+- [ ] Registrar UsuarioService
+- [ ] Registrar PromptReporteService, EventoReporteService, UsuarioReporteService
+- [ ] Registrar EventoService
+- [ ] Registrar PerfilService
+- [ ] Registrar RoleService, PermissionService
+- [ ] Validar resolución automática en constructor injection
 
-### 17. Registro de Servicios y Providers
-- [ ] Verificar bindings en `AppServiceProvider` o crear `ServiceServiceProvider`
-- [ ] Registrar todas las interfaces → implementaciones
-- [ ] Documentar IoC Container para nuevos desarrolladores
-- [ ] Validar resolución automática en tests unitarios
-
-### 18. Validación Final y Documentación
-- [ ] Ejecutar suite de tests (si existe) o crear smoke tests
-- [ ] Validar que no haya regresiones funcionales
-- [ ] Documentar arquitectura en `docs/solid-architecture.md`
-- [ ] Crear diagrama de dependencias (Contratos → Servicios → Controladores)
-- [ ] Actualizar bitácora con resumen técnico
+### 21. Validación Final
+- [ ] Ejecutar `./vendor/bin/pint` en todos los archivos modificados
+- [ ] Validar que no haya regresiones funcionales navegando rutas
+- [ ] Verificar que todos los controladores <150 LOC
+- [ ] Verificar cero queries directos a modelos en controladores
+- [ ] Actualizar bitácora con resumen técnico por controlador
+- [ ] Commit final: "refactor: aplicación SOLID completa en controladores"
 
 ---
 
@@ -98,6 +144,7 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 - 21/01/2026: Toolbar de configuraciones parametrizado con variables .env (versión, motor BD, estado). Se eliminaron vistas legacy `resources/views/configuraciones/index.blade.php` y se dejaron banners "Próximamente" en Apariencia, Notificaciones y Sistema. Se pausa el resto de tareas de configuración (9-11) por decisión del cliente.
 - 21/01/2026: Corregida persistencia de tema claro/oscuro unificando clave `theme` en localStorage y aplicando clase `dark` en html/body. Se eliminó flicker con pre-carga en `<head>`.
+- 21/01/2026: **Auditoría SOLID completada** - Analizados 10 controladores (1,417 LOC, 65 métodos). Identificadas violaciones: 7/10 sin servicios, 3 God Objects (>200 LOC), 6 con queries directos. Prioridad crítica: ConfiguracionesController (riesgo seguridad exec()) y PromptController (282 LOC). Documentación completa en `docs/auditoria-solid-controladores.md`.
 
 ---
 
