@@ -64,8 +64,8 @@
                 </svg>
             </button>
             <div x-show="open.collab" x-transition class="space-y-1">
-                <a href="#"
-                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+                <a href="{{ route('prompts.compartidosConmigo') }}"
+                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('prompts.compartidosConmigo') ? 'bg-rose-50 text-rose-700 dark:bg-rose-900/30 dark:text-rose-200' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <circle cx="18" cy="5" r="3" />
                         <circle cx="6" cy="12" r="3" />
@@ -73,7 +73,7 @@
                         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
                         <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                     </svg>
-                    <span class="flex-1">Compartidos</span>
+                    <span class="flex-1">Compartidos Conmigo</span>
                 </a>
             </div>
         </div>

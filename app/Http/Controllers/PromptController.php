@@ -262,14 +262,23 @@ class PromptController extends Controller
     {
         // Obtener filtros
         $filters = [
-            'compartidos_conmigo' => true,
+            'buscar' => $request->get('buscar'),
+            'etiqueta' => $request->get('etiqueta'),
             'orden' => $request->get('orden', 'reciente'),
+            'compartidos_conmigo' => true,
         ];
 
         // Usar servicio
         $prompts = $this->promptService->listar(Auth::user(), 15, $filters);
 
+        // Etiquetas solo de los prompts mostrados
+        $etiquetas = $prompts->getCollection()
+            ->flatMap(fn ($prompt) => $prompt->etiquetas)
+            ->unique('id')
+            ->sortBy('nombre')
+            ->values();
+
         // Retornar vista
-        return view('prompts.compartidos', compact('prompts'));
+        return view('prompts.compartidos', compact('prompts', 'etiquetas'));
     }
 }
