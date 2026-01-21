@@ -39,7 +39,8 @@ class PromptPolicy
             return false;
         }
 
-        // Verificar acceso
+        // Verificar acceso (propietario, compartido, o público)
+        // NOTA: Admin NO puede ver prompts privados de otros usuarios (respeta privacidad)
         $acceso = $this->compartirService->verificarAcceso($prompt, $user);
 
         return $acceso !== null;
@@ -59,6 +60,8 @@ class PromptPolicy
      */
     public function update(User $user, Prompt $prompt): bool
     {
+        // Solo propietario o alguien con acceso 'editor' puede editar
+        // NOTA: Admin NO puede editar prompts privados de otros usuarios (respeta privacidad)
         return $this->compartirService->puedeEditar($prompt, $user);
     }
 
@@ -68,6 +71,7 @@ class PromptPolicy
     public function delete(User $user, Prompt $prompt): bool
     {
         // Solo el propietario o admin puede eliminar
+        // Admin puede eliminar SOLO POR RAZONES ADMINISTRATIVAS (contenido inapropiado, spam, etc)
         if ($prompt->user_id === $user->id) {
             return true;
         }
@@ -81,7 +85,8 @@ class PromptPolicy
     public function share(User $user, Prompt $prompt): bool
     {
         // Solo el propietario puede compartir
-        return $prompt->user_id === $user->id || $user->esAdmin();
+        // NOTA: Admin NO puede compartir prompts privados de otros usuarios (respeta privacidad)
+        return $prompt->user_id === $user->id;
     }
 
     /**

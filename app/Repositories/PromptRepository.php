@@ -25,6 +25,14 @@ class PromptRepository implements PromptRepositoryInterface
             } elseif (isset($filters['solo_mios']) && $filters['solo_mios']) {
                 // Ver solo mis prompts
                 $query->where('user_id', $userId);
+            } elseif (isset($filters['propios_y_compartidos']) && $filters['propios_y_compartidos']) {
+                // Ver mis prompts + los compartidos conmigo (sin públicos de terceros)
+                $query->where(function ($q) use ($userId) {
+                    $q->where('user_id', $userId)
+                        ->orWhereHas('accesosCompartidos', function ($sq) use ($userId) {
+                            $sq->where('user_id', $userId);
+                        });
+                });
             } else {
                 // Ver mis prompts + los compartidos conmigo + públicos
                 $query->where(function ($q) use ($userId) {

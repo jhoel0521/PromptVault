@@ -157,43 +157,81 @@
                                     id="nivel_acceso" 
                                     class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-slate-100 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20 transition-colors text-sm"
                                 >
-                                    <option value="lectura" class="bg-white dark:bg-slate-900">Solo Lectura</option>
-                                    <option value="edicion" class="bg-white dark:bg-slate-900">Edición</option>
+                                    <option value="lector" class="bg-white dark:bg-slate-900">🔍 Lector (Solo ver)</option>
+                                    <option value="comentador" class="bg-white dark:bg-slate-900">💬 Comentador (Ver + Comentar)</option>
+                                    <option value="editor" class="bg-white dark:bg-slate-900">✏️ Editor (Ver + Editar + Comentar)</option>
                                 </select>
+                                <small class="text-slate-500 dark:text-slate-400 text-xs mt-1 block">
+                                    Elige el nivel de acceso que deseas dar al usuario
+                                </small>
                             </div>
                             <button 
                                 type="submit" 
-                                class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-lg transition-colors text-sm"
+                                class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-2 rounded-lg transition-colors text-sm flex items-center justify-center gap-2"
                             >
-                                Compartir
+                                <i class="fas fa-share-alt"></i> Compartir Acceso
                             </button>
                         </form>
 
                         {{-- Usuarios con acceso --}}
                         @if($prompt->accesosCompartidos->count())
                             <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
-                                <h6 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3">Usuarios con acceso</h6>
-                                <div class="space-y-2">
+                                <h6 class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-3 flex items-center gap-2">
+                                    <i class="fas fa-users"></i> Usuarios con acceso ({{ $prompt->accesosCompartidos->count() }})
+                                </h6>
+                                <div class="space-y-3">
                                     @foreach($prompt->accesosCompartidos as $acceso)
-                                        <div class="flex justify-between items-center bg-slate-50 dark:bg-slate-900 rounded-lg p-2">
-                                            <div>
-                                                <span class="block text-sm text-slate-900 dark:text-white">{{ $acceso->user->name }}</span>
-                                                <small class="text-xs text-slate-600 dark:text-slate-400">{{ $acceso->nivel_acceso }}</small>
+                                        <div class="bg-slate-50 dark:bg-slate-900 rounded-lg p-3 border border-slate-200 dark:border-slate-700">
+                                            <div class="flex justify-between items-start gap-3">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2">
+                                                        <i class="fas fa-user-circle text-slate-400"></i>
+                                                        <span class="block text-sm font-semibold text-slate-900 dark:text-white">{{ $acceso->user->name }}</span>
+                                                    </div>
+                                                    <small class="text-xs text-slate-600 dark:text-slate-400 ml-6">
+                                                        {{ $acceso->user->email }}
+                                                    </small>
+                                                    <div class="mt-1 ml-6">
+                                                        @php
+                                                            $badgeColor = match($acceso->nivel_acceso) {
+                                                                'lector' => 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300',
+                                                                'comentador' => 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
+                                                                'editor' => 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',
+                                                                default => 'bg-slate-100 text-slate-800'
+                                                            };
+                                                            $icon = match($acceso->nivel_acceso) {
+                                                                'lector' => '🔍',
+                                                                'comentador' => '💬',
+                                                                'editor' => '✏️',
+                                                                default => '❓'
+                                                            };
+                                                        @endphp
+                                                        <span class="inline-block px-2 py-0.5 rounded text-xs font-semibold {{ $badgeColor }}">
+                                                            {{ $icon }} {{ ucfirst($acceso->nivel_acceso) }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <form action="{{ route('prompts.quitarAcceso', [$prompt, $acceso->user]) }}" method="POST" style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button 
+                                                        type="submit" 
+                                                        class="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 p-2 rounded transition-colors"
+                                                        title="Quitar acceso a {{ $acceso->user->name }}"
+                                                    >
+                                                        <i class="fas fa-trash text-sm"></i>
+                                                    </button>
+                                                </form>
                                             </div>
-                                            <form action="{{ route('prompts.quitarAcceso', [$prompt, $acceso->user]) }}" method="POST" style="display:inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button 
-                                                    type="submit" 
-                                                    class="text-red-500 hover:text-red-400 transition-colors text-sm"
-                                                    title="Quitar acceso"
-                                                >
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </form>
                                         </div>
                                     @endforeach
                                 </div>
+                            </div>
+                        @else
+                            <div class="pt-4 border-t border-slate-200 dark:border-slate-700">
+                                <p class="text-xs text-slate-500 dark:text-slate-400 text-center py-3">
+                                    <i class="fas fa-info-circle mr-1"></i> No hay usuarios con acceso compartido aún
+                                </p>
                             </div>
                         @endif
                     </div>

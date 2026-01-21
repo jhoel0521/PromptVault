@@ -45,10 +45,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('prompts', PromptController::class);
 
     // Prompts adicionales
-    Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir');
-    Route::delete('/prompts/{prompt}/acceso/{user}', [PromptController::class, 'quitarAcceso'])->name('prompts.quitarAcceso');
-    Route::get('/prompts/{prompt}/historial', [PromptController::class, 'historial'])->name('prompts.historial');
-    Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar');
+    Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir')->middleware('can:share,prompt');
+    Route::delete('/prompts/{prompt}/acceso/{user}', [PromptController::class, 'quitarAcceso'])->name('prompts.quitarAcceso')->middleware('can:share,prompt');
+    Route::get('/prompts/{prompt}/historial', [PromptController::class, 'historial'])->name('prompts.historial')->middleware('can:update,prompt');
+    Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar')->middleware('can:update,prompt');
     Route::get('/compartidos-conmigo', [PromptController::class, 'compartidosConmigo'])->name('prompts.compartidosConmigo');
 
     // Calendario

@@ -52,16 +52,18 @@
                                     {{ Str::limit($version->contenido, 60) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                    @if($version->numero_version != $prompt->version_actual)
-                                        <form action="{{ route('prompts.restaurar', [$prompt, $version]) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" 
-                                                    onclick="return confirm('¿Deseas restaurar esta versión como la actual?')"
-                                                    class="bg-amber-500 hover:bg-amber-600 text-white font-medium px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2">
-                                                <i class="fas fa-undo"></i> Restaurar
-                                            </button>
-                                        </form>
-                                    @endif
+                                    @can('update', $prompt)
+                                        @if($version->numero_version != $prompt->version_actual)
+                                            <form action="{{ route('prompts.restaurar', [$prompt, $version]) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" 
+                                                        onclick="return confirm('¿Deseas restaurar esta versión como la actual?')"
+                                                        class="bg-amber-500 hover:bg-amber-600 text-white font-medium px-4 py-2 rounded-lg transition-colors inline-flex items-center gap-2">
+                                                    <i class="fas fa-undo"></i> Restaurar
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @endcan
                                 </td>
                             </tr>
                         @endforeach

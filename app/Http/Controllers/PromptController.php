@@ -33,7 +33,8 @@ class PromptController extends Controller
             'etiqueta' => $request->get('etiqueta'),
             'visibilidad' => $request->get('visibilidad'),
             'orden' => $request->get('orden', 'reciente'),
-            'solo_mios' => true,
+            // Mostrar propios + compartidos (no públicos de terceros)
+            'propios_y_compartidos' => true,
         ];
 
         // Usar servicio

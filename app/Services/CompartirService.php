@@ -36,11 +36,6 @@ class CompartirService implements CompartirServiceInterface
             return 'propietario';
         }
 
-        // Admin tiene acceso total
-        if ($usuario->esAdmin()) {
-            return 'propietario';
-        }
-
         // Verificar acceso compartido
         $acceso = AccesoCompartido::where('prompt_id', $prompt->id)
             ->where('user_id', $usuario->id)
