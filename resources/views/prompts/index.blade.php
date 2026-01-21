@@ -66,7 +66,23 @@
 
         <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             @forelse($prompts as $prompt)
-                <x-prompt.card :prompt="$prompt" />
+                @php
+                    $tagNames = $prompt->etiquetas->pluck('nombre')->map(fn ($nombre) => strtolower($nombre))->implode(',');
+                    $searchText = strtolower(trim(preg_replace('/\s+/', ' ', implode(' ', [
+                        $prompt->titulo,
+                        $prompt->descripcion,
+                        $prompt->contenido,
+                        optional($prompt->user)->name,
+                    ]))));
+                @endphp
+                <div
+                    x-show="matches($el)"
+                    x-transition
+                    data-search="{{ $searchText }}"
+                    data-tags="{{ $tagNames }}"
+                >
+                    <x-prompt.card :prompt="$prompt" />
+                </div>
             @empty
                 <div class="col-span-full text-center py-12 bg-white border border-dashed border-slate-200 rounded-xl dark:bg-slate-800 dark:border-slate-700">
                     <i class="fas fa-inbox text-slate-300 dark:text-slate-600 text-5xl mb-4"></i>

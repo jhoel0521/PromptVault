@@ -97,6 +97,9 @@
             emptyIcon="search"
         />
     </main>
+
+    {{-- Chatbot Widget --}}
+    <x-chatbot-widget />
     
     <x-chatbot-widget />
 </body>

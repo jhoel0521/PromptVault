@@ -49,6 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/prompts/{prompt}/acceso/{user}', [PromptController::class, 'quitarAcceso'])->name('prompts.quitarAcceso')->middleware('can:share,prompt');
     Route::get('/prompts/{prompt}/historial', [PromptController::class, 'historial'])->name('prompts.historial')->middleware('can:update,prompt');
     Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar')->middleware('can:update,prompt');
+    Route::post('/prompts/{prompt}/calificar', [PromptController::class, 'calificar'])->name('prompts.calificar')->middleware('can:rate,prompt');
     Route::get('/compartidos-conmigo', [PromptController::class, 'compartidosConmigo'])->name('prompts.compartidosConmigo');
 
     // Calendario

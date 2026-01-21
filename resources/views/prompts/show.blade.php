@@ -12,20 +12,57 @@
             <div class="lg:col-span-2 space-y-6">
                 
                 {{-- Título y Favorito --}}
-                <div class="flex justify-between items-start">
-                    <div>
+                <div class="flex justify-between items-start gap-4">
+                    <div class="flex-1">
                         <h1 class="text-4xl font-bold text-slate-900 dark:text-white mb-2">{{ $prompt->titulo }}</h1>
                         @if($prompt->descripcion)
                             <p class="text-slate-600 dark:text-slate-400">{{ $prompt->descripcion }}</p>
                         @endif
                     </div>
-                    <div class="flex gap-2">
-                        <button 
-                            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-500 px-4 py-2 rounded-lg transition-colors"
-                            onclick="toggleFavorite()"
-                        >
-                            <i class="fas fa-heart"></i>
-                        </button>
+                    <div class="flex flex-col items-end gap-3 w-64">
+                        <div class="flex items-center gap-2 text-sm">
+                            <span class="text-amber-500 text-lg"><i class="fas fa-star"></i></span>
+                            <span class="font-semibold text-slate-900 dark:text-white">{{ number_format($prompt->promedio_calificacion, 1) }}</span>
+                            <span class="text-slate-500 dark:text-slate-400 text-xs">({{ $prompt->calificaciones->count() }} valoraciones)</span>
+                        </div>
+                        @auth
+                            @php
+                                $userRating = $prompt->calificaciones->firstWhere('user_id', auth()->id());
+                            @endphp
+                            @can('rate', $prompt)
+                                <form action="{{ route('prompts.calificar', $prompt) }}" method="POST" class="flex flex-col items-end gap-2 w-full" x-data="{ rating: {{ $userRating->estrellas ?? 0 }} }">
+                                    @csrf
+                                    <div class="flex items-center gap-1">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <label class="cursor-pointer" @click="rating = {{ $i }}">
+                                                <input type="radio" name="estrellas" value="{{ $i }}" class="hidden" {{ isset($userRating) && $userRating->estrellas == $i ? 'checked' : '' }}>
+                                                <i class="fas fa-star text-lg" :class="rating >= {{ $i }} ? 'text-amber-400' : 'text-slate-300 dark:text-slate-600'"></i>
+                                            </label>
+                                        @endfor
+                                    </div>
+                                    <textarea name="resena" rows="2" class="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-rose-500/30" placeholder="Deja una reseña (opcional)">{{ old('resena', $userRating->resena ?? '') }}</textarea>
+                                    <div class="flex items-center gap-2 w-full">
+                                        <button type="submit" class="px-3 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold rounded-lg transition-colors">
+                                            {{ $userRating ? 'Actualizar calificación' : 'Calificar' }}
+                                        </button>
+                                        <button 
+                                            type="button"
+                                            class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-500 px-3 py-2 rounded-lg transition-colors"
+                                            onclick="toggleFavorite()"
+                                            title="Favorito"
+                                        >
+                                            <i class="fas fa-heart"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            @else
+                                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+                                    <i class="fas fa-info-circle"></i> No puedes calificar tu propio prompt.
+                                </div>
+                            @endcan
+                        @else
+                            <a href="{{ route('login') }}" class="text-xs text-rose-600 dark:text-rose-400 hover:underline">Inicia sesión para calificar</a>
+                        @endauth
                     </div>
                 </div>
 
@@ -35,7 +72,7 @@
                         <span class="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider">PROMPT</span>
                         <button 
                             class="text-xs text-rose-600 hover:text-rose-700 dark:text-rose-500 dark:hover:text-rose-400 transition-colors flex items-center gap-2"
-                            onclick="copyPrompt()"
+                            onclick="copyPrompt(event)"
                         >
                             <i class="fas fa-copy"></i> Copiar
                         </button>
@@ -292,10 +329,15 @@
     </form>
 
 <script>
-    function copyPrompt() {
+    function copyPrompt(event) {
         const text = document.getElementById('promptContent').innerText;
-        navigator.clipboard.writeText(text).then(() => {
-            const btn = event.target.closest('button');
+        const btn = event?.target?.closest('button');
+
+        const showCopied = () => {
+            if (!btn) {
+                return;
+            }
+
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
             btn.classList.add('!text-green-500');
@@ -303,9 +345,36 @@
                 btn.innerHTML = originalText;
                 btn.classList.remove('!text-green-500');
             }, 2000);
-        }).catch(() => {
-            alert('Error al copiar');
-        });
+        };
+
+        const fallbackCopy = () => {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        };
+
+        const attemptClipboard = () => navigator.clipboard.writeText(text);
+
+        const copyAction = navigator.clipboard && window.isSecureContext
+            ? attemptClipboard().catch(() => { fallbackCopy(); })
+            : Promise.resolve().then(() => { fallbackCopy(); });
+
+        copyAction
+            .then(showCopied)
+            .catch(() => {
+                try {
+                    fallbackCopy();
+                    showCopied();
+                } catch (error) {
+                    alert('Error al copiar');
+                }
+            });
     }
 
     function toggleFavorite() {

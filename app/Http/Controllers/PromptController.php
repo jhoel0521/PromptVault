@@ -6,8 +6,10 @@ use App\Contracts\Repositories\EtiquetaRepositoryInterface;
 use App\Contracts\Services\CompartirServiceInterface;
 use App\Contracts\Services\PromptServiceInterface;
 use App\Http\Requests\Prompt\CompartirPromptRequest;
+use App\Http\Requests\Prompt\RatePromptRequest;
 use App\Http\Requests\Prompt\StorePromptRequest;
 use App\Http\Requests\Prompt\UpdatePromptRequest;
+use App\Models\Calificacion;
 use App\Models\Prompt;
 use App\Models\User;
 use App\Models\Version;
@@ -39,7 +41,13 @@ class PromptController extends Controller
 
         // Usar servicio
         $prompts = $this->promptService->listar(Auth::user(), 15, $filters);
-        $etiquetas = $this->etiquetaRepository->all();
+
+        // Etiquetas solo de los prompts mostrados en la página actual
+        $etiquetas = $prompts->getCollection()
+            ->flatMap(fn ($prompt) => $prompt->etiquetas)
+            ->unique('id')
+            ->sortBy('nombre')
+            ->values();
 
         // Retornar vista
         return view('prompts.index', compact('prompts', 'etiquetas'));
@@ -224,6 +232,27 @@ class PromptController extends Controller
         // Retornar vista
         return redirect()->route('prompts.show', $prompt)
             ->with('success', 'Versión restaurada exitosamente');
+    }
+
+    /**
+     * Calificar o actualizar calificación de un prompt
+     */
+    public function calificar(RatePromptRequest $request, Prompt $prompt)
+    {
+        $data = $request->validated();
+
+        Calificacion::updateOrCreate(
+            [
+                'prompt_id' => $prompt->id,
+                'user_id' => $request->user()->id,
+            ],
+            [
+                'estrellas' => $data['estrellas'],
+                'resena' => $data['resena'] ?? null,
+            ]
+        );
+
+        return back()->with('success', 'Calificación guardada correctamente.');
     }
 
     /**
