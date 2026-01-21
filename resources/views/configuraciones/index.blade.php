@@ -37,68 +37,62 @@
     </div>
 
     <!-- Navigation Tabs + Content -->
-    <div x-data="{ activeTab: 'general' }" class="space-y-6">
+    <div class="space-y-6">
         <!-- Tabs -->
         <div class="flex flex-wrap gap-3 overflow-x-auto pb-2">
-            <button @click="activeTab = 'general'" 
-                    :class="activeTab === 'general' ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200">
-                <i class="fas fa-sliders-h" :class="activeTab === 'general' ? 'text-white' : 'text-gray-400'"></i>
+            <a href="{{ route('admin.configuraciones.general') }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 {{ request()->routeIs('admin.configuraciones.general') ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10' }}">
+                <i class="fas fa-sliders-h {{ request()->routeIs('admin.configuraciones.general') ? 'text-white' : 'text-gray-400' }}"></i>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase tracking-wider" :class="activeTab === 'general' ? 'text-rose-200' : 'text-gray-500'">CONFIGURACIÓN</div>
-                    <div class="text-sm font-medium" :class="activeTab === 'general' ? 'text-white' : 'text-gray-300'">General</div>
+                    <div class="text-[10px] uppercase tracking-wider {{ request()->routeIs('admin.configuraciones.general') ? 'text-rose-200' : 'text-gray-500' }}">CONFIGURACIÓN</div>
+                    <div class="text-sm font-medium {{ request()->routeIs('admin.configuraciones.general') ? 'text-white' : 'text-gray-300' }}">General</div>
                 </div>
-            </button>
+            </a>
             
-            <button @click="activeTab = 'security'" 
-                    :class="activeTab === 'security' ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200">
-                <i class="fas fa-shield-alt" :class="activeTab === 'security' ? 'text-white' : 'text-gray-400'"></i>
+            <a href="{{ route('admin.configuraciones.seguridad') }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 {{ request()->routeIs('admin.configuraciones.seguridad') ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10' }}">
+                <i class="fas fa-shield-alt {{ request()->routeIs('admin.configuraciones.seguridad') ? 'text-white' : 'text-gray-400' }}"></i>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase tracking-wider" :class="activeTab === 'security' ? 'text-rose-200' : 'text-gray-500'">CONFIGURACIÓN</div>
-                    <div class="text-sm font-medium" :class="activeTab === 'security' ? 'text-white' : 'text-gray-300'">Seguridad</div>
+                    <div class="text-[10px] uppercase tracking-wider {{ request()->routeIs('admin.configuraciones.seguridad') ? 'text-rose-200' : 'text-gray-500' }}">CONFIGURACIÓN</div>
+                    <div class="text-sm font-medium {{ request()->routeIs('admin.configuraciones.seguridad') ? 'text-white' : 'text-gray-300' }}">Seguridad</div>
                 </div>
-            </button>
+            </a>
 
-            <button @click="activeTab = 'appearance'" 
-                    :class="activeTab === 'appearance' ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200">
-                <i class="fas fa-paint-brush" :class="activeTab === 'appearance' ? 'text-white' : 'text-gray-400'"></i>
+            <a href="{{ route('admin.configuraciones.apariencia') }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 {{ request()->routeIs('admin.configuraciones.apariencia') ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10' }}">
+                <i class="fas fa-paint-brush {{ request()->routeIs('admin.configuraciones.apariencia') ? 'text-white' : 'text-gray-400' }}"></i>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase tracking-wider" :class="activeTab === 'appearance' ? 'text-rose-200' : 'text-gray-500'">CONFIGURACIÓN</div>
-                    <div class="text-sm font-medium" :class="activeTab === 'appearance' ? 'text-white' : 'text-gray-300'">Apariencia</div>
+                    <div class="text-[10px] uppercase tracking-wider {{ request()->routeIs('admin.configuraciones.apariencia') ? 'text-rose-200' : 'text-gray-500' }}">CONFIGURACIÓN</div>
+                    <div class="text-sm font-medium {{ request()->routeIs('admin.configuraciones.apariencia') ? 'text-white' : 'text-gray-300' }}">Apariencia</div>
                 </div>
-            </button>
+            </a>
             
-            <button @click="activeTab = 'notifications'" 
-                    :class="activeTab === 'notifications' ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200">
-                <i class="fas fa-bell" :class="activeTab === 'notifications' ? 'text-white' : 'text-gray-400'"></i>
+            <a href="{{ route('admin.configuraciones.notificaciones') }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 {{ request()->routeIs('admin.configuraciones.notificaciones') ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10' }}">
+                <i class="fas fa-bell {{ request()->routeIs('admin.configuraciones.notificaciones') ? 'text-white' : 'text-gray-400' }}"></i>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase tracking-wider" :class="activeTab === 'notifications' ? 'text-rose-200' : 'text-gray-500'">CONFIGURACIÓN</div>
-                    <div class="text-sm font-medium" :class="activeTab === 'notifications' ? 'text-white' : 'text-gray-300'">Notificaciones</div>
+                    <div class="text-[10px] uppercase tracking-wider {{ request()->routeIs('admin.configuraciones.notificaciones') ? 'text-rose-200' : 'text-gray-500' }}">CONFIGURACIÓN</div>
+                    <div class="text-sm font-medium {{ request()->routeIs('admin.configuraciones.notificaciones') ? 'text-white' : 'text-gray-300' }}">Notificaciones</div>
                 </div>
-            </button>
+            </a>
 
-            <button @click="activeTab = 'backups'" 
-                    :class="activeTab === 'backups' ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200">
-                <i class="fas fa-database" :class="activeTab === 'backups' ? 'text-white' : 'text-gray-400'"></i>
+            <a href="{{ route('admin.configuraciones.respaldos') }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 {{ request()->routeIs('admin.configuraciones.respaldos') ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10' }}">
+                <i class="fas fa-database {{ request()->routeIs('admin.configuraciones.respaldos') ? 'text-white' : 'text-gray-400' }}"></i>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase tracking-wider" :class="activeTab === 'backups' ? 'text-rose-200' : 'text-gray-500'">CONFIGURACIÓN</div>
-                    <div class="text-sm font-medium" :class="activeTab === 'backups' ? 'text-white' : 'text-gray-300'">Respaldos</div>
+                    <div class="text-[10px] uppercase tracking-wider {{ request()->routeIs('admin.configuraciones.respaldos') ? 'text-rose-200' : 'text-gray-500' }}">CONFIGURACIÓN</div>
+                    <div class="text-sm font-medium {{ request()->routeIs('admin.configuraciones.respaldos') ? 'text-white' : 'text-gray-300' }}">Respaldos</div>
                 </div>
-            </button>
+            </a>
 
-            <button @click="activeTab = 'system'" 
-                    :class="activeTab === 'system' ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10'"
-                    class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200">
-                <i class="fas fa-server" :class="activeTab === 'system' ? 'text-white' : 'text-gray-400'"></i>
+            <a href="{{ route('admin.configuraciones.sistema') }}" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg border transition-all duration-200 {{ request()->routeIs('admin.configuraciones.sistema') ? 'bg-rose-500 border-rose-500' : 'bg-white/5 border-white/10 hover:bg-white/10' }}">
+                <i class="fas fa-server {{ request()->routeIs('admin.configuraciones.sistema') ? 'text-white' : 'text-gray-400' }}"></i>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase tracking-wider" :class="activeTab === 'system' ? 'text-rose-200' : 'text-gray-500'">CONFIGURACIÓN</div>
-                    <div class="text-sm font-medium" :class="activeTab === 'system' ? 'text-white' : 'text-gray-300'">Sistema</div>
+                    <div class="text-[10px] uppercase tracking-wider {{ request()->routeIs('admin.configuraciones.sistema') ? 'text-rose-200' : 'text-gray-500' }}">CONFIGURACIÓN</div>
+                    <div class="text-sm font-medium {{ request()->routeIs('admin.configuraciones.sistema') ? 'text-white' : 'text-gray-300' }}">Sistema</div>
                 </div>
-            </button>
+            </a>
         </div>
 
         <!-- Main Content Grid -->

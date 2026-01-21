@@ -1,3 +1,4 @@
+<x-configuraciones-layout>
 <div class="space-y-6">
     <!-- Personalización del Tema -->
     <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6">
@@ -136,3 +137,4 @@
         </div>
     </div>
 </div>
+</x-configuraciones-layout>

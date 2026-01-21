@@ -73,10 +73,10 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 
 ---
 
-## Resumen de Inventario (Actualizado 21/01/2026)
-- **65 archivos .blade.php** en `resources/views/` (49 procesados, 16 pendientes)
+## Resumen de Inventario (Actualizado 21/01/2026 - 21:15)
+- **65 archivos .blade.php** en `resources/views/` (50 procesados, 15 pendientes)
   - ✅ Auth: 3 | ✅ Prompts: 6 | ✅ Calendario: 4 | ✅ Home: 1 | ✅ Perfil: 4 | ✅ Components: 8 | ✅ Configuraciones: 7
-  - ✅ **Admin/Usuarios: 4** | ✅ **Admin/Roles: 4** | ✅ **Admin/Permisos: 4** | ✅ **Admin/Reportes: 3** | ⚠️ Admin/Backups: 1 pendiente
+  - ✅ **Admin/Usuarios: 4** | ✅ **Admin/Roles: 4** | ✅ **Admin/Permisos: 4** | ✅ **Admin/Reportes: 3** | ✅ **Admin/Backups: 1**
   - ❌ Eliminados: dashboard.blade.php + 4 role components + academicos.blade.php + asistencias.blade.php (7 eliminados)
 - **10 archivos .css** restantes en `public/css/` (validado 21/01/2026)
   - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4), admin/reportes (1)** = **27 eliminados**
@@ -119,8 +119,8 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/admin/reportes/eventos.blade.php` ✅ MIGRADO (Chart.js: eventos por mes, tipo, completados vs pendientes)
 **Nota:** Vistas antiguas `academicos.blade.php` + `asistencias.blade.php` eliminadas (no aplicables a PromptVault).
 
-#### Backups
-- `resources/views/admin/backups/index.blade.php`
+#### Backups (1 archivo) ✅ COMPLETADO
+- `configuraciones/respaldos.blade.php` ✅ RECREADO (backup manual SQL con crear/listar/descargar/eliminar, sin jobs/cloud)
 
 ### 1.3 Prompts Module (6 archivos) ✅ COMPLETADO
 - `resources/views/prompts/index.blade.php` ✅
@@ -428,8 +428,7 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] Migración eventos: agregado campo `completado` (boolean)
 - [x] Seeders: PromptSeeder + EventoSeeder con datos realistas
 - [x] Link Reportes en sidebar (sección Sistema, solo admin)
-
-- [ ] Admin/Backups: 1 vista
+- [x] Admin/Backups: 1 vista (respaldos.blade.php con crear/descargar/eliminar backups SQL)
 
 ### FASE 4: Módulos Secundarios (Prioridad Baja)
 - [ ] Buscador
@@ -514,9 +513,9 @@ http://127.0.0.1:8000/admin/permisos
 
 ---
 
-## 8. REGISTRO DE PROGRESO - BITÁCORA (Actualizado 21/01/2026)
+## 8. REGISTRO DE PROGRESO - BITÁCORA (Actualizado 21/01/2026 - 21:15)
 
-### Módulos completados: 11/14
+### Módulos completados: 12/14 (85.7%)
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
@@ -528,14 +527,14 @@ http://127.0.0.1:8000/admin/permisos
 - [x] Admin/Roles ✅
 - [x] Admin/Permisos ✅
 - [x] Admin/Reportes ✅
-- [ ] Admin/Backups (1 vista)
+- [x] Admin/Backups ✅
 - [ ] Errors/Modals/Pages/Filters/Buscador (11 vistas)
 
-### Archivos validados: 49/65 total (75.4%)
-- **Blade: 49/65 procesados** (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅, Admin/Reportes: 3 ✅)
-  - Components: 8 archivos layout migrados (header, sidebar, footer, loading, etc.)
+### Archivos validados: 50/65 total (76.9%)
+- **Blade: 50/65 procesados** (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅, Admin/Reportes: 3 ✅, Admin/Backups: 1 ✅)
+  - Components: 8 archivos layout migrados (header, sidebar, footer, loading, etc.) + 1 componente configuraciones-layout
   - ❌ Eliminados: 7 (dashboard.blade.php + 4 role components + academicos + asistencias)
-  - ⚠️ Pendientes: 16 vistas (Backups: 1, Errors: 3, Modals: 3, Pages: 3, Filters: 1, Buscador: 1, otros: 4)
+  - ⚠️ Pendientes: 15 vistas (Errors: 3, Modals: 3, Pages: 3, Filters: 1, Buscador: 1, otros: 4)
 - **CSS: 27 eliminados → 10 restantes** (validado 21/01/2026)
   - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4), admin/reportes (1)
   - ⚠️ Pendientes eliminar: 10 archivos (buscador, calendario, filters, errors: 3, modals: 3, paginacion)
@@ -2150,3 +2149,159 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
   - Filtro módulo: dropdown con distinct modulos
 - **Patrón Admin:** Header gradient temático, Alpine x-data, dark mode completo, responsive grid, datalist HTML5
 - **Módulos completados:** 10/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, Admin/Usuarios, Admin/Roles, **Admin/Permisos**)
+
+---
+
+### 🔄 FASE 3.5: ADMIN/BACKUPS MODULE - ✅ COMPLETADO
+
+**Fecha:** 21/01/2026 21:15
+
+#### Cambios Backend:
+- **ConfiguracionesController:**
+  - Método `respaldos()`: Lista backups existentes en `storage/app/backups/` con formatBytes()
+  - Método `createBackup()`: Genera backup SQL con mysqldump o fallback PHP puro, guarda en storage, redirecciona con success
+  - Método `downloadExistingBackup($filename)`: Descarga backup existente validando extensión .sql
+  - Método `deleteBackup($filename)`: Elimina backup con validación y confirmación
+  - Método `generateSqlBackupPHP($filepath)`: Fallback PHP sin mysqldump (SHOW CREATE TABLE + INSERT INTO)
+  - Helper `formatBytes($bytes)`: Formatea tamaño (B, KB, MB, GB, TB)
+- **Rutas web.php:**
+  - GET `/admin/configuraciones` → redirect a general (index ya no renderiza vista)
+  - POST `/admin/configuraciones/backup/create` → createBackup (NO descarga, solo crea)
+  - GET `/admin/configuraciones/backup/{filename}` → downloadExistingBackup
+  - DELETE `/admin/configuraciones/backup/{filename}` → deleteBackup
+- **Navegación con URLs reales:**
+  - Sistema de tabs Alpine eliminado, reemplazado por links reales
+  - Cada sección tiene su propia URL con `request()->routeIs()` para tab activo
+  - F5 mantiene posición, links compartibles
+
+#### Cambios Frontend:
+- **configuraciones/respaldos.blade.php:** ✅ RECREADO DESDE CERO (136→207 líneas)
+  - OLD (eliminado):
+    - Jobs automáticos (frecuencia cada 6h/diario/semanal)
+    - Retención local (7/30 días/indefinido)
+    - Incluir archivos multimedia (toggle sin implementar)
+    - Sincronización cloud (Google Drive, Dropbox, AWS S3)
+    - Proveedores externos no configurados
+    - Encriptación en tránsito
+    - Estrategias de respaldo programadas
+    - Botón "Descargar Backup" que generaba y descargaba en un paso
+  - NEW (recreado):
+    - Layout: `<x-configuraciones-layout>` con tabs navegación
+    - Mensajes flash: @if(session('success')) green alert, @if(session('error')) red alert
+    - Card "Respaldo de Base de Datos" con info card azul
+    - Lista qué incluye: tablas, estructura CREATE, registros INSERT, NO archivos storage
+    - Grid database info: nombre BD, conexión, host (config() Laravel)
+    - Formulario POST a `createBackup()` con botón "Crear Backup" (icono plus)
+    - Alpine.js: x-data="{ generating: false }" con spinner fa-spin, @submit="generating = true"
+    - Tabla "Historial de Respaldos" con backups reales de storage:
+      - Columnas: Nombre (icon file-code), Tamaño (formatBytes), Fecha (d/m/Y H:i:s), Acciones
+      - Botón azul "Descargar" → GET downloadExistingBackup
+      - Botón rojo "Eliminar" → DELETE deleteBackup con confirm JavaScript
+      - Badge contador backups disponibles
+      - Estado vacío cuando no hay backups: "Genera tu primer backup usando el botón de arriba"
+    - Card "Recomendaciones de Seguridad" (amber): respaldos periódicos, almacenamiento externo, eliminar antiguos, NO compartir .sql
+    - Dark mode completo: bg-white dark:bg-slate-800, border-slate-200 dark:border-slate-700
+    - Gradiente blue info card: bg-blue-50 dark:bg-blue-900/20
+    - Icons FontAwesome: database, info-circle, server, table, hdd, plus-circle, file-code, download, trash-alt, exclamation-triangle
+- **configuraciones/index.blade.php:** ✅ MODIFICADO
+  - Eliminado: x-data Alpine tabs, @click buttons
+  - Agregado: Links reales <a href="{{ route() }}" con request()->routeIs() para active state
+  - Redirect index() a general en controller
+- **components/configuraciones-layout.blade.php:** ✅ CREADO (117 líneas)
+  - Layout reutilizable: header + stats toolbar + tabs navegación + slot content
+  - Header: Panel de Configuración con icono cogs gradient rose/blue
+  - Stats toolbar: v2.5.0, PHP version, MySQL, status Online
+  - Tabs navegación: 6 links (general, seguridad, apariencia, notificaciones, respaldos, sistema)
+  - Tab activo: bg-rose-500 border-rose-500 con request()->routeIs()
+  - Tab inactivo: bg-white/5 border-white/10 hover:bg-white/10
+  - Content slot: {{ $slot }} para contenido de cada sección
+- **configuraciones/*.blade.php (5 vistas):** ✅ ENVUELTAS con layout
+  - general.blade.php, seguridad.blade.php, apariencia.blade.php, notificaciones.blade.php, sistema.blade.php
+  - Envueltas con `<x-configuraciones-layout>...contenido...</x-configuraciones-layout>`
+  - PowerShell: foreach 5 archivos, prepend opening tag, append closing tag
+
+#### Problemas Resueltos:
+1. **Vista original con jobs/cloud no implementados** → Recreada desde cero con funcionalidad real
+2. **Ruta RouteNotFoundException admin.configuraciones.backup.download** → Cambiada a backup.create
+3. **Controlador duplicado BackupController creado por error** → Eliminado completamente
+4. **Carpeta admin/backups incorrecta** → Eliminada, backup integrado en configuraciones
+5. **Menciones cloud storage sin implementar** → Eliminadas, solo backup manual SQL
+6. **Jobs automáticos sin backend** → Eliminados, solo generación manual on-demand
+7. **Descarga automática sin guardar** → Separado: createBackup() guarda, downloadExistingBackup() descarga
+8. **Botón generaba y descargaba en un paso** → Cambiado a crear → listar → descargar/eliminar
+9. **Tabs Alpine sin URLs reales** → Reemplazado por links con request()->routeIs() + redirect index
+10. **F5 perdía posición en tabs** → Solucionado con URLs únicas por sección
+11. **Alpine @click bloqueaba submit form** → Cambiado a @submit="generating = true"
+
+#### Archivos Eliminados:
+- ❌ `app/Http/Controllers/Admin/BackupController.php` (controlador duplicado innecesario creado por error, 120 líneas)
+- ❌ `resources/views/admin/backups/index.blade.php` (vista en carpeta incorrecta)
+- ❌ Carpeta completa: `resources/views/admin/backups/` eliminada
+- ❌ NO hay CSS/JS externos eliminados (configuraciones ya no tenía assets desde Fase 2.5)
+
+#### Validación:
+- ✅ `/admin/configuraciones` → redirect a `/admin/configuraciones/general`
+- ✅ `/admin/configuraciones/general` renderiza sin errores
+- ✅ `/admin/configuraciones/seguridad` renderiza sin errores
+- ✅ `/admin/configuraciones/apariencia` renderiza sin errores
+- ✅ `/admin/configuraciones/notificaciones` renderiza sin errores
+- ✅ `/admin/configuraciones/respaldos` renderiza sin errores con tabla vacía
+- ✅ `/admin/configuraciones/sistema` renderiza sin errores
+- ✅ Botón "Crear Backup" genera archivo .sql correctamente en storage/app/backups/
+- ✅ Spinner Alpine.js funciona durante generación (x-data generating)
+- ✅ Mensaje success flash aparece después de crear backup
+- ✅ Tabla "Historial de Respaldos" muestra backups guardados
+- ✅ Botón "Descargar" descarga archivo SQL correctamente
+- ✅ Botón "Eliminar" elimina con confirmación JavaScript
+- ✅ Info cards muestran datos reales de config('database')
+- ✅ Tabs navegación activos con request()->routeIs()
+- ✅ F5 mantiene posición en URL actual (sin perder tab)
+- ✅ Links compartibles funcionan correctamente
+- ✅ Dark mode funciona en todos los componentes
+- ✅ NO hay errores en consola
+- ✅ NO hay menciones a jobs, cloud, proveedores externos
+- ✅ Ruta `php artisan route:list --name=backup` muestra 3 rutas correctas
+
+#### Total de Cambios Fase 3.5:
+- **Vistas recreadas:** 1 archivo (respaldos.blade.php 136→207 líneas)
+- **Vistas modificadas:** 1 archivo (index.blade.php tabs Alpine → links reales)
+- **Vistas envueltas:** 5 archivos (general, seguridad, apariencia, notificaciones, sistema con <x-configuraciones-layout>)
+- **Componentes creados:** 1 archivo (configuraciones-layout.blade.php reutilizable)
+- **Vistas eliminadas:** 1 archivo (admin/backups/index.blade.php)
+- **Controladores eliminados:** 1 archivo (Admin/BackupController.php)
+- **Total procesados:** 50/65 archivos Blade (76.9%)
+- **CSS restantes:** 10 archivos (sin cambios, configuraciones no tenía CSS)
+- **JS restantes:** 14 archivos (sin cambios, configuraciones no tenía JS)
+- **Features agregadas:**
+  - Backup manual SQL crear/listar/descargar/eliminar (mysqldump + fallback PHP)
+  - Info card con detalles qué incluye el backup
+  - Grid database info (nombre, conexión, host)
+  - Tabla historial con backups reales de storage
+  - Alpine.js spinner durante generación
+  - Flash messages success/error
+  - Recomendaciones seguridad (respaldos periódicos, almacenamiento externo)
+  - Dark mode completo en vista
+  - Método generateSqlBackupPHP() fallback sin mysqldump
+  - Helper formatBytes() para tamaños legibles
+  - Manejo errores con try-catch + mensajes usuario
+  - Validación extensión .sql en download/delete
+  - Confirmación JavaScript antes de eliminar
+  - Integrado en configuraciones (NO módulo admin separado)
+  - Sistema navegación tabs con URLs reales
+  - Componente configuraciones-layout reutilizable
+  - Links compartibles por sección
+  - F5 mantiene posición (sin perder tab)
+  - Tab activo con request()->routeIs()
+- **Features eliminadas:**
+  - Jobs automáticos programados
+  - Sincronización cloud (Google Drive, Dropbox, AWS S3)
+  - Proveedores externos
+  - Retención local configurable
+  - Incluir archivos multimedia
+  - Encriptación en tránsito
+  - Descarga automática al generar (ahora son pasos separados)
+  - Sistema tabs Alpine sin URLs
+  - Carpeta admin/backups incorrecta
+  - BackupController duplicado
+- **Patrón Configuraciones:** URLs reales por sección, componente layout reutilizable, Alpine state local, info cards, dark mode, responsive, flash messages
+- **Módulos completados:** 12/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, Admin/Usuarios, Admin/Roles, Admin/Permisos, Admin/Reportes, **Admin/Backups**)

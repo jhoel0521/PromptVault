@@ -72,6 +72,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/apariencia', [ConfiguracionesController::class, 'apariencia'])->name('apariencia');
             Route::get('/sistema', [ConfiguracionesController::class, 'sistema'])->name('sistema');
             Route::get('/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('respaldos');
+            Route::post('/backup/create', [ConfiguracionesController::class, 'createBackup'])->name('backup.create');
+            Route::get('/backup/{filename}', [ConfiguracionesController::class, 'downloadExistingBackup'])->name('backup.existing');
+            Route::delete('/backup/{filename}', [ConfiguracionesController::class, 'deleteBackup'])->name('backup.delete');
             Route::post('/update', [ConfiguracionesController::class, 'update'])->name('update');
         });
         Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);
