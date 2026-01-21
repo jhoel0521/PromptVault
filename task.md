@@ -42,6 +42,12 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ---
 
+## Bitácora
+
+- 21/01/2026: Toolbar de configuraciones parametrizado con variables .env (versión, motor BD, estado). Se eliminaron vistas legacy `resources/views/configuraciones/index.blade.php` y se dejaron banners "Próximamente" en Apariencia, Notificaciones y Sistema.
+
+---
+
 ## Tareas Descubiertas para Siguientes Fases
 
 *(Espacio reservado para deuda técnica o bugs encontrados)*
