@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\BuscadorController;
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ConfiguracionesController;
 use App\Http\Controllers\HomeController;
@@ -89,3 +88,14 @@ Route::middleware('auth')->prefix('chatbot')->group(function () {
     Route::get('/providers', [App\Http\Controllers\ChatbotController::class, 'providers'])->name('chatbot.providers');
 });
 require __DIR__.'/auth.php';
+// Helper para probar páginas de error
+Route::get('/{code}', function ($code) {
+    $validCodes = [400, 401, 402, 403, 404, 405, 408, 419, 429, 500, 502, 503, 504];
+    $intCode = intval($code);
+
+    if (in_array($intCode, $validCodes)) {
+        return response()->view("errors.{$intCode}", [], $intCode);
+    }
+
+    abort(404, 'Código de error no válido');
+})->name('helper.http.code')->where('code', '[0-9]+');

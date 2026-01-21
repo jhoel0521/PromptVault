@@ -23,7 +23,21 @@ export default {
                 textBase: 'var(--text-dark)',
                 textMuted: 'var(--text-muted)',
                 borderBase: 'var(--border-color)',
-            }
+            },
+            animation: {
+                'float': 'float 10s infinite',
+                'gridMove': 'gridMove 20s linear infinite',
+            },
+            keyframes: {
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-20px)' },
+                },
+                gridMove: {
+                    '0%': { transform: 'perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px)' },
+                    '100%': { transform: 'perspective(500px) rotateX(60deg) translateY(0px) translateZ(-200px)' },
+                },
+            },
         },
     },
 
