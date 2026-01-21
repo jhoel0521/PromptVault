@@ -32,6 +32,16 @@ return new class extends Migration
             $table->string('session_driver')->default('file');
             $table->string('cache_store')->default('file');
             $table->string('queue_connection')->default('sync');
+            // Seguridad - Políticas de Acceso
+            $table->boolean('two_fa_enabled')->default(false)->comment('Autenticación 2FA');
+            $table->integer('session_timeout')->default(120)->comment('Timeout en minutos');
+            $table->integer('max_login_attempts')->default(5)->comment('Intentos fallidos permitidos');
+            $table->boolean('geo_blocking_enabled')->default(true)->comment('Bloqueo geográfico');
+            // Seguridad - Contraseñas
+            $table->integer('password_min_length')->default(12)->comment('Longitud mínima');
+            $table->integer('password_expiry_days')->default(90)->comment('Expiración en días');
+            $table->boolean('password_require_special_chars')->default(true)->comment('Requiere caracteres especiales');
+            $table->boolean('password_force_rotation')->default(false)->comment('Forzar renovación en próximo login');
             $table->timestamps();
         });
     }

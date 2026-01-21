@@ -31,15 +31,9 @@ class ConfiguracionesController extends Controller
      */
     public function seguridad()
     {
-        return view('configuraciones.seguridad');
-    }
+        $settings = AppSetting::getSettings();
 
-    /**
-     * Show the notifications settings page.
-     */
-    public function notificaciones()
-    {
-        return view('configuraciones.notificaciones');
+        return view('configuraciones.seguridad', compact('settings'));
     }
 
     /**
@@ -117,10 +111,24 @@ class ConfiguracionesController extends Controller
             'session_driver' => 'nullable|string|max:50',
             'cache_store' => 'nullable|string|max:50',
             'queue_connection' => 'nullable|string|max:50',
+            // Seguridad - Políticas de Acceso
+            'two_fa_enabled' => 'nullable|boolean',
+            'session_timeout' => 'nullable|integer|min:5|max:1440',
+            'max_login_attempts' => 'nullable|integer|min:1|max:20',
+            'geo_blocking_enabled' => 'nullable|boolean',
+            // Seguridad - Contraseñas
+            'password_min_length' => 'nullable|integer|min:8|max:32',
+            'password_expiry_days' => 'nullable|integer|min:1|max:365',
+            'password_require_special_chars' => 'nullable|boolean',
+            'password_force_rotation' => 'nullable|boolean',
         ]);
 
-        // Checkbox no enviado => false
+        // Procesar checkboxes (no enviados = false)
         $validated['maintenance_mode'] = $request->boolean('maintenance_mode');
+        $validated['two_fa_enabled'] = $request->boolean('two_fa_enabled');
+        $validated['geo_blocking_enabled'] = $request->boolean('geo_blocking_enabled');
+        $validated['password_require_special_chars'] = $request->boolean('password_require_special_chars');
+        $validated['password_force_rotation'] = $request->boolean('password_force_rotation');
 
         // Obtener o crear settings
         $settings = AppSetting::getSettings();
@@ -181,7 +189,6 @@ class ConfiguracionesController extends Controller
 
             // Redirigir con mensaje de éxito
             return back()->with('success', 'Backup generado exitosamente: '.$filename);
-
         } catch (\Exception $e) {
             return back()->with('error', 'Error al generar respaldo: '.$e->getMessage());
         }

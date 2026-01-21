@@ -28,11 +28,28 @@ class AppSetting extends Model
         'session_driver',
         'cache_store',
         'queue_connection',
+        // Seguridad
+        'two_fa_enabled',
+        'session_timeout',
+        'max_login_attempts',
+        'geo_blocking_enabled',
+        'password_min_length',
+        'password_expiry_days',
+        'password_require_special_chars',
+        'password_force_rotation',
     ];
 
     protected $casts = [
         'maintenance_mode' => 'boolean',
         'mail_port' => 'integer',
+        'two_fa_enabled' => 'boolean',
+        'session_timeout' => 'integer',
+        'max_login_attempts' => 'integer',
+        'geo_blocking_enabled' => 'boolean',
+        'password_min_length' => 'integer',
+        'password_expiry_days' => 'integer',
+        'password_require_special_chars' => 'boolean',
+        'password_force_rotation' => 'boolean',
     ];
 
     /**
@@ -62,6 +79,15 @@ class AppSetting extends Model
                 'session_driver' => env('SESSION_DRIVER', 'file'),
                 'cache_store' => env('CACHE_STORE', 'file'),
                 'queue_connection' => env('QUEUE_CONNECTION', 'sync'),
+                // Seguridad - Valores por defecto
+                'two_fa_enabled' => false,
+                'session_timeout' => 120,
+                'max_login_attempts' => 5,
+                'geo_blocking_enabled' => true,
+                'password_min_length' => 12,
+                'password_expiry_days' => 90,
+                'password_require_special_chars' => true,
+                'password_force_rotation' => false,
             ]
         );
     }

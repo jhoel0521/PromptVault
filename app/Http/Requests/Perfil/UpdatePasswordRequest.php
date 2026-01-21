@@ -2,11 +2,14 @@
 
 namespace App\Http\Requests\Perfil;
 
+use App\Http\Requests\Traits\ValidatePasswordPolicies;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UpdatePasswordRequest extends FormRequest
 {
+    use ValidatePasswordPolicies;
+
     public function authorize(): bool
     {
         return true;
@@ -14,20 +17,21 @@ class UpdatePasswordRequest extends FormRequest
 
     public function rules(): array
     {
+        $passwordRules = $this->getPasswordRules();
+
         return [
             'current_password' => 'required',
-            'new_password' => 'required|min:6|confirmed',
+            'new_password' => $passwordRules,
+            'new_password_confirmation' => 'required|string',
         ];
     }
 
     public function messages(): array
     {
-        return [
+        return array_merge($this->getPasswordMessages(), [
             'current_password.required' => 'La contraseña actual es obligatoria',
             'new_password.required' => 'La nueva contraseña es obligatoria',
-            'new_password.min' => 'La nueva contraseña debe tener al menos 6 caracteres',
-            'new_password.confirmed' => 'Las contraseñas no coinciden',
-        ];
+        ]);
     }
 
     /**
