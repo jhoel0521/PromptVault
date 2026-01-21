@@ -73,15 +73,17 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 
 ---
 
-## Resumen de Inventario
-- **65 archivos .blade.php** en `resources/views/` (35 procesados, 30 pendientes)
-  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 ✅ | Configuraciones: 7 ✅
-  - **Admin/Usuarios: 4 ✅ | Admin/Roles: 4 ✅ | Admin/Permisos: 4 ✅ COMPLETADOS** | Admin (otros): 6 pendientes
-  - Eliminados: dashboard.blade.php + 4 role components (5)
-- **11 archivos .css** restantes en `public/css/` (validado 20/01/2026)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (0), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = 25 eliminados
-- **15 archivos .js** restantes en `public/JavaScript/` (validado 20/01/2026)
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (0), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = 26 eliminados
+## Resumen de Inventario (Actualizado 21/01/2026)
+- **65 archivos .blade.php** en `resources/views/` (46 procesados, 19 pendientes)
+  - ✅ Auth: 3 | ✅ Prompts: 6 | ✅ Calendario: 4 | ✅ Home: 1 | ✅ Perfil: 4 | ✅ Components: 8 | ✅ Configuraciones: 7
+  - ✅ **Admin/Usuarios: 4** | ✅ **Admin/Roles: 4** | ✅ **Admin/Permisos: 4** | ⚠️ Admin (otros): 6 pendientes
+  - ❌ Eliminados: dashboard.blade.php + 4 role components (5 eliminados)
+- **11 archivos .css** restantes en `public/css/` (validado 21/01/2026)
+  - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = **26 eliminados**
+  - ⚠️ Restantes: reportes (1), buscador (1), calendario (1), filters (1), errors (3), modals (3), paginacion (1)
+- **15 archivos .js** restantes en `public/JavaScript/` (validado 21/01/2026)
+  - ❌ Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = **27 eliminados**
+  - ⚠️ Restantes: components (5), reportes (1), buscador (1), calendario (1), filters (1), errors (3), modals (3)
 
 ---
 
@@ -139,14 +141,14 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/perfil/edit.blade.php` ✅ MIGRADO (formulario edición + avatar upload + sidebar sticky)
 - `resources/views/perfil/security.blade.php` ✅ MIGRADO (cambiar contraseña + recomendaciones seguridad)
 
-### 1.6 Configuraciones Module (7 archivos) - ⚠️ EN PROGRESO
-- `resources/views/configuraciones/index.blade.php` ⚠️ PENDIENTE MIGRACIÓN
-- `resources/views/configuraciones/general.blade.php` ⚠️ PENDIENTE MIGRACIÓN
-- `resources/views/configuraciones/sistema.blade.php` ⚠️ PENDIENTE MIGRACIÓN
-- `resources/views/configuraciones/seguridad.blade.php` ⚠️ PENDIENTE MIGRACIÓN
-- `resources/views/configuraciones/apariencia.blade.php` ⚠️ PENDIENTE MIGRACIÓN
-- `resources/views/configuraciones/notificaciones.blade.php` ⚠️ PENDIENTE MIGRACIÓN
-- `resources/views/configuraciones/respaldos.blade.php` ⚠️ PENDIENTE MIGRACIÓN
+### 1.6 Configuraciones Module (7 archivos) ✅ COMPLETADO
+- `resources/views/configuraciones/index.blade.php` ✅ MIGRADO (layout Alpine tabs)
+- `resources/views/configuraciones/general.blade.php` ✅ MIGRADO (componente @include)
+- `resources/views/configuraciones/sistema.blade.php` ✅ MIGRADO (componente @include)
+- `resources/views/configuraciones/seguridad.blade.php` ✅ MIGRADO (componente @include)
+- `resources/views/configuraciones/apariencia.blade.php` ✅ MIGRADO (componente @include)
+- `resources/views/configuraciones/notificaciones.blade.php` ✅ MIGRADO (componente @include)
+- `resources/views/configuraciones/respaldos.blade.php` ✅ MIGRADO (componente @include)
 **Nota:** Link agregado en sidebar (sección Sistema, solo admin). CSS/JS eliminados en commit 5498367.
 
 ### 1.7 Components ✅ FASE COMPLETA
@@ -219,7 +221,7 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 
 ---
 
-## 2. INVENTARIO COMPLETO - ARCHIVOS CSS (26 restantes)
+## 2. INVENTARIO COMPLETO - ARCHIVOS CSS (11 restantes)
 
 ### 2.1 Auth Styles (4 archivos) ✅ ELIMINADOS
 - `public/css/auth/auth.css` ❌ ELIMINADO
@@ -227,18 +229,18 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/auth/registro.css` (1832 líneas) ❌ ELIMINADO
 - `public/css/auth/recuperar.css` ❌ ELIMINADO
 
-### 2.2 Admin Styles (16 archivos) PENDIENTES MIGRACIÓN
-#### Usuarios
-- `public/css/admin/usuarios/index.css`
-- `public/css/admin/usuarios/create.css`
-- `public/css/admin/usuarios/show.css`
-- `public/css/admin/usuarios/edit.css`
+### 2.2 Admin Styles (1 archivo restante) - 12 eliminados
+#### Usuarios (4 archivos) ✅ ELIMINADOS
+- `public/css/admin/usuarios/index.css` ❌ ELIMINADO
+- `public/css/admin/usuarios/create.css` ❌ ELIMINADO
+- `public/css/admin/usuarios/show.css` ❌ ELIMINADO
+- `public/css/admin/usuarios/edit.css` ❌ ELIMINADO
 
-#### Roles
-- `public/css/admin/roles/index.css`
-- `public/css/admin/roles/create.css`
-- `public/css/admin/roles/show.css`
-- `public/css/admin/roles/edit.css`
+#### Roles (4 archivos) ✅ ELIMINADOS
+- `public/css/admin/roles/index.css` ❌ ELIMINADO
+- `public/css/admin/roles/create.css` ❌ ELIMINADO
+- `public/css/admin/roles/show.css` ❌ ELIMINADO
+- `public/css/admin/roles/edit.css` ❌ ELIMINADO
 
 #### Permisos (4 archivos) ✅ ELIMINADOS
 - `public/css/admin/permisos/index.css` ❌ ELIMINADO
@@ -246,8 +248,8 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/admin/permisos/show.css` ❌ ELIMINADO
 - `public/css/admin/permisos/edit.css` ❌ ELIMINADO
 
-#### Reportes
-- `public/css/admin/reportes/index.css`
+#### Reportes (1 archivo restante)
+- `public/css/admin/reportes/index.css` ⚠️ PENDIENTE ELIMINAR
 
 ### 2.3 Component Styles (4 archivos) ✅ ELIMINADOS
 - `public/css/components/header.css` ❌ ELIMINADO
@@ -255,46 +257,46 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/components/sidebar.css` ❌ ELIMINADO
 - `public/css/components/loading.css` ❌ ELIMINADO
 
-### 2.4 Module Styles (6 archivos restantes) - 2 eliminados
+### 2.4 Module Styles (3 archivos restantes) - 5 eliminados
 - `public/css/dashboard/dashboard.css` ❌ ELIMINADO
 - `public/css/layouts/loading.css` ❌ ELIMINADO
-- `public/css/calendario/index.css` (pendiente eliminar)
-- `public/css/buscador/index.css`
-- `public/css/configuraciones/configuraciones.css`
-- `public/css/perfil/index.css`
-- `public/css/perfil/edit.css`
-- `public/css/filters/filtersUsuario.css`
+- `public/css/configuraciones/configuraciones.css` ❌ ELIMINADO
+- `public/css/perfil/index.css` ❌ ELIMINADO
+- `public/css/perfil/edit.css` ❌ ELIMINADO
+- `public/css/calendario/index.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/buscador/index.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/filters/filtersUsuario.css` ⚠️ PENDIENTE ELIMINAR
 
-### 2.5 Utilities (6 archivos) PENDIENTES
-- `public/css/pages/paginacion.css`
-- `public/css/errors/403.css`
-- `public/css/errors/404.css`
-- `public/css/errors/500.css`
-- `public/css/mod/advertencia.css`
-- `public/css/mod/confirmar.css`
-- `public/css/mod/eliminar.css`
+### 2.5 Utilities (7 archivos restantes) - PENDIENTES MIGRACIÓN
+- `public/css/pages/paginacion.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/errors/403.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/errors/404.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/errors/500.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/mod/advertencia.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/mod/confirmar.css` ⚠️ PENDIENTE ELIMINAR
+- `public/css/mod/eliminar.css` ⚠️ PENDIENTE ELIMINAR
 
 ---
 
-## 3. INVENTARIO COMPLETO - ARCHIVOS JAVASCRIPT (29 restantes)
+## 3. INVENTARIO COMPLETO - ARCHIVOS JAVASCRIPT (15 restantes)
 
 ### 3.1 Auth Scripts (3 archivos) ✅ ELIMINADOS
 - `public/JavaScript/auth/login.js` ❌ ELIMINADO
 - `public/JavaScript/auth/registro.js` ❌ ELIMINADO
 - `public/JavaScript/auth/recuperar.js` ❌ ELIMINADO
 
-### 3.2 Admin Scripts (16 archivos) PENDIENTES MIGRACIÓN
-#### Usuarios
-- `public/JavaScript/admin/usuarios/index.js`
-- `public/JavaScript/admin/usuarios/create.js`
-- `public/JavaScript/admin/usuarios/show.js`
-- `public/JavaScript/admin/usuarios/edit.js`
+### 3.2 Admin Scripts (1 archivo restante) - 12 eliminados
+#### Usuarios (4 archivos) ✅ ELIMINADOS
+- `public/JavaScript/admin/usuarios/index.js` ❌ ELIMINADO
+- `public/JavaScript/admin/usuarios/create.js` ❌ ELIMINADO
+- `public/JavaScript/admin/usuarios/show.js` ❌ ELIMINADO
+- `public/JavaScript/admin/usuarios/edit.js` ❌ ELIMINADO
 
-#### Roles
-- `public/JavaScript/admin/roles/index.js`
-- `public/JavaScript/admin/roles/create.js`
-- `public/JavaScript/admin/roles/show.js`
-- `public/JavaScript/admin/roles/edit.js`
+#### Roles (4 archivos) ✅ ELIMINADOS
+- `public/JavaScript/admin/roles/index.js` ❌ ELIMINADO
+- `public/JavaScript/admin/roles/create.js` ❌ ELIMINADO
+- `public/JavaScript/admin/roles/show.js` ❌ ELIMINADO
+- `public/JavaScript/admin/roles/edit.js` ❌ ELIMINADO
 
 #### Permisos (4 archivos) ✅ ELIMINADOS
 - `public/JavaScript/admin/permisos/index.js` ❌ ELIMINADO
@@ -302,15 +304,15 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/JavaScript/admin/permisos/show.js` ❌ ELIMINADO
 - `public/JavaScript/admin/permisos/edit.js` ❌ ELIMINADO
 
-#### Reportes
-- `public/JavaScript/admin/reportes/index.js`
+#### Reportes (1 archivo restante)
+- `public/JavaScript/admin/reportes/index.js` ⚠️ PENDIENTE ELIMINAR
 
-### 3.3 Component Scripts (4 archivos) - 1 eliminado, 4 pendientes
-- `public/JavaScript/components/header.js`
-- `public/JavaScript/components/footer.js`
-- `public/JavaScript/components/sidebar.js`
-- `public/JavaScript/components/loading.js`
-- `public/JavaScript/components/dashboard.js`
+### 3.3 Component Scripts (5 archivos restantes) - 1 eliminado
+- `public/JavaScript/components/header.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/components/footer.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/components/sidebar.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/components/loading.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/components/dashboard.js` ⚠️ PENDIENTE ELIMINAR
 - `public/JavaScript/components/chatbot.js` ❌ ELIMINADO (migrado a Alpine)
 
 ### 3.4 Layout Scripts (4 archivos) ✅ ELIMINADOS
@@ -325,20 +327,20 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/JavaScript/dashboard/collaborator.js` ❌ ELIMINADO
 - `public/JavaScript/dashboard/guest.js` ❌ ELIMINADO
 
-### 3.6 Module Scripts (5 archivos) PENDIENTES
-- `public/JavaScript/calendario/index.js` (pendiente eliminar)
-- `public/JavaScript/buscador/index.js`
-- `public/JavaScript/configuraciones/configuraciones.js`
-- `public/JavaScript/perfil/index.js`
-- `public/JavaScript/filters/filtersUsuario.js`
+### 3.6 Module Scripts (2 archivos restantes) - 3 eliminados
+- `public/JavaScript/configuraciones/configuraciones.js` ❌ ELIMINADO
+- `public/JavaScript/perfil/index.js` ❌ ELIMINADO
+- `public/JavaScript/calendario/index.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/buscador/index.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/filters/filtersUsuario.js` ⚠️ PENDIENTE ELIMINAR
 
-### 3.7 Utilities (6 archivos) PENDIENTES
-- `public/JavaScript/errors/403.js`
-- `public/JavaScript/errors/404.js`
-- `public/JavaScript/errors/500.js`
-- `public/JavaScript/mod/advertencia.js`
-- `public/JavaScript/mod/confirmar.js`
-- `public/JavaScript/mod/eliminar.js`
+### 3.7 Utilities (6 archivos restantes) - PENDIENTES MIGRACIÓN
+- `public/JavaScript/errors/403.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/errors/404.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/errors/500.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/mod/advertencia.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/mod/confirmar.js` ⚠️ PENDIENTE ELIMINAR
+- `public/JavaScript/mod/eliminar.js` ⚠️ PENDIENTE ELIMINAR
 
 ---
 
@@ -502,9 +504,9 @@ http://127.0.0.1:8000/admin/permisos
 
 ---
 
-## 8. REGISTRO DE PROGRESO - BITÁCORA
+## 8. REGISTRO DE PROGRESO - BITÁCORA (Actualizado 21/01/2026)
 
-### Módulos completados: 9/14
+### Módulos completados: 10/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
@@ -515,17 +517,21 @@ http://127.0.0.1:8000/admin/permisos
 - [x] Admin/Usuarios ✅
 - [x] Admin/Roles ✅
 - [x] Admin/Permisos ✅
-- [ ] Admin/Reportes
-- [ ] Errors/Modals/Utilities
+- [ ] Admin/Reportes (3 vistas)
+- [ ] Admin/Backups (1 vista)
+- [ ] Errors/Modals/Pages/Filters/Buscador (11 vistas)
 
-### Archivos validados: 35/65 total (53.8%)
-- Blade: 35/65 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅)
+### Archivos validados: 46/65 total (70.8%)
+- **Blade: 46/65 procesados** (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅)
   - Components: 8 archivos layout migrados (header, sidebar, footer, loading, etc.)
-  - Eliminados: 5 (dashboard.blade.php + 4 role components)
-  - Total real: 65 archivos blade en proyecto (validado 20/01/2026)
-- CSS: 21 eliminados → 15 restantes (validado 20/01/2026)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), admin/usuarios (4), admin/roles (4)
-  - Pendientes migrar: 15 archivos
+  - ❌ Eliminados: 5 (dashboard.blade.php + 4 role components)
+  - ⚠️ Pendientes: 19 vistas (Reportes: 3, Backups: 1, Errors: 3, Modals: 3, Pages: 3, Filters: 1, Buscador: 1, otros: 4)
+- **CSS: 26 eliminados → 11 restantes** (validado 21/01/2026)
+  - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4)
+  - ⚠️ Pendientes eliminar: 11 archivos (reportes, buscador, calendario, filters, errors, modals, paginacion)
+- **JS: 27 eliminados → 15 restantes** (validado 21/01/2026)
+  - ❌ Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4)
+  - ⚠️ Pendientes eliminar: 15 archivos (components: 5, reportes, buscador, calendario, filters, errors, modals)
 - JS: 22 eliminados → 19 restantes (validado 20/01/2026)
   - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), admin/usuarios (4), admin/roles (4)
   - Pendientes migrar: 19 archivos
