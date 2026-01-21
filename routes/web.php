@@ -61,7 +61,6 @@ Route::middleware('auth')->group(function () {
     // Buscador
     Route::get('buscador', [BuscadorController::class, 'search'])->name('buscador.index');
 
-    
     // Administración (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
         // Configuraciones
@@ -78,6 +77,13 @@ Route::middleware('auth')->group(function () {
         Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);
         Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
         Route::resource('permisos', \App\Http\Controllers\Admin\PermisosController::class);
+
+        // Reportes
+        Route::prefix('reportes')->name('reportes.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\Admin\ReportesController::class, 'index'])->name('index');
+            Route::get('/prompts', [\App\Http\Controllers\Admin\ReportesController::class, 'prompts'])->name('prompts');
+            Route::get('/eventos', [\App\Http\Controllers\Admin\ReportesController::class, 'eventos'])->name('eventos');
+        });
     });
 });
 

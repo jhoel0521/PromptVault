@@ -54,17 +54,22 @@ class DatabaseSeeder extends Seeder
             VersionSeeder::class,
         ]);
 
-        // 7. Crear accesos compartidos (Req 3: compartir tipo Google Docs)
+        // 7. Crear eventos del calendario
+        $this->call([
+            EventoSeeder::class,
+        ]);
+
+        // 8. Crear accesos compartidos (Req 3: compartir tipo Google Docs)
         $this->call([
             AccesoCompartidoSeeder::class,
         ]);
 
-        // 8. Crear comentarios (Req 4)
+        // 9. Crear comentarios (Req 4)
         $this->call([
             ComentarioSeeder::class,
         ]);
 
-        // 9. Crear calificaciones (Req 5: estrellas)
+        // 10. Crear calificaciones (Req 5: estrellas)
         $this->call([
             CalificacionSeeder::class,
         ]);

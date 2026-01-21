@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('tipo')->default('personal');
             $table->string('ubicacion')->nullable();
             $table->boolean('todo_el_dia')->default(false);
+            $table->boolean('completado')->default(false);
             $table->string('color')->nullable();
             $table->timestamps();
         });

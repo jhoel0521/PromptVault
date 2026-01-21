@@ -90,6 +90,11 @@
                     </svg>
                 </button>
                 <div x-show="open.admin" x-transition class="space-y-1">
+                    <a href="{{ route('admin.reportes.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('admin.reportes.*') ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-200' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
+                        <i class="fas fa-chart-pie w-5 text-center"></i>
+                        <span>Reportes</span>
+                    </a>
                     <a href="{{ route('admin.configuraciones.index') }}"
                         class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('admin.configuraciones.*') ? 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-200' : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

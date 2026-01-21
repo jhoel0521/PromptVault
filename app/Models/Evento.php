@@ -17,6 +17,7 @@ class Evento extends Model
         'tipo',
         'ubicacion',
         'todo_el_dia',
+        'completado',
         'color',
     ];
 
@@ -24,6 +25,7 @@ class Evento extends Model
         'fecha_inicio' => 'datetime',
         'fecha_fin' => 'datetime',
         'todo_el_dia' => 'boolean',
+        'completado' => 'boolean',
         'tipo' => TipoEvento::class,
     ];
 

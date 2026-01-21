@@ -74,16 +74,16 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario (Actualizado 21/01/2026)
-- **65 archivos .blade.php** en `resources/views/` (46 procesados, 19 pendientes)
+- **65 archivos .blade.php** en `resources/views/` (49 procesados, 16 pendientes)
   - ✅ Auth: 3 | ✅ Prompts: 6 | ✅ Calendario: 4 | ✅ Home: 1 | ✅ Perfil: 4 | ✅ Components: 8 | ✅ Configuraciones: 7
-  - ✅ **Admin/Usuarios: 4** | ✅ **Admin/Roles: 4** | ✅ **Admin/Permisos: 4** | ⚠️ Admin (otros): 6 pendientes
-  - ❌ Eliminados: dashboard.blade.php + 4 role components (5 eliminados)
-- **11 archivos .css** restantes en `public/css/` (validado 21/01/2026)
-  - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = **26 eliminados**
-  - ⚠️ Restantes: reportes (1), buscador (1), calendario (1), filters (1), errors (3), modals (3), paginacion (1)
-- **15 archivos .js** restantes en `public/JavaScript/` (validado 21/01/2026)
-  - ❌ Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = **27 eliminados**
-  - ⚠️ Restantes: components (5), reportes (1), buscador (1), calendario (1), filters (1), errors (3), modals (3)
+  - ✅ **Admin/Usuarios: 4** | ✅ **Admin/Roles: 4** | ✅ **Admin/Permisos: 4** | ✅ **Admin/Reportes: 3** | ⚠️ Admin/Backups: 1 pendiente
+  - ❌ Eliminados: dashboard.blade.php + 4 role components + academicos.blade.php + asistencias.blade.php (7 eliminados)
+- **10 archivos .css** restantes en `public/css/` (validado 21/01/2026)
+  - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4), admin/reportes (1)** = **27 eliminados**
+  - ⚠️ Restantes: buscador (1), calendario (1), filters (1), errors (3), modals (3), paginacion (1)
+- **14 archivos .js** restantes en `public/JavaScript/` (validado 21/01/2026)
+  - ❌ Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), **admin/usuarios (4), admin/roles (4), admin/permisos (4), admin/reportes (1)** = **28 eliminados**
+  - ⚠️ Restantes: components (5), buscador (1), calendario (1), filters (1), errors (3), modals (3)
 
 ---
 
@@ -113,10 +113,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/admin/permisos/show.blade.php` ✅ MIGRADO
 - `resources/views/admin/permisos/edit.blade.php` ✅ MIGRADO
 
-#### Reportes
-- `resources/views/admin/reportes/index.blade.php`
-- `resources/views/admin/reportes/academicos.blade.php`
-- `resources/views/admin/reportes/asistencias.blade.php`
+#### Reportes (3 archivos) ✅ COMPLETADO
+- `resources/views/admin/reportes/index.blade.php` ✅ MIGRADO (dashboard reportes con stats cards)
+- `resources/views/admin/reportes/prompts.blade.php` ✅ MIGRADO (Chart.js: prompts por mes, etiquetas, versiones, visibilidad)
+- `resources/views/admin/reportes/eventos.blade.php` ✅ MIGRADO (Chart.js: eventos por mes, tipo, completados vs pendientes)
+**Nota:** Vistas antiguas `academicos.blade.php` + `asistencias.blade.php` eliminadas (no aplicables a PromptVault).
 
 #### Backups
 - `resources/views/admin/backups/index.blade.php`
@@ -248,8 +249,8 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/admin/permisos/show.css` ❌ ELIMINADO
 - `public/css/admin/permisos/edit.css` ❌ ELIMINADO
 
-#### Reportes (1 archivo restante)
-- `public/css/admin/reportes/index.css` ⚠️ PENDIENTE ELIMINAR
+#### Reportes (1 archivo) ✅ ELIMINADO
+- `public/css/admin/reportes/index.css` ❌ ELIMINADO
 
 ### 2.3 Component Styles (4 archivos) ✅ ELIMINADOS
 - `public/css/components/header.css` ❌ ELIMINADO
@@ -304,8 +305,8 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/JavaScript/admin/permisos/show.js` ❌ ELIMINADO
 - `public/JavaScript/admin/permisos/edit.js` ❌ ELIMINADO
 
-#### Reportes (1 archivo restante)
-- `public/JavaScript/admin/reportes/index.js` ⚠️ PENDIENTE ELIMINAR
+#### Reportes (1 archivo) ✅ ELIMINADO
+- `public/JavaScript/admin/reportes/index.js` ❌ ELIMINADO
 
 ### 3.3 Component Scripts (5 archivos restantes) - 1 eliminado
 - `public/JavaScript/components/header.js` ⚠️ PENDIENTE ELIMINAR
@@ -418,7 +419,16 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] HTML5 datalist autocomplete módulo/acción
 - [x] Grid layouts 3 columnas, help cards sidebar
 
-- [ ] Admin/Reportes: 3 vistas + CSS + JS
+#### 3.4 Admin/Reportes ✅ COMPLETADO
+- [x] index, prompts, eventos (3 vistas)
+- [x] CSS/JS eliminados (1 archivo cada uno)
+- [x] Chart.js CDN para visualización de datos
+- [x] Stats cards: total prompts, eventos, usuarios, compartidos
+- [x] Gráficas: prompts por mes/etiqueta, eventos por tipo/mes
+- [x] Migración eventos: agregado campo `completado` (boolean)
+- [x] Seeders: PromptSeeder + EventoSeeder con datos realistas
+- [x] Link Reportes en sidebar (sección Sistema, solo admin)
+
 - [ ] Admin/Backups: 1 vista
 
 ### FASE 4: Módulos Secundarios (Prioridad Baja)
@@ -506,7 +516,7 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA (Actualizado 21/01/2026)
 
-### Módulos completados: 10/14
+### Módulos completados: 11/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
@@ -517,21 +527,21 @@ http://127.0.0.1:8000/admin/permisos
 - [x] Admin/Usuarios ✅
 - [x] Admin/Roles ✅
 - [x] Admin/Permisos ✅
-- [ ] Admin/Reportes (3 vistas)
+- [x] Admin/Reportes ✅
 - [ ] Admin/Backups (1 vista)
 - [ ] Errors/Modals/Pages/Filters/Buscador (11 vistas)
 
-### Archivos validados: 46/65 total (70.8%)
-- **Blade: 46/65 procesados** (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅)
+### Archivos validados: 49/65 total (75.4%)
+- **Blade: 49/65 procesados** (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅, Admin/Reportes: 3 ✅)
   - Components: 8 archivos layout migrados (header, sidebar, footer, loading, etc.)
-  - ❌ Eliminados: 5 (dashboard.blade.php + 4 role components)
-  - ⚠️ Pendientes: 19 vistas (Reportes: 3, Backups: 1, Errors: 3, Modals: 3, Pages: 3, Filters: 1, Buscador: 1, otros: 4)
-- **CSS: 26 eliminados → 11 restantes** (validado 21/01/2026)
-  - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4)
-  - ⚠️ Pendientes eliminar: 11 archivos (reportes, buscador, calendario, filters, errors, modals, paginacion)
-- **JS: 27 eliminados → 15 restantes** (validado 21/01/2026)
-  - ❌ Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4)
-  - ⚠️ Pendientes eliminar: 15 archivos (components: 5, reportes, buscador, calendario, filters, errors, modals)
+  - ❌ Eliminados: 7 (dashboard.blade.php + 4 role components + academicos + asistencias)
+  - ⚠️ Pendientes: 16 vistas (Backups: 1, Errors: 3, Modals: 3, Pages: 3, Filters: 1, Buscador: 1, otros: 4)
+- **CSS: 27 eliminados → 10 restantes** (validado 21/01/2026)
+  - ❌ Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4), admin/reportes (1)
+  - ⚠️ Pendientes eliminar: 10 archivos (buscador, calendario, filters, errors: 3, modals: 3, paginacion)
+- **JS: 28 eliminados → 14 restantes** (validado 21/01/2026)
+  - ❌ Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), admin/usuarios (4), admin/roles (4), admin/permisos (4), admin/reportes (1)
+  - ⚠️ Pendientes eliminar: 14 archivos (components: 5, buscador, calendario, filters, errors: 3, modals: 3)
 - JS: 22 eliminados → 19 restantes (validado 20/01/2026)
   - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), admin/usuarios (4), admin/roles (4)
   - Pendientes migrar: 19 archivos
@@ -2038,6 +2048,101 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
   - Badges indigo-100/900 para módulos
   - Empty state roles asignados (icon unlink)
   - Gradientes temáticos: indigo/cyan (index), teal/green (create), cyan/blue (show), orange/amber (edit)
+
+---
+
+### 🔄 FASE 3.4: Admin/Reportes - ✅ COMPLETADO (21/01/2026)
+
+#### Cambios Backend:
+- **Migración:** `2026_01_20_192849_create_eventos_table.php` → agregado campo `completado` (boolean, default false)
+- **Modelo:** `App\Models\Evento` → cast `completado` como boolean
+- **Controller:** `App\Http\Controllers\Admin\ReportesController` creado con 3 métodos:
+  - `index()`: Dashboard reportes con stats cards (prompts, eventos, usuarios, compartidos)
+  - `prompts()`: Análisis prompts (etiquetas, versiones, visibilidad, top 10)
+  - `eventos()`: Análisis eventos (completados, tipo, distribución mensual)
+- **Seeders:** Creados `PromptSeeder` + `EventoSeeder` con datos realistas:
+  - 10 prompts con etiquetas variadas (Marketing, Código, Diseño, SEO, etc.)
+  - 5-12 versiones aleatorias por prompt
+  - 12 eventos con tipos variados (reunión, tarea, recordatorio)
+  - Campo `completado` random (60% completados)
+- **Rutas:** Agregadas en `web.php`:
+  - `GET /admin/reportes` → index
+  - `GET /admin/reportes/prompts` → prompts
+  - `GET /admin/reportes/eventos` → eventos
+
+#### Cambios Frontend:
+- **index.blade.php:** Dashboard reportes (195 líneas)
+  - 4 stats cards: Total Prompts, Eventos, Usuarios, Compartidos
+  - 6 report cards: Prompts (purple), Eventos (blue), Usuarios (green), AI Groq (rose), Compartidos (amber), Sistema (slate)
+  - Botón imprimir (window.print())
+  - Link a reportes específicos
+  - 3 cards marcados "Próximamente" (AI, Compartidos, Sistema)
+- **prompts.blade.php:** Análisis prompts con Chart.js (265 líneas)
+  - Chart.js 4.4.1 CDN
+  - 4 stats cards: Total Prompts, Etiquetas, Versiones, Compartidos
+  - 4 gráficas interactivas:
+    - Line chart: Prompts por mes (últimos 6 meses)
+    - Bar chart: Top 10 etiquetas más usadas
+    - Bar horizontal: Distribución versiones por prompt
+    - Doughnut chart: Privados vs Compartidos
+  - Tabla: Top 10 prompts más activos (versiones, compartidos, última edición)
+  - Dark mode compatible (colores adaptativos)
+- **eventos.blade.php:** Análisis eventos con Chart.js (245 líneas)
+  - Chart.js 4.4.1 CDN
+  - 4 stats cards: Total Eventos, Completados, Pendientes, Este Mes
+  - 3 gráficas interactivas:
+    - Line chart: Eventos por mes (últimos 6 meses)
+    - Bar chart: Eventos por tipo (reunión, tarea, recordatorio, deadline)
+    - Doughnut chart: Completados (60%) vs Pendientes (40%)
+  - Dark mode compatible
+- **sidebar.blade.php:** Agregado link Reportes (sección Sistema, solo admin)
+
+#### Archivos Eliminados:
+- ❌ `resources/views/admin/reportes/academicos.blade.php` (plantilla académica obsoleta)
+- ❌ `resources/views/admin/reportes/asistencias.blade.php` (plantilla académica obsoleta)
+- ❌ `public/css/admin/reportes/index.css` (migrado a Tailwind)
+- ❌ `public/JavaScript/admin/reportes/index.js` (migrado a Alpine/Chart.js)
+
+#### Problemas Resueltos:
+1. **Namespace incorrecto** → Movido ReportesController de `app/Http/Controllers` a `app/Http/Controllers/Admin`
+2. **Modelo Calendario no existe** → Corregido a `App\Models\Evento`
+3. **Falta import Str** → Agregado `use Illuminate\Support\Str;`
+4. **Campo es_publico no existe** → Corregido a `visibilidad = 'publico'`
+5. **Campo completado no existe** → Agregado migración con campo `completado` (boolean)
+6. **Enum TipoEvento en ucfirst()** → Corregido a `ucfirst($t->value)`
+7. **Próximos eventos en reporte** → Eliminado (no aplicable para admin ver eventos de otros)
+8. **Reportes académicos desalineados** → Eliminadas vistas obsoletas, creados reportes relevantes a PromptVault
+
+#### Validación:
+- ✅ `/admin/reportes` renderiza sin errores (stats cards + 6 report cards)
+- ✅ `/admin/reportes/prompts` renderiza con Chart.js (4 gráficas + tabla top 10)
+- ✅ `/admin/reportes/eventos` renderiza con Chart.js (3 gráficas)
+- ✅ Dark mode funciona en todas las gráficas (colores adaptativos)
+- ✅ Link "Reportes" visible en sidebar (solo admin)
+- ✅ Migración `php artisan migrate:fresh --seed` exitosa
+- ✅ PromptSeeder crea 10 prompts con 5-12 versiones
+- ✅ EventoSeeder crea 12 eventos con campo `completado`
+- ✅ No hay errores en consola
+
+#### Total de Cambios Fase 3.4:
+- **Vistas migradas:** 3 archivos (index, prompts, eventos)
+- **Vistas eliminadas:** 2 archivos (academicos, asistencias)
+- **Total procesados:** 49/65 archivos Blade (75.4%)
+- **CSS eliminados:** 1 archivo admin/reportes
+- **JS eliminados:** 1 archivo admin/reportes
+- **CSS restantes:** 10 archivos (validado 21/01/2026)
+- **JS restantes:** 14 archivos (validado 21/01/2026)
+- **Features agregadas:**
+  - Chart.js 4.4.1 CDN para visualización de datos
+  - 4 stats cards: prompts, eventos, usuarios, compartidos
+  - 7 gráficas interactivas: line (2), bar (2), bar horizontal (1), doughnut (2)
+  - Dark mode compatible en todas las gráficas
+  - Campo `completado` en eventos (migración + seeder)
+  - Seeders con datos realistas (10 prompts + 12 eventos)
+  - Link Reportes en sidebar (sección Sistema, solo admin)
+  - Dashboard reportes con 6 report cards (3 activos, 3 próximamente)
+  - Tabla top 10 prompts más activos (versiones + compartidos)
+  - Gradientes temáticos: blue/indigo (index), purple (prompts), blue (eventos)
   - Dark mode completo: dark:bg-slate-900, dark:text-white, dark:border-slate-700
   - Links roles asignados: arrow-right a route('admin.roles.show')
   - Formularios con @error validation todos los campos
