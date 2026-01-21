@@ -52,14 +52,14 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 - [x] Priorizar orden de refactorización por impacto
 
 ### 13. ConfiguracionesController → BackupService + ConfigurationService (CRÍTICO)
-- [ ] Crear `BackupServiceInterface` en `app/Contracts/Services`
-- [ ] Implementar `BackupService` en `app/Services` (extraer exec() mysqldump seguro)
-- [ ] Crear `ConfigurationServiceInterface` en `app/Contracts/Services`
-- [ ] Implementar `ConfigurationService` en `app/Services` (manejar AppSetting CRUD)
-- [ ] Refactorizar `ConfiguracionesController`: inyectar ambos servicios
-- [ ] Eliminar lógica filesystem directo (scandir, filesize, filemtime)
-- [ ] Validar que controlador solo coordine vistas y servicios
-- [ ] **Razón**: ⚠️ Código exec() es riesgo seguridad, 298 LOC, 6 responsabilidades
+- [x] Crear `BackupServiceInterface` en `app/Contracts/Services`
+- [x] Implementar `BackupService` en `app/Services` (extraer exec() mysqldump seguro)
+- [x] Crear `ConfigurationServiceInterface` en `app/Contracts/Services`
+- [x] Implementar `ConfigurationService` en `app/Services` (manejar AppSetting CRUD)
+- [x] Refactorizar `ConfiguracionesController`: inyectar ambos servicios
+- [x] Eliminar lógica filesystem directo (scandir, filesize, filemtime)
+- [x] Validar que controlador solo coordine vistas y servicios
+- [x] **Razón**: ⚠️ Código exec() es riesgo seguridad, 298 LOC, 6 responsabilidades
 
 ### 14. PromptController → Extraer CalificacionService (CRÍTICO)
 - [ ] Crear `CalificacionServiceInterface` en `app/Contracts/Services`
@@ -144,7 +144,8 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 - 21/01/2026: Toolbar de configuraciones parametrizado con variables .env (versión, motor BD, estado). Se eliminaron vistas legacy `resources/views/configuraciones/index.blade.php` y se dejaron banners "Próximamente" en Apariencia, Notificaciones y Sistema. Se pausa el resto de tareas de configuración (9-11) por decisión del cliente.
 - 21/01/2026: Corregida persistencia de tema claro/oscuro unificando clave `theme` en localStorage y aplicando clase `dark` en html/body. Se eliminó flicker con pre-carga en `<head>`.
-- 21/01/2026: **Auditoría SOLID completada** - Analizados 10 controladores (1,417 LOC, 65 métodos). Identificadas violaciones: 7/10 sin servicios, 3 God Objects (>200 LOC), 6 con queries directos. Prioridad crítica: ConfiguracionesController (riesgo seguridad exec()) y PromptController (282 LOC). Documentación completa en `docs/auditoria-solid-controladores.md`.
+- 21/01/2026: **Auditoría SOLID completada** - Analizados 10 controladores (1,417 LOC, 65 métodos). Identificadas violaciones: 7/10 sin servicios, 3 God Objects (ConfiguracionesController 298 LOC, PromptController 282 LOC, ReportesController 171 LOC). Prioridad: Tareas 13-21 ordenadas por riesgo crítico → alto → medio → bajo.
+- 21/01/2026: **Tarea 13 completada** - Refactorizado ConfiguracionesController (298→78 LOC, -73% reducción). Creados BackupService y ConfigurationService con interfaces. Eliminado código exec() directo, queries a AppSetting, y operaciones filesystem del controlador. Registrados bindings en AppServiceProvider. Controlador ahora solo coordina vistas y servicios.
 
 ---
 

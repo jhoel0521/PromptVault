@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Contracts\Services\BackupServiceInterface;
+use App\Contracts\Services\ConfigurationServiceInterface;
+use App\Services\BackupService;
+use App\Services\ConfigurationService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Bind BackupService
+        $this->app->bind(BackupServiceInterface::class, BackupService::class);
+
+        // Bind ConfigurationService
+        $this->app->bind(ConfigurationServiceInterface::class, ConfigurationService::class);
     }
 
     /**
