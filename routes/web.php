@@ -61,22 +61,23 @@ Route::middleware('auth')->group(function () {
     // Buscador
     Route::get('buscador', [BuscadorController::class, 'search'])->name('buscador.index');
 
-    // Configuraciones
-    Route::prefix('configuraciones')->name('configuraciones.')->group(function () {
-        Route::get('/', [ConfiguracionesController::class, 'index'])->name('index');
-        Route::get('/general', [ConfiguracionesController::class, 'general'])->name('general');
-        Route::get('/seguridad', [ConfiguracionesController::class, 'seguridad'])->name('seguridad');
-        Route::get('/notificaciones', [ConfiguracionesController::class, 'notificaciones'])->name('notificaciones');
-        Route::get('/apariencia', [ConfiguracionesController::class, 'apariencia'])->name('apariencia');
-        Route::get('/sistema', [ConfiguracionesController::class, 'sistema'])->name('sistema');
-        Route::get('/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('respaldos');
-        Route::post('/update', [ConfiguracionesController::class, 'update'])->name('update');
-    });
-
+    
     // Administración (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
+        // Configuraciones
+        Route::prefix('configuraciones')->name('configuraciones.')->group(function () {
+            Route::get('/', [ConfiguracionesController::class, 'index'])->name('index');
+            Route::get('/general', [ConfiguracionesController::class, 'general'])->name('general');
+            Route::get('/seguridad', [ConfiguracionesController::class, 'seguridad'])->name('seguridad');
+            Route::get('/notificaciones', [ConfiguracionesController::class, 'notificaciones'])->name('notificaciones');
+            Route::get('/apariencia', [ConfiguracionesController::class, 'apariencia'])->name('apariencia');
+            Route::get('/sistema', [ConfiguracionesController::class, 'sistema'])->name('sistema');
+            Route::get('/respaldos', [ConfiguracionesController::class, 'respaldos'])->name('respaldos');
+            Route::post('/update', [ConfiguracionesController::class, 'update'])->name('update');
+        });
         Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);
         Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
+        Route::resource('permisos', \App\Http\Controllers\Admin\PermisosController::class);
     });
 });
 

@@ -74,14 +74,14 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **65 archivos .blade.php** en `resources/views/` (31 procesados, 34 pendientes)
+- **65 archivos .blade.php** en `resources/views/` (35 procesados, 30 pendientes)
   - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 ✅ | Configuraciones: 7 ✅
-  - **Admin/Usuarios: 4 ✅ | Admin/Roles: 4 ✅ COMPLETADOS** | Admin (otros): 10 pendientes
+  - **Admin/Usuarios: 4 ✅ | Admin/Roles: 4 ✅ | Admin/Permisos: 4 ✅ COMPLETADOS** | Admin (otros): 6 pendientes
   - Eliminados: dashboard.blade.php + 4 role components (5)
-- **15 archivos .css** restantes en `public/css/` (validado 20/01/2026)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (0), **admin/usuarios (4), admin/roles (4)** = 21 eliminados
-- **19 archivos .js** restantes en `public/JavaScript/` (validado 20/01/2026)
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (0), **admin/usuarios (4), admin/roles (4)** = 22 eliminados
+- **11 archivos .css** restantes en `public/css/` (validado 20/01/2026)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (0), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = 25 eliminados
+- **15 archivos .js** restantes en `public/JavaScript/` (validado 20/01/2026)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (0), **admin/usuarios (4), admin/roles (4), admin/permisos (4)** = 26 eliminados
 
 ---
 
@@ -99,17 +99,17 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `resources/views/admin/usuarios/show.blade.php` ✅ MIGRADO
 - `resources/views/admin/usuarios/edit.blade.php` ✅ MIGRADO
 
-#### Roles
-- `resources/views/admin/roles/index.blade.php`
-- `resources/views/admin/roles/create.blade.php`
-- `resources/views/admin/roles/show.blade.php`
-- `resources/views/admin/roles/edit.blade.php`
+#### Roles (4 archivos) ✅ MIGRADO
+- `resources/views/admin/roles/index.blade.php` ✅ MIGRADO
+- `resources/views/admin/roles/create.blade.php` ✅ MIGRADO
+- `resources/views/admin/roles/show.blade.php` ✅ MIGRADO
+- `resources/views/admin/roles/edit.blade.php` ✅ MIGRADO
 
-#### Permisos
-- `resources/views/admin/permisos/index.blade.php`
-- `resources/views/admin/permisos/create.blade.php`
-- `resources/views/admin/permisos/show.blade.php`
-- `resources/views/admin/permisos/edit.blade.php`
+#### Permisos (4 archivos) ✅ MIGRADO
+- `resources/views/admin/permisos/index.blade.php` ✅ MIGRADO
+- `resources/views/admin/permisos/create.blade.php` ✅ MIGRADO
+- `resources/views/admin/permisos/show.blade.php` ✅ MIGRADO
+- `resources/views/admin/permisos/edit.blade.php` ✅ MIGRADO
 
 #### Reportes
 - `resources/views/admin/reportes/index.blade.php`
@@ -1893,3 +1893,144 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
 - **Módulos completados:** 9/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, Admin/Usuarios, **Admin/Roles**)
 
 
+
+---
+
+### 🔄 FASE 3.3: ADMIN/PERMISOS - ✅ COMPLETADO
+
+#### Cambios Backend:
+- **Routes:** Agregado `Route::resource('permisos', \App\Http\Controllers\Admin\PermisosController::class)` en grupo admin middleware
+- **Sidebar:** Actualizado link permisos de `href="#"` a `{{ route('admin.permisos.index') }}` con active state `request()->routeIs('admin.permisos.*')`
+- **Controller existente:** Usa PermisosController.php (ya existía, sin cambios necesarios)
+  - Métodos: index() con search/modulo filters, create(), show(), edit()
+  - Usa `Permiso::distinct()->pluck('modulo')` para lista módulos
+  - Usa `withCount('roles')` para contar roles asignados
+
+#### Cambios Frontend:
+
+**1. resources/views/admin/permisos/index.blade.php** (~180 líneas)
+- OLD: @extends('layouts.admin'), CSS index.css/paginacion.css, JS index.js, sweetalert2 CDN
+- NEW: <x-app-layout>, Alpine x-data con filtros reactivos
+- **Header:** Gradient indigo-500 to cyan-600, icon key
+- **Alpine x-data:**
+  ```javascript
+  {
+    search: '{{ request('search') }}',
+    modulo: '{{ request('modulo') }}',
+    perPage: '{{ request('per_page', 10) }}',
+    applyFilters() { /* manipula window.location */ },
+    deletePermiso(id) { /* confirm + document.getElementById('delete-'+id).submit() */ }
+  }
+  ```
+- **Búsqueda:** Input con x-model.debounce.500ms + @input="applyFilters()"
+- **Filtros:** Select módulo (foreach $modulos), select per_page (10/25/50)
+- **Tabla:** 
+  - Badge indigo-100/900 para módulo
+  - Nombre permiso con font-mono
+  - Columna roles_count
+  - Acciones: Ver (blue), Editar (amber), Eliminar (red con @click="deletePermiso()")
+- **Dark mode:** dark:bg-slate-900, dark:text-white, dark:border-slate-700
+- **Responsive:** flex-col sm:flex-row, grid-cols-1 md:grid-cols-2
+
+**2. resources/views/admin/permisos/create.blade.php** (~170 líneas)
+- OLD: @extends, CSS create.css, JS create.js
+- NEW: <x-app-layout>, grid lg:grid-cols-3 (1 sidebar + 2 form)
+- **Header:** Gradient teal-500 to green-600
+- **Left sidebar:** 2 help cards con bg-teal-100/900
+  - Card 1: Icon cube + "El módulo agrupa permisos relacionados"
+  - Card 2: Icon bolt + "La acción define operación específica"
+- **Form:** @csrf, POST a admin.permisos.store
+- **Campos:**
+  - nombre: input text con @error validation
+  - modulo: input + datalist id="modulos-list" con @foreach($modulos)
+  - accion: input + datalist id="acciones-list" con @foreach($acciones)
+  - descripcion: textarea rows 4
+- **Actions:** Cancelar (ghost) + Guardar Permiso (gradient teal-600)
+- **HTML5 Datalist:** Autocomplete nativo sin Alpine complejidad
+
+**3. resources/views/admin/permisos/show.blade.php** (~120 líneas)
+- OLD: @extends, CSS show.css, inline styles
+- NEW: <x-app-layout>, grid lg:grid-cols-3 (2 left + 1 right)
+- **Header:** Gradient cyan-500 to blue-600, subtitle font-mono
+- **Left column:** Info fields readonly
+  - nombre: font-mono bg-slate-50 dark:bg-slate-800
+  - modulo: badge indigo-100/900
+  - accion: texto normal
+  - descripcion: bg-slate-50 dark:bg-slate-800
+- **Right column:** Roles asignados
+  - Lista con icon arrow-right
+  - Links a {{ route('admin.roles.show', $role) }}
+  - Empty state: icon unlink 4xl + "Este permiso no está asignado a ningún rol"
+- **Action:** Editar Permiso (gradient from-amber-600)
+
+**4. resources/views/admin/permisos/edit.blade.php** (~180 líneas)
+- OLD: @extends, CSS edit.css, JS edit.js
+- NEW: <x-app-layout>, grid lg:grid-cols-3 (1 info + 2 form)
+- **Header:** Gradient orange-500 to amber-600, subtitle font-mono
+- **Left sidebar:** 2 info cards
+  - Card 1 (orange-100/900): "Roles Activos: {{ $permiso->roles->count() }}" con icon plug
+  - Card 2 (yellow-100/900): "Precaución: Modificar nombre clave puede romper lógica" con icon exclamation-triangle
+- **Form:** @csrf + @method('PUT'), PUT a admin.permisos.update
+- **Campos pre-filled con old():**
+  - nombre: value="{{ old('nombre', $permiso->nombre) }}"
+  - modulo: input + datalist (pre-filled)
+  - accion: input + datalist (pre-filled)
+  - descripcion: {{ old('descripcion', $permiso->descripcion) }}
+- **@error validation:** En todos los campos
+- **Actions:** Cancelar + Actualizar Permiso (gradient orange-600)
+
+#### Problemas Resueltos:
+1. **Controller duplicado** → Agent creó PermisoController.php por error, eliminado con Remove-Item, usó PermisosController.php existente
+2. **Routes faltantes** → Agregado Route::resource en web.php grupo admin
+3. **Sidebar placeholder** → Actualizado href="#" a route('admin.permisos.index') con active state
+4. **Datalist HTML5** → Implementado autocomplete nativo modulo/accion sin Alpine complejidad
+
+#### Archivos Eliminados:
+- ❌ public/css/admin/permisos/index.css
+- ❌ public/css/admin/permisos/create.css
+- ❌ public/css/admin/permisos/show.css
+- ❌ public/css/admin/permisos/edit.css
+- ❌ public/JavaScript/admin/permisos/index.js
+- ❌ public/JavaScript/admin/permisos/create.js
+- ❌ public/JavaScript/admin/permisos/show.js
+- ❌ public/JavaScript/admin/permisos/edit.js
+
+#### Validación PowerShell:
+```powershell
+# Vistas blade
+Get-ChildItem resources/views -Recurse -Filter "*.blade.php" | Measure-Object
+# Output: 65 archivos (sin cambios)
+
+# CSS restantes
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 11 archivos (-4 desde 15)
+
+# JS restantes
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 15 archivos (-4 desde 19)
+```
+
+#### Total de Cambios Fase 3.3:
+- **Vistas migradas:** 4 archivos (index, create, show, edit)
+- **Total procesados:** 35/65 archivos Blade (53.8%)
+- **CSS eliminados:** 4 archivos admin/permisos
+- **JS eliminados:** 4 archivos admin/permisos
+- **CSS restantes:** 11 archivos (validado con PowerShell)
+- **JS restantes:** 15 archivos (validado con PowerShell)
+- **Features agregadas:** 
+  - Alpine applyFilters() con search debounce 500ms
+  - Alpine deletePermiso() confirm (index)
+  - HTML5 datalist autocomplete módulo/acción (create/edit)
+  - Grid lg:grid-cols-3 responsive (1+2 o 2+1)
+  - Help cards sidebar (cube Módulo, bolt Acción)
+  - Info cards warnings (orange Roles Activos, yellow Precaución)
+  - Badges indigo-100/900 para módulos
+  - Empty state roles asignados (icon unlink)
+  - Gradientes temáticos: indigo/cyan (index), teal/green (create), cyan/blue (show), orange/amber (edit)
+  - Dark mode completo: dark:bg-slate-900, dark:text-white, dark:border-slate-700
+  - Links roles asignados: arrow-right a route('admin.roles.show')
+  - Formularios con @error validation todos los campos
+  - Select per_page: 10/25/50 con applyFilters()
+  - Filtro módulo: dropdown con distinct modulos
+- **Patrón Admin:** Header gradient temático, Alpine x-data, dark mode completo, responsive grid, datalist HTML5
+- **Módulos completados:** 10/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, Admin/Usuarios, Admin/Roles, **Admin/Permisos**)
