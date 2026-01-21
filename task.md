@@ -240,11 +240,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/css/admin/roles/show.css`
 - `public/css/admin/roles/edit.css`
 
-#### Permisos
-- `public/css/admin/permisos/index.css`
-- `public/css/admin/permisos/create.css`
-- `public/css/admin/permisos/show.css`
-- `public/css/admin/permisos/edit.css`
+#### Permisos (4 archivos) ✅ ELIMINADOS
+- `public/css/admin/permisos/index.css` ❌ ELIMINADO
+- `public/css/admin/permisos/create.css` ❌ ELIMINADO
+- `public/css/admin/permisos/show.css` ❌ ELIMINADO
+- `public/css/admin/permisos/edit.css` ❌ ELIMINADO
 
 #### Reportes
 - `public/css/admin/reportes/index.css`
@@ -296,11 +296,11 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - `public/JavaScript/admin/roles/show.js`
 - `public/JavaScript/admin/roles/edit.js`
 
-#### Permisos
-- `public/JavaScript/admin/permisos/index.js`
-- `public/JavaScript/admin/permisos/create.js`
-- `public/JavaScript/admin/permisos/show.js`
-- `public/JavaScript/admin/permisos/edit.js`
+#### Permisos (4 archivos) ✅ ELIMINADOS
+- `public/JavaScript/admin/permisos/index.js` ❌ ELIMINADO
+- `public/JavaScript/admin/permisos/create.js` ❌ ELIMINADO
+- `public/JavaScript/admin/permisos/show.js` ❌ ELIMINADO
+- `public/JavaScript/admin/permisos/edit.js` ❌ ELIMINADO
 
 #### Reportes
 - `public/JavaScript/admin/reportes/index.js`
@@ -409,7 +409,13 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] Alpine selectAll permisos, search/filtros
 - [x] Badges tipo rol (sistema/personalizado)
 
-- [ ] Admin/Permisos: 4 vistas + CSS + JS
+#### 3.3 Admin/Permisos ✅ COMPLETADO
+- [x] index, create, show, edit (4 vistas)
+- [x] CSS/JS eliminados (4 archivos cada uno)
+- [x] Alpine search debounce, filtro módulo, deletePermiso()
+- [x] HTML5 datalist autocomplete módulo/acción
+- [x] Grid layouts 3 columnas, help cards sidebar
+
 - [ ] Admin/Reportes: 3 vistas + CSS + JS
 - [ ] Admin/Backups: 1 vista
 
@@ -508,13 +514,12 @@ http://127.0.0.1:8000/admin/permisos
 - [x] Configuraciones ✅
 - [x] Admin/Usuarios ✅
 - [x] Admin/Roles ✅
-- [ ] Admin/Permisos
-- [ ] Admin/Permisos
+- [x] Admin/Permisos ✅
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 31/65 total (48%)
-- Blade: 31/65 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅)
+### Archivos validados: 35/65 total (53.8%)
+- Blade: 35/65 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅, Admin/Permisos: 4 ✅)
   - Components: 8 archivos layout migrados (header, sidebar, footer, loading, etc.)
   - Eliminados: 5 (dashboard.blade.php + 4 role components)
   - Total real: 65 archivos blade en proyecto (validado 20/01/2026)
