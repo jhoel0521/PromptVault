@@ -6,13 +6,13 @@
     <div class="flex items-center gap-6 flex-1 min-w-0">
         <a href="{{ route('dashboard') }}"
             class="text-lg font-bold text-slate-900 dark:text-white whitespace-nowrap">PromptVault</a>
-        <form action="{{ route('buscador.index') }}" method="GET" class="relative flex-1 max-w-xl">
+        <form action="{{ route('home') }}" method="GET" class="relative flex-1 max-w-xl">
             <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-red-600" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="11" cy="11" r="8" />
                 <path d="M21 21l-4.35-4.35" />
             </svg>
-            <input name="query" type="text" placeholder="Buscar prompts..."
+            <input name="buscar" type="text" placeholder="Buscar prompts..."
                 class="w-full pl-10 pr-3 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:border-red-600 focus:ring-0" />
         </form>
     </div>

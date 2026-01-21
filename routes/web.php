@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Route;
 // Página principal pública - muestra prompts públicos
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Búsqueda pública
-Route::get('buscador/search', [BuscadorController::class, 'search'])->name('buscador.search');
-
 /*
 |--------------------------------------------------------------------------
 | Rutas de Autenticación
@@ -57,9 +54,6 @@ Route::middleware('auth')->group(function () {
 
     // Calendario
     Route::resource('calendario', CalendarioController::class);
-
-    // Buscador
-    Route::get('buscador', [BuscadorController::class, 'search'])->name('buscador.index');
 
     // Administración (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {

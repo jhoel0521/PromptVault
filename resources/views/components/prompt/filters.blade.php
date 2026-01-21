@@ -1,7 +1,7 @@
 {{-- Componente: Filtros de Prompts --}}
 @props(['etiquetas', 'showVisibility' => true])
 
-<form action="{{ request()->url() }}" method="GET" class="grid gap-3 mb-8" style="grid-template-columns: 2fr 1fr 1fr 1fr auto;">
+<form action="{{ route('home') }}" method="GET" class="grid gap-3 mb-8" style="grid-template-columns: 2fr 1fr 1fr 1fr auto;">
     <div>
         <input 
             type="text" 
