@@ -11,6 +11,7 @@ use App\Http\Requests\Prompt\RatePromptRequest;
 use App\Http\Requests\Prompt\StorePromptRequest;
 use App\Http\Requests\Prompt\UpdatePromptRequest;
 use App\Models\Prompt;
+use App\Models\User;
 use App\Models\Version;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

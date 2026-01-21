@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Contracts\Services\BackupServiceInterface;
 use App\Contracts\Services\ConfigurationServiceInterface;
-use Illuminate\Http\Request;
+use App\Http\Requests\Configuracion\UpdateConfiguracionRequest;
 
 class ConfiguracionesController extends Controller
 {
@@ -81,46 +81,10 @@ class ConfiguracionesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function update(UpdateConfiguracionRequest $request)
     {
-        // Validar entrada
-        $validated = $request->validate([
-            'app_name' => 'required|string|max:255',
-            'app_url' => 'nullable|url',
-            'app_env' => 'nullable|string|max:50',
-            'app_locale' => 'nullable|string|max:10',
-            'app_fallback_locale' => 'nullable|string|max:10',
-            'support_email' => 'nullable|email',
-            'contact_phone' => 'nullable|string|max:20',
-            'maintenance_mode' => 'nullable|boolean',
-            'theme' => 'nullable|in:dark,light',
-            'language' => 'nullable|in:es,en',
-            'mail_mailer' => 'nullable|string|max:50',
-            'mail_host' => 'nullable|string|max:150',
-            'mail_port' => 'nullable|integer',
-            'mail_from_address' => 'nullable|email',
-            'mail_from_name' => 'nullable|string|max:150',
-            'session_driver' => 'nullable|string|max:50',
-            'cache_store' => 'nullable|string|max:50',
-            'queue_connection' => 'nullable|string|max:50',
-            // Seguridad - Políticas de Acceso
-            'two_fa_enabled' => 'nullable|boolean',
-            'session_timeout' => 'nullable|integer|min:5|max:1440',
-            'max_login_attempts' => 'nullable|integer|min:1|max:20',
-            'geo_blocking_enabled' => 'nullable|boolean',
-            // Seguridad - Contraseñas
-            'password_min_length' => 'nullable|integer|min:8|max:32',
-            'password_expiry_days' => 'nullable|integer|min:1|max:365',
-            'password_require_special_chars' => 'nullable|boolean',
-            'password_force_rotation' => 'nullable|boolean',
-        ]);
-
-        // Procesar checkboxes (no enviados = false)
-        $validated['maintenance_mode'] = $request->boolean('maintenance_mode');
-        $validated['two_fa_enabled'] = $request->boolean('two_fa_enabled');
-        $validated['geo_blocking_enabled'] = $request->boolean('geo_blocking_enabled');
-        $validated['password_require_special_chars'] = $request->boolean('password_require_special_chars');
-        $validated['password_force_rotation'] = $request->boolean('password_force_rotation');
+        // Autorización y validación: manejadas en UpdateConfiguracionRequest
+        $validated = $request->validated();
 
         $this->configService->updateSettings($validated);
 
