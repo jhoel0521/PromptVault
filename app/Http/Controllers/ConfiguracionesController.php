@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AppSetting;
 use Illuminate\Http\Request;
 
 class ConfiguracionesController extends Controller
@@ -20,7 +21,9 @@ class ConfiguracionesController extends Controller
      */
     public function general()
     {
-        return view('configuraciones.general');
+        $settings = AppSetting::getSettings();
+
+        return view('configuraciones.general', compact('settings'));
     }
 
     /**
@@ -94,8 +97,38 @@ class ConfiguracionesController extends Controller
      */
     public function update(Request $request)
     {
-        // Lógica para actualizar configuraciones
-        return redirect()->route('configuraciones.index')->with('success', 'Configuración actualizada exitosamente.');
+        // Validar entrada
+        $validated = $request->validate([
+            'app_name' => 'required|string|max:255',
+            'app_url' => 'nullable|url',
+            'app_env' => 'nullable|string|max:50',
+            'app_locale' => 'nullable|string|max:10',
+            'app_fallback_locale' => 'nullable|string|max:10',
+            'support_email' => 'nullable|email',
+            'contact_phone' => 'nullable|string|max:20',
+            'maintenance_mode' => 'nullable|boolean',
+            'theme' => 'nullable|in:dark,light',
+            'language' => 'nullable|in:es,en',
+            'mail_mailer' => 'nullable|string|max:50',
+            'mail_host' => 'nullable|string|max:150',
+            'mail_port' => 'nullable|integer',
+            'mail_from_address' => 'nullable|email',
+            'mail_from_name' => 'nullable|string|max:150',
+            'session_driver' => 'nullable|string|max:50',
+            'cache_store' => 'nullable|string|max:50',
+            'queue_connection' => 'nullable|string|max:50',
+        ]);
+
+        // Checkbox no enviado => false
+        $validated['maintenance_mode'] = $request->boolean('maintenance_mode');
+
+        // Obtener o crear settings
+        $settings = AppSetting::getSettings();
+
+        // Actualizar
+        $settings->update($validated);
+
+        return redirect()->back()->with('success', 'Configuración actualizada exitosamente.');
     }
 
     /**

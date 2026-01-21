@@ -17,9 +17,12 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 ## Tareas Pendientes - Fase 2: Configuración
 
 ### 8. Auditoría y Funcionalidad de Rutas en Configuración
-- [ ] Revisar `/admin/configuraciones` - verificar qué funciona y qué no
-- [ ] Identificar problemas en la ruta Configuración (Sistema)
-- [ ] Documentar estado actual de cada sección
+- [x] Revisar `/admin/configuraciones` - verificar qué funciona y qué no
+- [x] Identificar problemas en la ruta Configuración (Sistema)
+- [x] Documentar estado actual de cada sección
+- [x] Implementar modo mantenimiento con middleware y BD
+- [x] Crear componentes reutilizables (form-label, form-select)
+- [x] Integrar campos .env en tabla app_settings
 
 ### 9. Revisión de Migraciones de Tabla
 - [ ] Auditar estructura de migraciones existentes

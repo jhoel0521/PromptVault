@@ -3,20 +3,19 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
+        web: __DIR__.'/../routes/master-web.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
-        then: function () {
-            Route::middleware('web')
-                ->group(base_path('routes/auth.php'));
-        },
+        then: null,
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Alias para modo mantenimiento aplicado en routes/master-web.php
+        $middleware->alias([
+            'maintenance' => \App\Http\Middleware\CheckMaintenanceMode::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
