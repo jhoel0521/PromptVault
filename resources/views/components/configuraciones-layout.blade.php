@@ -11,12 +11,24 @@
         </div>
     </x-slot:header>
 
+    @php
+        $appVersion = config('app.version', 'v1.0.0');
+        $dbDisplay = config('app.db_display', 'MySQL');
+        $statusLabel = config('app.status_label', 'Online');
+        $statusColor = config('app.status_color', 'green');
+        $statusClass = [
+            'green' => 'text-green-500',
+            'yellow' => 'text-yellow-500',
+            'red' => 'text-red-500',
+        ][$statusColor] ?? 'text-green-500';
+    @endphp
+
     <!-- Stats Toolbar -->
     <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4 mb-6">
         <div class="flex flex-wrap items-center gap-4 text-sm">
             <div class="flex items-center gap-2">
                 <i class="fas fa-code-branch text-rose-500"></i>
-                <span class="text-white">v2.5.0</span>
+                <span class="text-white">{{ $appVersion }}</span>
             </div>
             <div class="w-px h-4 bg-white/20"></div>
             <div class="flex items-center gap-2">
@@ -26,12 +38,12 @@
             <div class="w-px h-4 bg-white/20"></div>
             <div class="flex items-center gap-2">
                 <i class="fas fa-database text-yellow-500"></i>
-                <span class="text-white">MySQL</span>
+                <span class="text-white">{{ $dbDisplay }}</span>
             </div>
             <div class="w-px h-4 bg-white/20"></div>
             <div class="flex items-center gap-2">
-                <i class="fas fa-circle text-green-500 text-[8px]"></i>
-                <span class="text-white">Online</span>
+                <i class="fas fa-circle {{ $statusClass }} text-[8px]"></i>
+                <span class="text-white">{{ $statusLabel }}</span>
             </div>
         </div>
     </div>

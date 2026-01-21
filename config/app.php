@@ -30,6 +30,33 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Version (UI)
+    |--------------------------------------------------------------------------
+    |
+    | Se expone en el panel de configuraciones para mostrar la versión
+    | publicada. Se puede configurar vía APP_VERSION en .env.
+    |
+    */
+
+    'version' => env('APP_VERSION', 'v1.0.0'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Status Badge (UI)
+    |--------------------------------------------------------------------------
+    |
+    | Valores usados en el toolbar de configuraciones. db_display describe
+    | el motor de base de datos, status_label describe el estado de servicio
+    | y status_color controla el color de ícono (green|yellow|red).
+    |
+    */
+
+    'db_display' => env('APP_DB_DISPLAY', 'MySQL'),
+    'status_label' => env('APP_STATUS_LABEL', 'Online'),
+    'status_color' => env('APP_STATUS_COLOR', 'green'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Debug Mode
     |--------------------------------------------------------------------------
     |

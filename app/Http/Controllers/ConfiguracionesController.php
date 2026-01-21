@@ -37,6 +37,16 @@ class ConfiguracionesController extends Controller
     }
 
     /**
+     * Show the notifications settings page.
+     */
+    public function notificaciones()
+    {
+        $settings = AppSetting::getSettings();
+
+        return view('configuraciones.notificaciones', compact('settings'));
+    }
+
+    /**
      * Show the appearance settings page.
      */
     public function apariencia()
