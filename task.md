@@ -1,74 +1,46 @@
-# PromptVault - Complete Refactor Task List
+# PromptVault - Task List
 
 ## Objetivo General
-Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript de la aplicación PromptVault, manteniendo el diseño original hermoso y funcional.
+Auditoría integral de seguridad, implementación de Policies y estandarización de código (SOLID/Tailwind) en el módulo de Prompts.
 
-## 🔴 TAREAS CRÍTICAS DE SEGURIDAD
+## Tareas Pendientes Area de Ejecucion
 
-### ⚠️ AUDITORÍA DE AUTORIZACIÓN (PRIORIDAD ALTA)
-**Problema detectado:** Usuarios sin permisos pueden ver paneles de administración/compartir en `/prompts/{id}`
+### 1. FormRequests y Autorización
+- [ ] Auditar `CompartirPromptRequest::authorize()` (Verificado: usa `can('share')`).
+- [ ] Auditar `UpdatePromptRequest`: Verificar que implemente `authorize()` correctamente.
+- [ ] Auditar `StorePromptRequest`: Verificar que implemente `authorize()` correctamente.
 
-**Áreas a auditar:**
-1. **PromptPolicy** (`app/Policies/PromptPolicy.php`)
-   - ✅ Métodos: `view()`, `update()`, `delete()`, `share()` están bien definidos
-   - ✅ Usa `CompartirService` correctamente para verificar acceso
-   
-2. **CompartirService** (`app/Services/CompartirService.php`)
-   - ✅ `verificarAcceso()`: Lógica correcta (propietario > admin > acceso compartido > público)
-   - ✅ `puedeEditar()`: Verifica ['propietario', 'editor']
-   - ✅ `puedeComentar()`: Verifica ['propietario', 'editor', 'comentador']
+### 2. Rutas (`routes/web.php`)
+- [ ] **Auditoría Crítica:** Verificar si `Route::resource('prompts')` aplica la seguridad implícita o requiere middleware extra.
+- [ ] Agregar middleware explícito `can:` a rutas personalizadas:
+    - [ ] Ruta `historial` -> `middleware('can:update,prompt')`
+    - [ ] Ruta `restaurarVersion` -> `middleware('can:update,prompt')`
+    - [ ] Ruta `quitarAcceso` -> `middleware('can:delete,prompt')`
 
-3. **FormRequests con authorize()** (BIEN IMPLEMENTADO ✅)
-   - ✅ `CompartirPromptRequest::authorize()`: Verifica `can('share', $prompt)`
-   - [ ] Verificar otros FormRequests: UpdatePromptRequest, StorePromptRequest
+### 3. Vistas (Blade & UI)
+- [ ] **Fix (`show.blade.php`):** El sidebar se renderiza completo aunque el usuario no tenga permisos. Corregir lógica `@can`.
+- [ ] **Auditoría (`show.blade.php`):** Verificar visibilidad de paneles según permisos:
+    - [ ] Panel "Acciones" (Editar/Eliminar) solo para `@can('update')`.
+    - [ ] Panel "Compartir Acceso" solo para `@can('share')`.
+- [ ] **Auditoría (`historial.blade.php`):** Verificar que el botón "Restaurar" solo aparezca si `can('update')`.
 
-4. **Routes** (`routes/web.php` líneas 55-62)
-   - ⚠️ **FALTA**: No tienen middleware `can:` explícito
-   - ✅ Pero usan Route Model Binding: `Route::resource('prompts')` aplica policies automáticamente
-   - ✅ Routes personalizadas: authorize() en FormRequests o controladores
-   - [ ] **VERIFICAR:** ¿Funciona autorización implícita con `Route::resource()`?
+### 4. Controladores (Lógica de Negocio)
+- [ ] **`PromptController`:** Revisar métodos `destroy` y `restaurar` (asegurar que llaman a `$this->authorize()` o usan el FormRequest adecuado).
+- [ ] **`CompartirController`:** Revisar método `removeAcceso` (verificar autorización).
 
-5. **Vistas a validar:**
-   - [ ] `resources/views/prompts/show.blade.php` líneas 76-100
-     - **@can('update')**: Panel "Acciones" con botones Editar/Eliminar
-     - **@can('delete')**: Botón eliminar
-     - **@can('share')**: Panel "Compartir Acceso" con formulario
-     - **Verificar:** ¿Se renderiza el sidebar vacío si no tiene permisos?
-     - **PROBLEMA:** Usuario sin permisos ve sidebar completo (posible fallo en @can)
-   
-   - [ ] `resources/views/prompts/edit.blade.php`
-     - **FormRequest:** ✅ UpdatePromptRequest debe tener authorize()
-     - **Controlador:** ✅ `update()` usa FormRequest con authorize()
-   
-   - [ ] `resources/views/prompts/historial.blade.php`
-     - **Ruta:** Necesita verificar autorización para ver historial
-     - **Botón restaurar:** ✅ `restaurarVersion()` debe verificar `can('update')`
-   
-   - [ ] Otros CRUD: create, destroy, compartir, quitarAcceso
-     - ✅ `compartir()`: Usa CompartirPromptRequest::authorize()
-     - [ ] `destroy()`: Verificar tiene `$this->authorize('delete', $prompt)`
-     - [ ] `quitarAcceso()`: Verificar autorización
-     - [ ] `restaurarVersion()`: Verificar autorización
+### 5. Tarea Opcional
+- [ ] (Pendiente de evaluación) La lógica de `CompartirService` podría refactorizarse a un Trait si se reutiliza en otros modelos.
+---
 
-6. **Routes a auditar** (`routes/web.php`)
-   - ⚠️ No tienen middleware explícito pero Route::resource() aplica policies automáticamente
-   - [ ] Verificar que `Route::resource('prompts')` autoriza correctamente edit/update/destroy
-   - [ ] Agregar middleware a rutas personalizadas:
-     - `->middleware('can:update,prompt')` en historial, restaurarVersion
-     - `->middleware('can:share,prompt')` en compartir (ya tiene en FormRequest)
-     - `->middleware('can:delete,prompt')` en quitarAcceso
+## Tareas Descubierta para Siguientes Fases o Iteracciones
+*(Espacio reservado para deuda técnica o bugs encontrados durante la ejecución actual)*
 
-7. **Controladores a auditar:**
-   - [ ] `app/Http/Controllers/PromptController.php`
-     - Métodos: store, update, destroy, restaurar
-   - [ ] `app/Http/Controllers/CompartirController.php`
-     - Métodos: compartir, removeAcceso
-   - [ ] Controladores Admin (usuarios, roles, permisos)
-
-**Acción inmediata:**
-- Crear rama `security/authorization-audit`
-- Revisar cada @can en vistas y agregar else con mensajes apropiados
-- Auditar todos los métodos de controladores con `$this->authorize()`
-- Agregar tests de autorización: `test_user_cannot_edit_others_prompts()`
 
 ---
+
+## Area de de Bitacora
+*Registro de cambios y auditorías finalizadas con éxito.*
+
+- **[Auditoría] PromptPolicy:** Métodos `view`, `update`, `delete`, `share` revisados y aprobados.
+- **[Auditoría] CompartirService:** Lógica de `verificarAcceso`, `puedeEditar` y `puedeComentar` validada correctamente.
+- **[Auditoría] Routes:** Detectada falta de middleware explícito en líneas 55-62 (migrado a tareas pendientes).
