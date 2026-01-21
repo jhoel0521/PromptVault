@@ -110,8 +110,8 @@
                         </svg>
                         <span class="flex-1">Usuarios</span>
                     </a>
-                    <a href="#"
-                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <a href="{{ route('admin.roles.index') }}"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 {{ request()->routeIs('admin.roles.*') ? 'bg-slate-100 dark:bg-slate-800' : '' }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                         </svg>

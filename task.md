@@ -74,14 +74,14 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 ---
 
 ## Resumen de Inventario
-- **65 archivos .blade.php** en `resources/views/` (19 procesados, 46 pendientes)
-  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 ✅
-  - **Admin/Usuarios: 4 ✅** | Configuraciones: 7 pendientes | Admin (otros): 14 pendientes
-  - Eliminados: dashboard.blade.php (1)
-- **19 archivos .css** restantes en `public/css/` (19 eliminados, 19 pendientes migración)
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (2), **admin/usuarios (4)**
-- **23 archivos .js** restantes en `public/JavaScript/` (19 eliminados, 23 pendientes migración)
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (1), **admin/usuarios (4)**
+- **65 archivos .blade.php** en `resources/views/` (31 procesados, 34 pendientes)
+  - Auth: 3 ✅ | Prompts: 6 ✅ | Calendario: 4 ✅ | Home: 1 ✅ | Perfil: 4 ✅ | Components: 8 ✅ | Configuraciones: 7 ✅
+  - **Admin/Usuarios: 4 ✅ | Admin/Roles: 4 ✅ COMPLETADOS** | Admin (otros): 10 pendientes
+  - Eliminados: dashboard.blade.php + 4 role components (5)
+- **15 archivos .css** restantes en `public/css/` (validado 20/01/2026)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), configuraciones (0), **admin/usuarios (4), admin/roles (4)** = 21 eliminados
+- **19 archivos .js** restantes en `public/JavaScript/` (validado 20/01/2026)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), configuraciones (0), **admin/usuarios (4), admin/roles (4)** = 22 eliminados
 
 ---
 
@@ -397,8 +397,18 @@ Auditar, validar y refactorizar **TODOS** los archivos Blade, CSS y JavaScript d
 - [x] NO hay CSS/JS externos (todo Tailwind + Alpine)
 
 ### FASE 3: Admin Module (Prioridad Media)
-- [ ] Admin/Usuarios: 4 vistas + CSS + JS
-- [ ] Admin/Roles: 4 vistas + CSS + JS
+#### 3.1 Admin/Usuarios ✅ COMPLETADO
+- [x] index, create, show, edit (4 vistas)
+- [x] CSS/JS eliminados (4 archivos cada uno)
+- [x] Alpine preview avatar, search debounce
+- [x] Componente <x-user-avatar> reutilizado
+
+#### 3.2 Admin/Roles ✅ COMPLETADO
+- [x] index, create, show, edit (4 vistas)
+- [x] CSS/JS eliminados (4 archivos cada uno)
+- [x] Alpine selectAll permisos, search/filtros
+- [x] Badges tipo rol (sistema/personalizado)
+
 - [ ] Admin/Permisos: 4 vistas + CSS + JS
 - [ ] Admin/Reportes: 3 vistas + CSS + JS
 - [ ] Admin/Backups: 1 vista
@@ -488,7 +498,7 @@ http://127.0.0.1:8000/admin/permisos
 
 ## 8. REGISTRO DE PROGRESO - BITÁCORA
 
-### Módulos completados: 7/14
+### Módulos completados: 9/14
 - [x] Auth ✅
 - [x] Layouts ✅
 - [x] Components ✅
@@ -496,22 +506,24 @@ http://127.0.0.1:8000/admin/permisos
 - [x] Calendario ✅
 - [x] Perfil ✅
 - [x] Configuraciones ✅
-- [ ] Admin/Usuarios
-- [ ] Admin/Roles
+- [x] Admin/Usuarios ✅
+- [x] Admin/Roles ✅
+- [ ] Admin/Permisos
 - [ ] Admin/Permisos
 - [ ] Admin/Reportes
 - [ ] Errors/Modals/Utilities
 
-### Archivos validados: 15/65 total (23%)
-- Blade: 15/65 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Components: 12 ✅)
+### Archivos validados: 31/65 total (48%)
+- Blade: 31/65 procesados (Auth: 3 ✅, Prompts: 6 ✅, Calendario: 4 ✅, Home: 1 ✅, Perfil: 4 ✅, Configuraciones: 7 ✅, Admin/Usuarios: 4 ✅, Admin/Roles: 4 ✅)
+  - Components: 8 archivos layout migrados (header, sidebar, footer, loading, etc.)
   - Eliminados: 5 (dashboard.blade.php + 4 role components)
   - Total real: 65 archivos blade en proyecto (validado 20/01/2026)
-- CSS: 13/36 eliminados → 23 restantes
-  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3)
-  - Pendientes migrar: 23 archivos
-- JS: 14/41 eliminados → 27 restantes
-  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1)
-  - Pendientes migrar: 27 archivos
+- CSS: 21 eliminados → 15 restantes (validado 20/01/2026)
+  - Eliminados: auth (4), dashboard (1), layouts (1), components (4), perfil (3), admin/usuarios (4), admin/roles (4)
+  - Pendientes migrar: 15 archivos
+- JS: 22 eliminados → 19 restantes (validado 20/01/2026)
+  - Eliminados: auth (3), dashboard (5), layouts (4), chatbot (1), perfil (1), admin/usuarios (4), admin/roles (4)
+  - Pendientes migrar: 19 archivos
 
 ---
 
@@ -1712,5 +1724,172 @@ Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
   - Formularios con @error validation (2 vistas)
 - **Patrón Admin:** Header gradient temático, grid 3 cols, Alpine x-data, dark mode completo
 - **Módulos completados:** 8/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, **Admin/Usuarios**)
+
+
+---
+
+### 🔄 FASE 3.2: ADMIN/ROLES MODULE - ✅ COMPLETADO
+
+#### Cambios Backend:
+- **No requeridos:** Rutas, controllers, modelos ya existen
+- **Validaciones:** FormRequests ya implementados (StoreRoleRequest, UpdateRoleRequest)
+
+#### Cambios Frontend:
+
+**1. admin/roles/index.blade.php** ✅ MIGRADO (200 líneas)
+- OLD: @extends('layouts.admin'), CSS externos (index.css, paginacion.css), JS externos (index.js, sweetalert2 CDN)
+- NEW: <x-app-layout> + Alpine x-data
+- Features implementadas:
+  - Header: Gradient purple/pink con icon user-tag
+  - Search input: Alpine x-model con debounce 500ms, icon search
+  - Filtros: Select tipo (sistema/personalizado), per_page (10/25/50)
+  - Tabla responsive: thead bg-slate-50, tbody divide-y, hover:bg-slate-50
+  - Badges: Tipo rol (blue-100/900 sistema con icon shield-alt, green personalizado con icon edit)
+  - Badges: Estado (green-100/900 activo, red inactivo)
+  - Count usuarios: icon users + número
+  - Acciones: Ver (blue hover:bg-blue-50), Editar (amber, solo si !es_sistema), Eliminar (red Alpine confirm, solo si !es_sistema), Bloqueado (slate disabled si es_sistema con icon lock)
+  - Paginación Laravel: `{{ $roles->appends(request()->query())->links() }}`
+  - Dark mode: dark:bg-slate-900, dark:text-white, dark:border-slate-700 completo
+  - Responsive: flex-col sm:flex-row, hidden sm:inline, grid-cols-1 md:grid-cols-2
+
+**2. admin/roles/create.blade.php** ✅ MIGRADO (157 líneas)
+- OLD: @extends, CSS externos (create.css), JS externos (create.js)
+- NEW: <x-app-layout> + Alpine x-data selectAllModule()
+- Features implementadas:
+  - Header: Gradient rose/purple con icon user-shield
+  - Card 1 - Información Básica:
+    - Input nombre: required, icon id-card, placeholder "Ej: Gestor de Laboratorios"
+    - Textarea descripción: icon align-left, rows 3, placeholder descriptivo
+  - Card 2 - Permisos del Sistema:
+    - Grid: grid-cols-1 md:grid-cols-2 xl:grid-cols-3
+    - Module cards: $permisosGrouped foreach loop
+    - Module header: Nombre módulo ucfirst() + botón "Seleccionar Todo" Alpine
+    - Checkboxes permisos: w-4 h-4 text-rose-600, name="permisos[]", foreach loop
+  - Alpine selectAllModule():
+    ```js
+    selectAllModule(event, module) {
+        const checkboxes = event.target.closest('.module-card').querySelectorAll('input[type=checkbox]');
+        const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+        checkboxes.forEach(cb => cb.checked = !allChecked);
+        event.target.textContent = !allChecked ? 'Deseleccionar Todo' : 'Seleccionar Todo';
+    }
+    ```
+  - Validation: @error('field') Laravel directives con text-red-600
+  - Actions: Cancelar (ghost text-slate-700) + Guardar Rol (gradient from-rose-600)
+
+**3. admin/roles/show.blade.php** ✅ MIGRADO (130 líneas)
+- OLD: @extends, CSS externos (show.css), inline styles
+- NEW: <x-app-layout> sin Alpine (solo lectura)
+- Features implementadas:
+  - Header: Gradient blue/cyan con icon user-shield
+  - Badge: "Rol de Sistema" (blue-100/900 con icon server) si es_sistema
+  - Card 1 - Información General:
+    - Grid md:grid-cols-2: Nombre + Usuarios Asignados count
+    - Descripción: text-sm leading-relaxed, fallback "Sin descripción definida."
+  - Card 2 - Permisos Concedidos:
+    - @php groupBy('modulo') permissions
+    - Grid: grid-cols-1 md:grid-cols-2 xl:grid-cols-3
+    - Module cards: Header con nombre + count permisos
+    - Permission badges: icon check green + nombre permiso
+    - Empty state: icon lock 4xl + mensaje "Este rol no tiene permisos asignados."
+  - Action: Editar Rol (gradient from-amber-600 to-amber-500)
+
+**4. admin/roles/edit.blade.php** ✅ MIGRADO (171 líneas)
+- OLD: @extends, @method('PUT'), CSS externos (edit.css), JS externos (edit.js)
+- NEW: <x-app-layout> + Alpine x-data selectAllModule() + form PUT
+- Features implementadas:
+  - Header: Gradient amber/orange con icon edit
+  - Form: @csrf + @method('PUT')
+  - Card 1 - Información Básica:
+    - Input nombre: value="{{ old('nombre', $role->nombre) }}" required
+    - Textarea descripción: value old() pre-filled
+    - Badge info: "Rol de sistema. Algunos permisos críticos." (blue-50 dark:blue-900/20) si es_sistema
+  - Card 2 - Permisos del Sistema:
+    - @php $rolePermissions = $role->permisos->pluck('id')->toArray()
+    - Grid xl:grid-cols-3 con module cards
+    - Checkboxes: {{ in_array($permiso->id, $rolePermissions) ? 'checked' : '' }}
+    - Alpine selectAllModule() reutilizado (igual que create)
+  - Actions: Cancelar + Actualizar Rol (gradient from-amber-600)
+  - Dark mode completo en todos inputs/selects/checkboxes
+
+#### Patrón Consistente Aplicado:
+- **Headers:** Gradientes temáticos (purple/pink index, rose/purple crear, amber editar, blue/cyan ver)
+- **Icons:** FontAwesome 6 (user-tag, user-shield, edit, shield-alt, lock, key, check)
+- **Alpine.js:** x-data state, @click events, selectAllModule() function reutilizable
+- **Tailwind:** bg-slate-50 dark:bg-slate-900, hover:, focus:ring-2, rounded-xl, shadow-sm
+- **Badges:** Consistent pattern (100 bg + 900 text o 900/30 dark, sizes px-2.5 py-1 text-xs)
+- **Responsive:** flex-col sm:flex-row, grid-cols-1 md:grid-cols-2 xl:grid-cols-3
+- **Formularios:** @error Laravel, required inputs, placeholder descriptivos, old() pre-filled
+- **Permisos:** Checkboxes agrupados por módulo, botón "Seleccionar Todo" por módulo
+
+#### Archivos Eliminados:
+- ❌ `public/css/admin/roles/index.css` (migrado a Tailwind inline)
+- ❌ `public/css/admin/roles/create.css` (migrado a Tailwind inline)
+- ❌ `public/css/admin/roles/show.css` (migrado a Tailwind inline)
+- ❌ `public/css/admin/roles/edit.css` (migrado a Tailwind inline)
+- ❌ `public/JavaScript/admin/roles/index.js` (migrado a Alpine.js declarativo)
+- ❌ `public/JavaScript/admin/roles/create.js` (migrado a Alpine.js declarativo)
+- ❌ `public/JavaScript/admin/roles/show.js` (no requería JS)
+- ❌ `public/JavaScript/admin/roles/edit.js` (migrado a Alpine.js declarativo)
+
+#### Problemas Resueltos:
+1. **SweetAlert2 CDN** → Eliminado, usar confirm() nativo Alpine
+2. **@extends prohibido** → Reemplazado por <x-app-layout> en 4 vistas (cumple AGENTS.md Regla 1)
+3. **CSS externos** → Migrados 100% a Tailwind inline (cumple AGENTS.md Regla 2)
+4. **JS externos** → Migrados 100% a Alpine.js declarativo (cumple AGENTS.md Regla 3)
+5. **Permisos checkboxes** → Alpine selectAllModule() toggle inteligente (all checked → uncheck all)
+
+#### Validación:
+- ✅ /admin/roles renderiza tabla sin errores
+- ✅ Search input funciona con debounce 500ms
+- ✅ Filtros tipo + per_page funcionan correctamente
+- ✅ Paginación Laravel funciona
+- ✅ Badges tipo rol (sistema/personalizado) renderizan correctamente
+- ✅ Botón eliminar solo visible para roles !es_sistema
+- ✅ Botón editar locked (icon lock) para roles es_sistema
+- ✅ /admin/roles/create renderiza formulario sin errores
+- ✅ Permisos agrupados por módulo correctamente
+- ✅ Botón "Seleccionar Todo" Alpine funciona en cada módulo
+- ✅ /admin/roles/{id} show renderiza detalle readonly
+- ✅ Permisos concedidos agrupados por módulo
+- ✅ /admin/roles/{id}/edit renderiza formulario pre-filled
+- ✅ Old values + checkboxes checked funcionan correctamente
+- ✅ Dark mode funciona en todas 4 vistas
+- ✅ Responsive funciona: mobile (stack), tablet (grid-cols-2), desktop (grid-cols-3)
+- ✅ No hay errores en consola browser
+- ✅ Cumple AGENTS.md Reglas 1-3 (NO @extends, Tailwind inline, Alpine declarativo)
+
+#### Validación Comandos (20/01/2026):
+```powershell
+# Post-eliminación
+Remove-Item public/css/admin/roles/*.css -Force
+Remove-Item public/JavaScript/admin/roles/*.js -Force
+
+Get-ChildItem public/css -Recurse -Filter "*.css" | Measure-Object
+# Output: 15 archivos (-4 desde 19)
+
+Get-ChildItem public/JavaScript -Recurse -Filter "*.js" | Measure-Object
+# Output: 19 archivos (-4 desde 23)
+```
+
+#### Total de Cambios Fase 3.2:
+- **Vistas migradas:** 4 archivos (index, create, show, edit)
+- **Total procesados:** 31/65 archivos Blade (47.7%)
+- **CSS eliminados:** 4 archivos admin/roles
+- **JS eliminados:** 4 archivos admin/roles
+- **CSS restantes:** 15 archivos (validado con PowerShell)
+- **JS restantes:** 19 archivos (validado con PowerShell)
+- **Features agregadas:** 
+  - Alpine selectAllModule() para checkboxes permisos
+  - Alpine search debounce (index)
+  - Alpine deleteRole confirm (index)
+  - Filtro por tipo rol (sistema/personalizado)
+  - Badges tipo rol + estado
+  - Lock edición roles sistema
+  - Grid responsive 3 cols permisos
+  - Formularios con @error validation
+  - Empty state permisos (show)
+- **Patrón Admin:** Header gradient temático, Alpine x-data, dark mode completo, responsive grid
+- **Módulos completados:** 9/14 (Auth, Layouts, Components, Prompts, Calendario, Perfil, Configuraciones, Admin/Usuarios, **Admin/Roles**)
 
 

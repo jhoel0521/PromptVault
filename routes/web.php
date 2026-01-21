@@ -76,6 +76,7 @@ Route::middleware('auth')->group(function () {
     // Administración (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('usuarios', \App\Http\Controllers\UsuarioController::class);
+        Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
     });
 });
 

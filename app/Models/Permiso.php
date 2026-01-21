@@ -17,4 +17,12 @@ class Permiso extends Model
     {
         return $this->belongsToMany(Role::class, 'role_permiso');
     }
+
+    /**
+     * Obtener permisos agrupados por módulo
+     */
+    public static function agrupadosPorModulo()
+    {
+        return self::all()->groupBy('modulo');
+    }
 }
