@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Contracts\Repositories\EtiquetaRepositoryInterface;
+use App\Contracts\Services\CalificacionServiceInterface;
 use App\Contracts\Services\CompartirServiceInterface;
 use App\Contracts\Services\PromptServiceInterface;
 use App\Http\Requests\Prompt\CompartirPromptRequest;
 use App\Http\Requests\Prompt\RatePromptRequest;
 use App\Http\Requests\Prompt\StorePromptRequest;
 use App\Http\Requests\Prompt\UpdatePromptRequest;
-use App\Models\Calificacion;
 use App\Models\Prompt;
-use App\Models\User;
 use App\Models\Version;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +20,8 @@ class PromptController extends Controller
     public function __construct(
         private PromptServiceInterface $promptService,
         private CompartirServiceInterface $compartirService,
-        private EtiquetaRepositoryInterface $etiquetaRepository
+        private EtiquetaRepositoryInterface $etiquetaRepository,
+        private CalificacionServiceInterface $calificacionService
     ) {}
 
     /**
@@ -163,19 +163,13 @@ class PromptController extends Controller
         // Obtener datos validados
         $data = $request->validated();
 
-        // Obtener usuario
-        $usuario = User::where('email', $data['email'])->first();
-
-        // Validar que no sea el propietario
-        if ($usuario->id === $prompt->user_id) {
-            return back()->with('error', 'No puedes compartir contigo mismo');
-        }
-
-        // Usar servicio
-        $this->compartirService->compartir($prompt, $usuario, $data['nivel_acceso']);
+        // Usar servicio (ahora maneja obtención de usuario y validación)
+        $resultado = $this->compartirService->compartirPorEmail($prompt, $data['email'], $data['nivel_acceso']);
 
         // Retornar vista
-        return back()->with('success', "Prompt compartido con {$usuario->name}");
+        return $resultado['success']
+            ? back()->with('success', $resultado['message'])
+            : back()->with('error', $resultado['message']);
     }
 
     /**
@@ -239,18 +233,13 @@ class PromptController extends Controller
      */
     public function calificar(RatePromptRequest $request, Prompt $prompt)
     {
+        // Autorización: manejada en RatePromptRequest
+        $this->authorize('rate', $prompt);
+
         $data = $request->validated();
 
-        Calificacion::updateOrCreate(
-            [
-                'prompt_id' => $prompt->id,
-                'user_id' => $request->user()->id,
-            ],
-            [
-                'estrellas' => $data['estrellas'],
-                'resena' => $data['resena'] ?? null,
-            ]
-        );
+        // Usar servicio
+        $this->calificacionService->calificar($prompt, $request->user(), $data);
 
         return back()->with('success', 'Calificación guardada correctamente.');
     }

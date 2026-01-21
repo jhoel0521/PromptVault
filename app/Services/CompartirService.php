@@ -17,6 +17,38 @@ class CompartirService implements CompartirServiceInterface
         );
     }
 
+    public function compartirPorEmail(Prompt $prompt, string $email, string $nivelAcceso): array
+    {
+        // Obtener usuario por email
+        $usuario = User::where('email', $email)->first();
+
+        if (! $usuario) {
+            return [
+                'success' => false,
+                'message' => 'Usuario no encontrado',
+                'acceso' => null,
+            ];
+        }
+
+        // Validar que no sea el propietario
+        if ($usuario->id === $prompt->user_id) {
+            return [
+                'success' => false,
+                'message' => 'No puedes compartir contigo mismo',
+                'acceso' => null,
+            ];
+        }
+
+        // Compartir
+        $acceso = $this->compartir($prompt, $usuario, $nivelAcceso);
+
+        return [
+            'success' => true,
+            'message' => "Prompt compartido con {$usuario->name}",
+            'acceso' => $acceso,
+        ];
+    }
+
     public function quitarAcceso(Prompt $prompt, User $usuario): bool
     {
         return AccesoCompartido::where('prompt_id', $prompt->id)

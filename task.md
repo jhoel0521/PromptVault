@@ -62,14 +62,14 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 - [x] **Razón**: ⚠️ Código exec() es riesgo seguridad, 298 LOC, 6 responsabilidades
 
 ### 14. PromptController → Extraer CalificacionService (CRÍTICO)
-- [ ] Crear `CalificacionServiceInterface` en `app/Contracts/Services`
-- [ ] Implementar `CalificacionService` en `app/Services`
-- [ ] Extraer lógica `calificar()` de PromptController (líneas 222-238)
-- [ ] Eliminar acceso directo a `Calificacion::updateOrCreate()`
-- [ ] Eliminar query directo `User::where('email',...)->first()` (línea 165)
-- [ ] Refactorizar validación propietario (líneas 166-169) a Policy
-- [ ] Validar inyección de CalificacionService en constructor
-- [ ] **Razón**: God Object 282 LOC, 13 métodos, 6 responsabilidades
+- [x] Crear `CalificacionServiceInterface` en `app/Contracts/Services`
+- [x] Implementar `CalificacionService` en `app/Services`
+- [x] Extraer lógica `calificar()` de PromptController (líneas 222-238)
+- [x] Eliminar acceso directo a `Calificacion::updateOrCreate()`
+- [x] Eliminar query directo `User::where('email',...)->first()` (línea 165)
+- [x] Refactorizar validación propietario (líneas 166-169) a Policy
+- [x] Validar inyección de CalificacionService en constructor
+- [x] **Razón**: God Object 282 LOC, 13 métodos, 6 responsabilidades
 
 ### 15. UsuarioController → UsuarioService + Refactorización (ALTA)
 - [ ] Crear `UsuarioServiceInterface` en `app/Contracts/Services`
@@ -146,6 +146,7 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 - 21/01/2026: Corregida persistencia de tema claro/oscuro unificando clave `theme` en localStorage y aplicando clase `dark` en html/body. Se eliminó flicker con pre-carga en `<head>`.
 - 21/01/2026: **Auditoría SOLID completada** - Analizados 10 controladores (1,417 LOC, 65 métodos). Identificadas violaciones: 7/10 sin servicios, 3 God Objects (ConfiguracionesController 298 LOC, PromptController 282 LOC, ReportesController 171 LOC). Prioridad: Tareas 13-21 ordenadas por riesgo crítico → alto → medio → bajo.
 - 21/01/2026: **Tarea 13 completada** - Refactorizado ConfiguracionesController (298→78 LOC, -73% reducción). Creados BackupService y ConfigurationService con interfaces. Eliminado código exec() directo, queries a AppSetting, y operaciones filesystem del controlador. Registrados bindings en AppServiceProvider. Controlador ahora solo coordina vistas y servicios.
+- 21/01/2026: **Tarea 14 completada** - Refactorizado PromptController (282→260 LOC, -8% reducción). Creado CalificacionService con métodos calificar() y obtenerCalificacion(). Eliminado acceso directo a Calificacion::updateOrCreate(). Agregado método compartirPorEmail() a CompartirService eliminando query directo User::where('email'). Agregada autorización explícita con Policy::rate() en método calificar(). Registrado binding en AppServiceProvider.
 
 ---
 
@@ -153,6 +154,7 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 *(Espacio reservado para deuda técnica o bugs encontrados)*
 
+- **Testing de Servicios:** Crear tests unitarios para cada método de cada servicio (BackupService, ConfigurationService, CalificacionService, etc.). Estructura: `tests/Unit/Services/` y `tests/Feature/Http/Controllers/`. Cada método del contrato debe tener su test correspondiente.
 - **Gestión Académica:** Módulo que repite y no se usa. Evaluar eliminación.
 - **.env Visualization:** Necesario para configuración desde admin.
 - **Auth Controllers:** Revisar alineación con Fortify/Breeze para evitar código duplicado.

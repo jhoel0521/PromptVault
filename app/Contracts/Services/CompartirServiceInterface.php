@@ -14,6 +14,13 @@ interface CompartirServiceInterface
     public function compartir(Prompt $prompt, User $usuario, string $nivelAcceso): AccesoCompartido;
 
     /**
+     * Compartir prompt con un usuario por email
+     *
+     * @return array ['success' => bool, 'message' => string, 'acceso' => AccesoCompartido|null]
+     */
+    public function compartirPorEmail(Prompt $prompt, string $email, string $nivelAcceso): array;
+
+    /**
      * Quitar acceso a un usuario
      */
     public function quitarAcceso(Prompt $prompt, User $usuario): bool;
