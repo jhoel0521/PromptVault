@@ -124,12 +124,12 @@ class ChatbotService implements ChatbotServiceInterface
     private function buildContext(Collection $prompts): string
     {
         if ($prompts->isEmpty()) {
-            return "IMPORTANTE: No se encontraron prompts en la base de datos del usuario relacionados con esta consulta.\n\n" .
-                   "Instrucciones:\n" .
-                   "- NO inventes ni sugieras prompts que no existen.\n" .
-                   "- NO menciones IDs de prompts ni URLs.\n" .
-                   "- Responde la pregunta del usuario basándote en tu conocimiento general sobre ingeniería de prompts.\n" .
-                   "- Si el usuario pregunta por prompts específicos, indícale que no se encontraron coincidencias y que puede buscar en su biblioteca o crear uno nuevo.";
+            return "IMPORTANTE: No se encontraron prompts en la base de datos del usuario relacionados con esta consulta.\n\n".
+                   "Instrucciones:\n".
+                   "- NO inventes ni sugieras prompts que no existen.\n".
+                   "- NO menciones IDs de prompts ni URLs.\n".
+                   "- Responde la pregunta del usuario basándote en tu conocimiento general sobre ingeniería de prompts.\n".
+                   '- Si el usuario pregunta por prompts específicos, indícale que no se encontraron coincidencias y que puede buscar en su biblioteca o crear uno nuevo.';
         }
 
         $context = "Se encontraron los siguientes prompts en la base de datos que podrían ser relevantes:\n\n";
@@ -137,9 +137,9 @@ class ChatbotService implements ChatbotServiceInterface
         foreach ($prompts as $prompt) {
             $context .= "---\n";
             $context .= "TÍTULO: {$prompt->titulo}\n";
-            $context .= "DESCRIPCIÓN: " . ($prompt->descripcion ?: 'Sin descripción') . "\n";
-            $context .= 'CONTENIDO (extracto): ' . Str::limit($prompt->contenido, 400) . "\n";
-            $context .= 'URL: ' . route('prompts.show', $prompt) . "\n\n";
+            $context .= 'DESCRIPCIÓN: '.($prompt->descripcion ?: 'Sin descripción')."\n";
+            $context .= 'CONTENIDO (extracto): '.Str::limit($prompt->contenido, 400)."\n";
+            $context .= 'URL: '.route('prompts.show', $prompt)."\n\n";
         }
 
         $context .= "---\n";
