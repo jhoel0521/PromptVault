@@ -1,10 +1,10 @@
 name: Testing Suite
 
 on:
-  push:
-    branches: [ main, dev, feature/* ]
   pull_request:
-    branches: [ main, dev, feature/* ]
+    branches: [ main, dev ]
+  push:
+    branches: [ main, dev ]
 
 jobs:
   tests:
@@ -34,15 +34,16 @@ jobs:
     - name: Obtener código
       uses: actions/checkout@v4
 
-    - name: Instalar Node.js
+    - name: Instalar Node.js y Compilar Assets
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-
-    - name: Compilar Frontend (NPM)
+        
+    - name: Construir Frontend (NPM Build)
       run: |
         npm install
         npm run build
+    # ---------------------------------------------------
 
     - name: Configurar PHP ${{ matrix.php-version }}
       uses: shivammathur/setup-php@v2
@@ -83,4 +84,5 @@ jobs:
       run: php artisan migrate --force
 
     - name: Ejecutar suite de tests
+      # Sin --parallel para evitar problemas en CI básico
       run: php artisan test --stop-on-failure
