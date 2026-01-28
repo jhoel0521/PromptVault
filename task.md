@@ -247,27 +247,33 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 - [x] **Razón**: Funcionalidad core de compartir
 - [x] **Status**: 12/12 tests pasando
 
-### 28. Feature Tests - Comentarios (MEDIA)
-- [ ] **ComentarioTest.php:**
-  - [ ] test_user_can_comment_on_public_prompt
-  - [ ] test_user_can_reply_to_comment
-  - [ ] test_owner_can_delete_comment
-  - [ ] test_user_can_delete_own_comment
-  - [ ] test_nested_comments_display_correctly
-- [ ] Validar relaciones parent/replies
-- [ ] Validar autorización para eliminar
-- [ ] **Razón**: Funcionalidad de colaboración
+### 28. Feature Tests - Comentarios (MEDIA) [x]
+- [x] **ComentarioTest.php:**
+  - [x] test_user_can_comment_on_public_prompt
+  - [x] test_user_can_reply_to_comment
+  - [x] test_owner_can_delete_comment
+  - [x] test_user_can_delete_own_comment
+  - [x] test_nested_comments_display_correctly
+- [x] Validar relaciones parent/replies
+- [x] Validar autorización para eliminar
+- [x] Crear ComentarioController con métodos store() y destroy()
+- [x] Crear ComentarioPolicy para autorización
+- [x] Registrar rutas en web.php
+- [x] **Razón**: Funcionalidad de colaboración
+- [x] **Status**: 5/5 tests pasando
 
-### 29. Feature Tests - Calificaciones (MEDIA)
-- [ ] **CalificacionTest.php:**
-  - [ ] test_user_can_rate_prompt
-  - [ ] test_user_can_update_rating
-  - [ ] test_user_cannot_rate_twice (updateOrCreate)
-  - [ ] test_prompt_average_updates_on_rating
-  - [ ] test_rating_range_validation (1-5)
-- [ ] Validar cálculo automático de promedio
-- [ ] Validar CalificacionService
-- [ ] **Razón**: Funcionalidad de valoración
+### 29. Feature Tests - Calificaciones (MEDIA) [x]
+- [x] **CalificacionTest.php:**
+  - [x] test_user_can_rate_prompt
+  - [x] test_user_can_update_rating
+  - [x] test_user_cannot_rate_twice (updateOrCreate)
+  - [x] test_prompt_average_updates_on_rating
+  - [x] test_rating_range_validation (1-5)
+- [x] Validar cálculo automático de promedio (model observer booted())
+- [x] Validar CalificacionService (updateOrCreate)
+- [x] Validar recalculación de promedio_calificacion
+- [x] **Razón**: Funcionalidad de valoración
+- [x] **Status**: 5/5 tests pasando
 
 ### 30. Feature Tests - Etiquetas (MEDIA)
 - [ ] **EtiquetaTest.php:**
@@ -343,6 +349,8 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ## Bitácora
 
+- 28/01/2026: **Tarea 29 completada - Feature Tests de Calificaciones** - Creado CalificacionTest.php con 5 tests validando sistema completo de calificaciones. Tests cubren: usuario puede calificar prompt público, actualizar calificación existente (updateOrCreate), prevención de duplicados, recalculación automática de promedio (observer booted() en Calificacion model llama Prompt::recalcularPromedio()), validación de rango 1-5 estrellas. CalificacionService implementa updateOrCreate para crear o actualizar calificaciones sin duplicados. Model observer sincroniza promedio_calificacion en cada save/delete. Status: 5/5 tests pasando. Total acumulado Fase 4: 78 tests (32 unit + 46 feature).
+- 28/01/2026: **Tarea 28 completada - Feature Tests de Comentarios** - Creado ComentarioTest.php con 5 tests validando comentarios y respuestas anidadas. Creado ComentarioController con métodos store() (validación inline de permisos por visibilidad) y destroy() (autor, propietario del prompt o admin pueden eliminar). Creado ComentarioPolicy (aunque finalmente no se usó authorize() por simplicidad). Tests validan: comentar en prompt público, responder a comentario (parent_id), propietario de prompt elimina comentario, autor elimina su comentario, estructura anidada con relación respuestas(). Status: 5/5 tests pasando.
 - 28/01/2026: **Tarea 27 completada - Feature Tests de Compartir y Colaboración** - Creados AccesoCompartidoTest.php (7 tests) y CollaborationTest.php (5 tests) para cobertura completa de funcionalidad de compartir. AccesoCompartidoTest valida: owner puede compartir, niveles de acceso (lector, comentador, editor) se crean correctamente, owner puede revocar acceso, user sin acceso no puede verlo, no se puede compartir con uno mismo. CollaborationTest valida: editor puede editar prompts compartidos, comentador puede comentar pero no editar, lector puede ver pero no editar, cambios de nivel de acceso se aplican dinámicamente. Fixes implementados: (1) `$prompt->refresh()` en test de revoke para recargar modelo después de DB delete, (2) Validación `not_in:auth()->user()->email` en CompartirPromptRequest para prevenir self-share. Status: 12/12 tests pasando (10 feature tests totales Tareas 22-27: 32 unit + 8 feature CRUD + 8 visibility + 8 versioning + 12 sharing = 68 tests).
 - 28/01/2026: **Mejora de test - contenido muy largo en versionado** - Mejorado test `test_user_can_restore_previous_version` para usar contenido de ~30,000 caracteres (próximo al límite MySQL TEXT: 65,535 chars) para validar que la restauración funciona correctamente con contenido muy largo. Test pasa exitosamente. Validación: 8/8 tests de versionado pasando.
 - 28/01/2026: **Tarea 26 completada - Feature Tests de Versionado de Prompts** - Creado PromptVersioningTest.php con 8 tests cobriendo lógica completa de versionado: edición crea nueva versión (si contenido cambió), historial visible, restauración de versiones anteriores, incremento automático de numero_version, validación de relación prompt->versiones, autorización de propietario, prevención de restaurar versiones de otros prompts. Tests validan integridad del versionado: cada edición con cambio de contenido incrementa version_actual y crea Version record con numero_version, mensaje_cambio opcional. PromptService.actualizar() maneja lógica. Status: 8/8 tests pasando.
