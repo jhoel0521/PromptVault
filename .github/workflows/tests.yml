@@ -5,13 +5,13 @@ on:
     branches: [ main, dev, feature/* ]
   pull_request:
     branches: [ main, dev, feature/* ]
-  workflow_dispatch:
 
 jobs:
   tests:
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref != 'refs/heads/main' && github.ref != 'refs/heads/dev')
+    name: Ejecutar Tests (PHP 8.4)
     runs-on: ubuntu-latest
     
+    # ESTRATEGIA: Si falla uno, no canceles los demás inmediatamente (opcional)
     strategy:
       fail-fast: false
       matrix:
@@ -42,7 +42,7 @@ jobs:
         extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, pdo_mysql, bcmath, soap, intl, gd, exif, iconv
         coverage: none
 
-    - name: Configurar entorno
+    - name: Configurar entorno .env
       run: |
         cp .env.example .env
         php -r "file_exists('.env') || copy('.env.example', '.env');"
@@ -61,7 +61,7 @@ jobs:
     - name: Generar clave de aplicación
       run: php artisan key:generate
 
-    - name: Configurar base de datos de pruebas
+    - name: Configurar base de datos
       run: |
         echo "DB_CONNECTION=mysql" >> .env
         echo "DB_HOST=127.0.0.1" >> .env
@@ -75,10 +75,3 @@ jobs:
 
     - name: Ejecutar suite de tests
       run: php artisan test --parallel --stop-on-failure
-
-    - name: Subir logs de fallos
-      if: failure()
-      uses: actions/upload-artifact@v3
-      with:
-        name: logs-pruebas-${{ matrix.php-version }}
-        path: storage/logs/
