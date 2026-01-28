@@ -130,7 +130,7 @@ class AccesoCompartidoTest extends TestCase
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
 
-        $prompt = Prompt::factory()->create(['user_id' => $owner->id]);
+        $prompt = Prompt::factory()->privado()->create(['user_id' => $owner->id]);
 
         // Compartir primero
         AccesoCompartido::create([
