@@ -3,6 +3,7 @@
 use App\Http\Controllers\CalendarioController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ConfiguracionesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerfilController;
@@ -45,6 +46,10 @@ Route::middleware('auth')->group(function () {
 
     // Prompts (CRUD)
     Route::resource('prompts', PromptController::class);
+
+    // Comentarios
+    Route::post('/prompts/{prompt}/comentarios', [ComentarioController::class, 'store'])->name('comentarios.store');
+    Route::delete('/comentarios/{comentario}', [ComentarioController::class, 'destroy'])->name('comentarios.destroy');
 
     // Prompts adicionales
     Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir')->middleware('can:share,prompt');
