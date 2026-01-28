@@ -18,7 +18,7 @@ abstract class TestCase extends BaseTestCase
         $this->artisan('migrate:fresh', ['--seed' => false])->run();
 
         // Crear roles por defecto si no existen
-        Role::firstOrCreate(['id' => 1], ['nombre' => 'Administrador', 'descripcion' => 'Rol de administrador']);
-        Role::firstOrCreate(['id' => 2], ['nombre' => 'Usuario', 'descripcion' => 'Rol de usuario regular']);
+        Role::firstOrCreate(['id' => 1], ['nombre' => 'admin', 'descripcion' => 'Rol de administrador']);
+        Role::firstOrCreate(['id' => 2], ['nombre' => 'usuario', 'descripcion' => 'Rol de usuario regular']);
     }
 }
