@@ -212,15 +212,20 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 - [x] **Razón**: Seguridad de acceso crítica
 - [x] **Status**: 8/8 tests pasando
 
-### 26. Feature Tests - Versionado de Prompts (ALTA)
-- [ ] **PromptVersioningTest.php:**
-  - [ ] test_editing_prompt_creates_new_version
-  - [ ] test_user_can_view_version_history
-  - [ ] test_user_can_restore_previous_version
-  - [ ] test_version_comparison_works
-- [ ] Validar incremento automático numero_version
-- [ ] Validar relación prompt->versiones
-- [ ] **Razón**: Funcionalidad crítica de versionado
+### 26. Feature Tests - Versionado de Prompts (ALTA) [x]
+- [x] **PromptVersioningTest.php:**
+  - [x] test_editing_prompt_creates_new_version
+  - [x] test_editing_without_content_change_does_not_create_version
+  - [x] test_user_can_view_version_history
+  - [x] test_user_can_restore_previous_version
+  - [x] test_numero_version_increments_correctly
+  - [x] test_prompt_versiones_relationship
+  - [x] test_only_owner_can_restore_version
+  - [x] test_cannot_restore_version_from_different_prompt
+- [x] Validar incremento automático numero_version
+- [x] Validar relación prompt->versiones
+- [x] **Razón**: Funcionalidad crítica de versionado
+- [x] **Status**: 8/8 tests pasando
 
 ### 27. Feature Tests - Compartir y Colaboración (ALTA)
 - [ ] **AccesoCompartidoTest.php:**
@@ -333,6 +338,8 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ## Bitácora
 
+- 28/01/2026: **Mejora de test - contenido muy largo en versionado** - Mejorado test `test_user_can_restore_previous_version` para usar contenido de ~30,000 caracteres (próximo al límite MySQL TEXT: 65,535 chars) para validar que la restauración funciona correctamente con contenido muy largo. Test pasa exitosamente. Validación: 8/8 tests de versionado pasando.
+- 28/01/2026: **Tarea 26 completada - Feature Tests de Versionado de Prompts** - Creado PromptVersioningTest.php con 8 tests cobriendo lógica completa de versionado: edición crea nueva versión (si contenido cambió), historial visible, restauración de versiones anteriores, incremento automático de numero_version, validación de relación prompt->versiones, autorización de propietario, prevención de restaurar versiones de otros prompts. Tests validan integridad del versionado: cada edición con cambio de contenido incrementa version_actual y crea Version record con numero_version, mensaje_cambio opcional. PromptService.actualizar() maneja lógica. Status: 8/8 tests pasando.
 - 28/01/2026: **Arreglo de inconsistencia: Visibilidad de Admin** - Descubierta en Tarea 25: modelo `Prompt::esVisiblePara()` permitía admin ver todo, pero Policy respetaba privacidad. SOLUCIONADO: eliminadas líneas "Admin puede ver todo" de métodos `esVisiblePara()` y `nivelAccesoPara()` en Prompt model. Ahora admin respeta privacidad consistentemente, alineado con Policy comments ("respeta privacidad"). Validación: 48 tests pasando (32 unit + 8 feature CRUD + 8 feature visibilidad). Cambios: app/Models/Prompt.php (removed lines 116-118), tests/Feature/Prompts/PromptVisibilityTest.php (updated assertion y comments). Pint: PASS.
 - 28/01/2026: **Tarea 25 completada - Feature Tests de Visibilidad de Prompts** - Creado PromptVisibilityTest.php con 8 tests cobriendo lógica de visibilidad crítica: prompts públicos visibles para todos autenticados, privados ocultos de otros, compartidos accesibles solo a usuarios con AccesoCompartido, y prompts de tipo 'enlace' tratados como privados. Tests validan tanto lógica de modelo (`esVisiblePara()`, `nivelAccesoPara()`) como autorización HTTP via Policy. Descubierta inconsistencia: modelo `esVisiblePara()` permite admin ver todo, pero Policy `view()` usa `compartirService->verificarAcceso()` que respeta privacidad incluso para admin (registrada en Tareas Descubiertas). Status: 8/8 tests pasando.
 - 28/01/2026: **Tarea 24 completada - Feature Tests CRUD de Prompts** - Creado PromptCrudTest.php con 8 tests de operaciones CRUD (create, view, update, delete) + autorización (usuario no puede editar/eliminar de otros, admin puede eliminar cualquiera) + autenticación (sin login redirige). Problema resuelto: Vite manifest no generado, solucionado con `npm run build`. Status: 8/8 tests pasando (2.71s).
