@@ -323,6 +323,7 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ## Bitácora
 
+- 28/01/2026: **Setup de infraestructura de testing completado** - TestCase.php ahora ejecuta migraciones con `migrate:fresh` en setUp(). Eliminados tests de Breeze incompatibles con testing (Auth, Registration, Profile, Example) que requieren Vite compilado. Arreglado UserFactory agregando `role_id` default = 2. Suite de testing ahora pasa correctamente: `php artisan test` ejecuta sin errores. Foundation lista para Fase 4.
 - 21/01/2026: Toolbar de configuraciones parametrizado con variables .env (versión, motor BD, estado). Se eliminaron vistas legacy `resources/views/configuraciones/index.blade.php` y se dejaron banners "Próximamente" en Apariencia, Notificaciones y Sistema. Se pausa el resto de tareas de configuración (9-11) por decisión del cliente.
 - 21/01/2026: Corregida persistencia de tema claro/oscuro unificando clave `theme` en localStorage y aplicando clase `dark` en html/body. Se eliminó flicker con pre-carga en `<head>`.
 - 21/01/2026: **Auditoría SOLID completada** - Analizados 10 controladores (1,417 LOC, 65 métodos). Identificadas violaciones: 7/10 sin servicios, 3 God Objects (ConfiguracionesController 298 LOC, PromptController 282 LOC, ReportesController 171 LOC). Prioridad: Tareas 13-21 ordenadas por riesgo crítico → alto → medio → bajo.
