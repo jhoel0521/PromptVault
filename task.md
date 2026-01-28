@@ -14,7 +14,11 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ---
 
-## Fase 2: Configuración (concluida/pausada)
+## Fase 2: Configuración ⏸️ (PAUSADA)
+
+> **Estado:** Pausada por decisión del cliente  
+> **Completadas:** Tarea 8 (Auditoría y Funcionalidad de Rutas)  
+> **Pendientes:** Tareas 9-11 (sin iniciarse)
 
 ### 8. Auditoría y Funcionalidad de Rutas en Configuración
 - [x] Revisar `/admin/configuraciones` - verificar qué funciona y qué no
@@ -42,7 +46,11 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ---
 
-## Fase 3: Refactorización SOLID de Controladores
+## Fase 3: Refactorización SOLID de Controladores ⏸️ (PAUSADA)
+
+> **Estado:** Pausada por decisión del cliente  
+> **Completadas:** Tareas 12-14 (Auditoría, ConfiguracionesController, PromptController)  
+> **Pendientes:** Tareas 15-21 (sin iniciarse)
 
 ### 12. Auditoría de Controladores Existentes
 - [x] Inventariar todos los controladores (app/Http/Controllers + Admin + Auth)
@@ -140,6 +148,179 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ---
 
+## Fase 4: Plan Integral de Testing 🚀 (EN INICIO)
+
+> **Objetivo:** Implementación de suite de pruebas automatizadas para todas las funcionalidades críticas  
+> **Alcance:** Tests unitarios + tests de integración (Feature)  
+> **Estado:** Planificación completada, listo para iniciarse
+
+### 22. Estructura Base y Setup de Testing (CRÍTICO)
+- [ ] Verificar estructura existente en `tests/` (Feature/Auth, Unit/, TestCase.php)
+- [ ] Crear directorio `tests/Unit/Models/` para tests de modelos
+- [ ] Crear directorio `tests/Unit/Services/` para tests de servicios
+- [ ] Crear directorio `tests/Feature/Prompts/` para CRUD de prompts
+- [ ] Crear directorio `tests/Feature/Sharing/` para tests de compartir
+- [ ] Crear directorio `tests/Feature/Comments/` para tests de comentarios
+- [ ] Crear directorio `tests/Feature/Ratings/` para tests de calificaciones
+- [ ] Crear directorio `tests/Feature/Tags/` para tests de etiquetas
+- [ ] Crear directorio `tests/Feature/Admin/` para tests administrativos
+- [ ] Crear directorio `tests/Feature/Calendar/` para tests de calendario
+- [ ] Configurar `phpunit.xml` con environment de testing (DB separada o in-memory)
+- [ ] Crear factories para modelos: UserFactory, PromptFactory, RoleFactory, etc.
+- [ ] **Razón**: Fundación sólida para suite de testing
+
+### 23. Unit Tests de Modelos (ALTA)
+- [ ] **UserTest.php**: relaciones (role), métodos (esAdmin, tienePermiso, puedeEditar)
+- [ ] **PromptTest.php**: relaciones (user, versiones, etiquetas), visibilidad, vistas
+- [ ] **RoleTest.php**: relaciones (users, permisos), tienePermiso()
+- [ ] **VersionTest.php**: relaciones (prompt), numero_version
+- [ ] **ComentarioTest.php**: relaciones (prompt, user, parent), replies
+- [ ] **CalificacionTest.php**: relaciones (prompt, user), validación rango estrellas
+- [ ] **EtiquetaTest.php**: relaciones (prompts), filtrado
+- [ ] **AccesoCompartidoTest.php**: relaciones (user, prompt), nivel acceso
+- [ ] **Razón**: Validación de modelos y relaciones fundamentales
+
+### 24. Feature Tests - CRUD de Prompts (CRÍTICO)
+- [ ] **PromptCrudTest.php:**
+  - [ ] test_user_can_create_prompt
+  - [ ] test_user_can_view_own_prompts
+  - [ ] test_user_can_update_own_prompt
+  - [ ] test_user_can_delete_own_prompt
+  - [ ] test_user_cannot_delete_others_prompt
+  - [ ] test_admin_can_delete_any_prompt
+- [ ] Validar validaciones de CreatePromptRequest
+- [ ] Validar respuestas HTTP (200, 403, 404)
+- [ ] **Razón**: Funcionalidad core - creación/edición/eliminación
+
+### 25. Feature Tests - Visibilidad de Prompts (CRÍTICO)
+- [ ] **PromptVisibilityTest.php:**
+  - [ ] test_public_prompts_visible_to_all
+  - [ ] test_private_prompts_hidden_from_others
+  - [ ] test_link_prompts_accessible_with_token
+  - [ ] test_shared_prompts_visible_to_shared_users
+- [ ] Validar policy PromptPolicy en cada caso
+- [ ] Validar queries con can() middleware
+- [ ] **Razón**: Seguridad de acceso crítica
+
+### 26. Feature Tests - Versionado de Prompts (ALTA)
+- [ ] **PromptVersioningTest.php:**
+  - [ ] test_editing_prompt_creates_new_version
+  - [ ] test_user_can_view_version_history
+  - [ ] test_user_can_restore_previous_version
+  - [ ] test_version_comparison_works
+- [ ] Validar incremento automático numero_version
+- [ ] Validar relación prompt->versiones
+- [ ] **Razón**: Funcionalidad crítica de versionado
+
+### 27. Feature Tests - Compartir y Colaboración (ALTA)
+- [ ] **AccesoCompartidoTest.php:**
+  - [ ] test_owner_can_share_prompt
+  - [ ] test_share_with_lector_level
+  - [ ] test_share_with_comentador_level
+  - [ ] test_share_with_editor_level
+  - [ ] test_owner_can_revoke_access
+  - [ ] test_shared_user_receives_notification
+- [ ] **CollaborationTest.php:**
+  - [ ] test_editor_can_edit_shared_prompt
+  - [ ] test_comentador_can_comment_not_edit
+  - [ ] test_lector_can_only_view
+- [ ] Validar niveles de acceso (AccesoCompartido)
+- [ ] **Razón**: Funcionalidad core de compartir
+
+### 28. Feature Tests - Comentarios (MEDIA)
+- [ ] **ComentarioTest.php:**
+  - [ ] test_user_can_comment_on_public_prompt
+  - [ ] test_user_can_reply_to_comment
+  - [ ] test_owner_can_delete_comment
+  - [ ] test_user_can_delete_own_comment
+  - [ ] test_nested_comments_display_correctly
+- [ ] Validar relaciones parent/replies
+- [ ] Validar autorización para eliminar
+- [ ] **Razón**: Funcionalidad de colaboración
+
+### 29. Feature Tests - Calificaciones (MEDIA)
+- [ ] **CalificacionTest.php:**
+  - [ ] test_user_can_rate_prompt
+  - [ ] test_user_can_update_rating
+  - [ ] test_user_cannot_rate_twice (updateOrCreate)
+  - [ ] test_prompt_average_updates_on_rating
+  - [ ] test_rating_range_validation (1-5)
+- [ ] Validar cálculo automático de promedio
+- [ ] Validar CalificacionService
+- [ ] **Razón**: Funcionalidad de valoración
+
+### 30. Feature Tests - Etiquetas (MEDIA)
+- [ ] **EtiquetaTest.php:**
+  - [ ] test_user_can_add_tags_to_prompt
+  - [ ] test_user_can_remove_tags_from_prompt
+  - [ ] test_admin_can_create_global_tags
+  - [ ] test_filter_prompts_by_tag
+- [ ] Validar relación many-to-many
+- [ ] Validar búsqueda por etiqueta
+- [ ] **Razón**: Funcionalidad de categorización
+
+### 31. Feature Tests - Administración de Usuarios (MEDIA)
+- [ ] **UserManagementTest.php:**
+  - [ ] test_admin_can_list_users
+  - [ ] test_admin_can_create_user
+  - [ ] test_admin_can_deactivate_user
+  - [ ] test_admin_can_change_user_role
+  - [ ] test_non_admin_cannot_access_user_management
+- [ ] Validar policies de administración
+- [ ] Validar middleware admin
+- [ ] **Razón**: Seguridad - solo admins pueden gestionar usuarios
+
+### 32. Feature Tests - Configuración de Sistema (MEDIA)
+- [ ] **ConfigurationTest.php:**
+  - [ ] test_admin_can_view_settings
+  - [ ] test_admin_can_update_settings
+  - [ ] test_non_admin_cannot_access_settings
+- [ ] Validar ConfigurationService
+- [ ] Validar persistencia en app_settings
+- [ ] **Razón**: Seguridad - solo admins pueden configurar
+
+### 33. Feature Tests - Calendario de Eventos (BAJA)
+- [ ] **EventoTest.php:**
+  - [ ] test_user_can_create_event
+  - [ ] test_user_can_view_own_events
+  - [ ] test_user_can_update_event
+  - [ ] test_user_can_delete_event
+  - [ ] test_user_can_mark_event_complete
+- [ ] Validar relaciones usuario-evento
+- [ ] Validar states (completado/pendiente)
+- [ ] **Razón**: Funcionalidad secundaria
+
+### 34. Unit Tests de Servicios (ALTA)
+- [ ] **Tests para CalificacionService:**
+  - [ ] test_calificar_creates_or_updates_rating
+  - [ ] test_obtener_calificacion_returns_user_rating
+- [ ] **Tests para CompartirService:**
+  - [ ] test_compartir_creates_acceso_compartido
+  - [ ] test_compartir_por_email_sends_notification
+  - [ ] test_revocar_access_removes_record
+- [ ] **Tests para PromptService:**
+  - [ ] test_crear_prompt_validates_input
+  - [ ] test_actualizar_prompt_creates_version
+  - [ ] test_eliminar_prompt_soft_delete
+- [ ] **Tests para BackupService y ConfigurationService (Tareas 13-14)**
+  - [ ] test_create_backup_generates_file
+  - [ ] test_list_backups_returns_files
+  - [ ] test_get_settings_returns_app_settings
+  - [ ] test_update_settings_persists_changes
+- [ ] **Razón**: Validación de lógica de negocio
+
+### 35. Validación Final y Cobertura (CRÍTICO)
+- [ ] Ejecutar todos los tests: `./vendor/bin/phpunit`
+- [ ] Generar coverage report: `./vendor/bin/phpunit --coverage-html coverage`
+- [ ] Validar cobertura >80% en funcionalidades críticas
+- [ ] Validar 0 warnings/notices en logs de testing
+- [ ] Documentar resultados en `docs/test-results.md`
+- [ ] Crear CI/CD pipeline (GitHub Actions) para ejecutar tests en cada PR
+- [ ] Commit: "test: implementación completa de suite de testing integral"
+- [ ] **Razón**: Garantía de calidad y confianza en regresiones
+
+---
+
 ## Bitácora
 
 - 21/01/2026: Toolbar de configuraciones parametrizado con variables .env (versión, motor BD, estado). Se eliminaron vistas legacy `resources/views/configuraciones/index.blade.php` y se dejaron banners "Próximamente" en Apariencia, Notificaciones y Sistema. Se pausa el resto de tareas de configuración (9-11) por decisión del cliente.
@@ -154,12 +335,13 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 *(Espacio reservado para deuda técnica o bugs encontrados)*
 
-- **Testing de Servicios:** Crear tests unitarios para cada método de cada servicio (BackupService, ConfigurationService, CalificacionService, etc.). Estructura: `tests/Unit/Services/` y `tests/Feature/Http/Controllers/`. Cada método del contrato debe tener su test correspondiente.
+- **✅ Testing de Servicios:** Planificado en Fase 4 (Tareas 22-35). Crear tests unitarios para cada método de cada servicio (BackupService, ConfigurationService, CalificacionService, etc.). Estructura: `tests/Unit/Services/` y `tests/Feature/Http/Controllers/`. Cada método del contrato debe tener su test correspondiente.
 - **Gestión Académica:** Módulo que repite y no se usa. Evaluar eliminación.
-- **.env Visualization:** Necesario para configuración desde admin.
+- **.env Visualization:** Necesario para configuración desde admin (Fase 2, Tarea 11, pausada).
 - **Auth Controllers:** Revisar alineación con Fortify/Breeze para evitar código duplicado.
 
 ---
 
-**Última actualización:** 21 de enero de 2026
-**Estado General:** Preparando Fase 3 - Refactorización SOLID
+**Última actualización:** 28 de enero de 2026
+**Estado General:** Fase 4 - Plan Integral de Testing (LISTO PARA INICIARSE)
+**Próximas Fases:** Fases 2 y 3 pausadas por decisión del cliente
