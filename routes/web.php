@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\CalendarioController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ConfiguracionesController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PerfilController;
@@ -40,10 +42,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil/seguridad', [PerfilController::class, 'cambiarPassword'])->name('perfil.security');
     Route::post('/perfil/password', [PerfilController::class, 'actualizarPassword'])->name('perfil.password');
     Route::post('/perfil/avatar', [PerfilController::class, 'subirAvatar'])->name('perfil.avatar');
-
+    
     // Prompts (CRUD)
     Route::resource('prompts', PromptController::class);
-
+    
     // Prompts adicionales
     Route::post('/prompts/{prompt}/compartir', [PromptController::class, 'compartir'])->name('prompts.compartir')->middleware('can:share,prompt');
     Route::delete('/prompts/{prompt}/acceso/{user}', [PromptController::class, 'quitarAcceso'])->name('prompts.quitarAcceso')->middleware('can:share,prompt');
@@ -51,10 +53,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/prompts/{prompt}/versiones/{version}/restaurar', [PromptController::class, 'restaurarVersion'])->name('prompts.restaurar')->middleware('can:update,prompt');
     Route::post('/prompts/{prompt}/calificar', [PromptController::class, 'calificar'])->name('prompts.calificar')->middleware('can:rate,prompt');
     Route::get('/compartidos-conmigo', [PromptController::class, 'compartidosConmigo'])->name('prompts.compartidosConmigo');
+    
+    // Chat IA
+    Route::prefix('chat')->name('chat.')->group(function () {
+        Route::get('/', [ChatController::class, 'index'])->name('index');
+        Route::get('/history', [ChatController::class, 'history'])->name('history');
+        Route::delete('/history/{id}', [ChatController::class, 'deleteMessage'])->name('history.delete');
+        Route::delete('/history', [ChatController::class, 'clearHistory'])->name('history.clear');
+    });
 
     // Calendario
     Route::resource('calendario', CalendarioController::class);
-
+    
     // Administración (solo admin)
     Route::middleware(['can:admin'])->prefix('admin')->name('admin.')->group(function () {
         // Configuraciones
@@ -85,8 +95,9 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware('auth')->prefix('chatbot')->group(function () {
-    Route::post('/ask', [App\Http\Controllers\ChatbotController::class, 'ask'])->name('chatbot.ask');
-    Route::get('/providers', [App\Http\Controllers\ChatbotController::class, 'providers'])->name('chatbot.providers');
+    Route::post('/ask', [ChatbotController::class, 'ask'])->name('chatbot.ask');
+    Route::get('/providers', [ChatbotController::class, 'providers'])->name('chatbot.providers');
+    Route::post('/prompt', [ChatbotController::class, 'createPrompt'])->name('chatbot.prompt.create');
 });
 require __DIR__.'/auth.php';
 // Helper para probar páginas de error

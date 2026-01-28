@@ -40,4 +40,13 @@ return [
         'model' => env('GROQ_MODEL', 'llama-3.3-70b-versatile'),
     ],
 
+    'claude' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+        'model' => env('CLAUDE_MODEL', 'claude-sonnet-4-20250514'),
+    ],
+
+    'chatbot' => [
+        'default_provider' => env('CHATBOT_DEFAULT_PROVIDER', 'groq'),
+    ],
+
 ];
