@@ -17,9 +17,9 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * Test que get settings devuelve AppSetting
+     * Test que obtener configuracion devuelve AppSetting
      */
-    public function test_get_settings_returns_app_settings(): void
+    public function test_obtener_configuracion_devuelve_app_settings(): void
     {
         // Crear configuración inicial
         $settings = AppSetting::firstOrCreate([], [
@@ -39,9 +39,9 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * Test que update settings persiste cambios
+     * Test que actualizar configuracion persiste cambios
      */
-    public function test_update_settings_persists_changes(): void
+    public function test_actualizar_configuracion_persiste_cambios(): void
     {
         // Crear configuración inicial
         AppSetting::firstOrCreate([], [

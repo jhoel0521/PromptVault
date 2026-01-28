@@ -11,7 +11,7 @@ class VersionTest extends TestCase
     /**
      * Test que una versión pertenece a un prompt
      */
-    public function test_version_belongs_to_prompt(): void
+    public function test_version_pertenece_a_prompt(): void
     {
         $version = Version::factory()->create();
 
@@ -22,7 +22,7 @@ class VersionTest extends TestCase
     /**
      * Test que una versión tiene un número de versión
      */
-    public function test_version_has_numero_version(): void
+    public function test_version_tiene_numero_version(): void
     {
         $version = Version::factory()->create(['numero_version' => 5]);
 

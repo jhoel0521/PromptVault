@@ -21,7 +21,7 @@ class CompartirServiceTest extends TestCase
     /**
      * Test que compartir crea registro de AccesoCompartido
      */
-    public function test_compartir_creates_acceso_compartido(): void
+    public function test_compartir_crea_acceso_compartido(): void
     {
         $owner = User::factory()->create();
         $user = User::factory()->create();
@@ -56,7 +56,7 @@ class CompartirServiceTest extends TestCase
     /**
      * Test que compartir por email envía notificación o retorna error
      */
-    public function test_compartir_por_email_sends_notification(): void
+    public function test_compartir_por_email_envia_notificacion(): void
     {
         $owner = User::factory()->create();
         $user = User::factory()->create(['email' => 'colaborador@example.com']);
@@ -88,7 +88,7 @@ class CompartirServiceTest extends TestCase
     /**
      * Test que revocar acceso elimina el registro
      */
-    public function test_revocar_access_removes_record(): void
+    public function test_revocar_acceso_elimina_registro(): void
     {
         $owner = User::factory()->create();
         $user = User::factory()->create();

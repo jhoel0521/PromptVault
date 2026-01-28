@@ -12,7 +12,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que un acceso compartido pertenece a un usuario
      */
-    public function test_acceso_compartido_belongs_to_user(): void
+    public function test_acceso_compartido_pertenece_a_usuario(): void
     {
         $acceso = AccesoCompartido::factory()->create();
 
@@ -23,7 +23,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que un acceso compartido pertenece a un prompt
      */
-    public function test_acceso_compartido_belongs_to_prompt(): void
+    public function test_acceso_compartido_pertenece_a_prompt(): void
     {
         $acceso = AccesoCompartido::factory()->create();
 

@@ -12,7 +12,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que editar un prompt crea una nueva versión
      */
-    public function test_editing_prompt_creates_new_version(): void
+    public function test_editar_prompt_crea_nueva_version(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create([
@@ -57,7 +57,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que editar sin cambiar contenido NO crea nueva versión
      */
-    public function test_editing_without_content_change_does_not_create_version(): void
+    public function test_editar_sin_cambio_contenido_no_crea_version(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create([
@@ -92,7 +92,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que usuario puede ver historial de versiones
      */
-    public function test_user_can_view_version_history(): void
+    public function test_usuario_puede_ver_historial_versiones(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create([
@@ -122,7 +122,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que usuario puede restaurar una versión anterior con contenido muy largo
      */
-    public function test_user_can_restore_previous_version(): void
+    public function test_usuario_puede_restaurar_version_anterior(): void
     {
         $user = User::factory()->create();
 
@@ -189,7 +189,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que el numero_version se incrementa correctamente
      */
-    public function test_numero_version_increments_correctly(): void
+    public function test_numero_version_incrementa_correctamente(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create([
@@ -229,7 +229,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que relación prompt->versiones funciona correctamente
      */
-    public function test_prompt_versiones_relationship(): void
+    public function test_relacion_prompt_versiones(): void
     {
         $prompt = Prompt::factory()->create(['version_actual' => 2]);
 
@@ -249,7 +249,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que solo propietario puede restaurar versiones
      */
-    public function test_only_owner_can_restore_version(): void
+    public function test_solo_propietario_puede_restaurar_version(): void
     {
         $owner = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -272,7 +272,7 @@ class PromptVersioningTest extends TestCase
     /**
      * Test que no puede restaurar versión de otro prompt
      */
-    public function test_cannot_restore_version_from_different_prompt(): void
+    public function test_no_puede_restaurar_version_de_prompt_diferente(): void
     {
         $user = User::factory()->create();
         $prompt1 = Prompt::factory()->create(['user_id' => $user->id]);

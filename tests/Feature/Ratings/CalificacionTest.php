@@ -12,7 +12,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que usuario puede calificar un prompt
      */
-    public function test_user_can_rate_prompt(): void
+    public function test_usuario_puede_calificar_prompt(): void
     {
         $owner = User::factory()->create();
         $rater = User::factory()->create();
@@ -43,7 +43,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que usuario puede actualizar su calificación
      */
-    public function test_user_can_update_rating(): void
+    public function test_usuario_puede_actualizar_calificacion(): void
     {
         $owner = User::factory()->create();
         $rater = User::factory()->create();
@@ -97,7 +97,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que usuario no puede calificar dos veces (updateOrCreate)
      */
-    public function test_user_cannot_rate_twice(): void
+    public function test_usuario_no_puede_calificar_dos_veces(): void
     {
         $owner = User::factory()->create();
         $rater = User::factory()->create();
@@ -130,7 +130,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que promedio se actualiza automáticamente
      */
-    public function test_prompt_average_updates_on_rating(): void
+    public function test_promedio_prompt_actualiza_con_calificacion(): void
     {
         $owner = User::factory()->create();
         $user1 = User::factory()->create();
@@ -174,7 +174,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que valida rango de estrellas (1-5)
      */
-    public function test_rating_range_validation(): void
+    public function test_validacion_rango_calificacion(): void
     {
         $owner = User::factory()->create();
         $rater = User::factory()->create();

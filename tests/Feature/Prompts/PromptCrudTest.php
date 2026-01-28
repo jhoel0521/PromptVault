@@ -11,7 +11,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un usuario puede crear un prompt
      */
-    public function test_user_can_create_prompt(): void
+    public function test_usuario_puede_crear_prompt(): void
     {
         $user = User::factory()->create();
 
@@ -32,7 +32,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un usuario puede ver sus propios prompts
      */
-    public function test_user_can_view_own_prompts(): void
+    public function test_usuario_puede_ver_propios_prompts(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $user->id]);
@@ -45,7 +45,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un usuario puede actualizar su propio prompt
      */
-    public function test_user_can_update_own_prompt(): void
+    public function test_usuario_puede_actualizar_propio_prompt(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $user->id]);
@@ -67,7 +67,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un usuario puede eliminar su propio prompt
      */
-    public function test_user_can_delete_own_prompt(): void
+    public function test_usuario_puede_eliminar_propio_prompt(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $user->id]);
@@ -81,7 +81,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un usuario NO puede eliminar prompts ajenos
      */
-    public function test_user_cannot_delete_others_prompt(): void
+    public function test_usuario_no_puede_eliminar_prompts_ajenos(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -96,7 +96,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un admin puede eliminar cualquier prompt
      */
-    public function test_admin_can_delete_any_prompt(): void
+    public function test_admin_puede_eliminar_cualquier_prompt(): void
     {
         $admin = User::factory()->create(['role_id' => 1]); // admin role
         $user = User::factory()->create();
@@ -111,7 +111,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que un usuario no puede actualizar prompts ajenos
      */
-    public function test_user_cannot_update_others_prompt(): void
+    public function test_usuario_no_puede_actualizar_prompts_ajenos(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -130,7 +130,7 @@ class PromptCrudTest extends TestCase
     /**
      * Test que usuario no autenticado no puede crear prompts
      */
-    public function test_unauthenticated_user_cannot_create_prompt(): void
+    public function test_usuario_no_autenticado_no_puede_crear_prompt(): void
     {
         $response = $this->post(route('prompts.store'), [
             'titulo' => 'Test',

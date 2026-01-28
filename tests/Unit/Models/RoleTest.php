@@ -11,7 +11,7 @@ class RoleTest extends TestCase
     /**
      * Test que un rol tiene muchos usuarios
      */
-    public function test_role_has_many_users(): void
+    public function test_rol_tiene_muchos_usuarios(): void
     {
         $role = Role::factory()->create();
         User::factory(3)->create(['role_id' => $role->id]);
@@ -22,7 +22,7 @@ class RoleTest extends TestCase
     /**
      * Test que un rol tiene muchos permisos
      */
-    public function test_role_has_many_permisos(): void
+    public function test_rol_tiene_muchos_permisos(): void
     {
         $role = Role::factory()->create();
 

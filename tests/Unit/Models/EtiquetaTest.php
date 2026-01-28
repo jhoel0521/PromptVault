@@ -11,7 +11,7 @@ class EtiquetaTest extends TestCase
     /**
      * Test que una etiqueta tiene muchos prompts (many-to-many)
      */
-    public function test_etiqueta_has_many_prompts(): void
+    public function test_etiqueta_tiene_muchos_prompts(): void
     {
         $etiqueta = Etiqueta::factory()->create();
         $prompts = Prompt::factory(3)->create();
@@ -26,7 +26,7 @@ class EtiquetaTest extends TestCase
     /**
      * Test que se pueden filtrar prompts por etiqueta
      */
-    public function test_filter_prompts_by_etiqueta(): void
+    public function test_filtrar_prompts_por_etiqueta(): void
     {
         $etiqueta = Etiqueta::factory()->create(['nombre' => 'JavaScript']);
         $prompt1 = Prompt::factory()->create();

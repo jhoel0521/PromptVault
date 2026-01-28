@@ -12,7 +12,7 @@ class CollaborationTest extends TestCase
     /**
      * Test que editor puede editar un prompt compartido
      */
-    public function test_editor_can_edit_shared_prompt(): void
+    public function test_editor_puede_editar_prompt_compartido(): void
     {
         $owner = User::factory()->create();
         $editor = User::factory()->create();
@@ -48,7 +48,7 @@ class CollaborationTest extends TestCase
     /**
      * Test que comentador puede comentar pero NO editar
      */
-    public function test_comentador_can_comment_not_edit(): void
+    public function test_comentador_puede_comentar_no_editar(): void
     {
         $owner = User::factory()->create();
         $comentador = User::factory()->create();
@@ -83,7 +83,7 @@ class CollaborationTest extends TestCase
     /**
      * Test que lector solo puede ver, no editar ni comentar
      */
-    public function test_lector_can_only_view(): void
+    public function test_lector_solo_puede_ver(): void
     {
         $owner = User::factory()->create();
         $lector = User::factory()->create();
@@ -122,7 +122,7 @@ class CollaborationTest extends TestCase
     /**
      * Test que usuario sin acceso no puede ver ni editar
      */
-    public function test_user_without_access_cannot_view_or_edit(): void
+    public function test_usuario_sin_acceso_no_puede_ver_ni_editar(): void
     {
         $owner = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -151,7 +151,7 @@ class CollaborationTest extends TestCase
     /**
      * Test que cambiar nivel de acceso actualiza permisos
      */
-    public function test_changing_access_level_updates_permissions(): void
+    public function test_cambiar_nivel_acceso_actualiza_permisos(): void
     {
         $owner = User::factory()->create();
         $user = User::factory()->create();

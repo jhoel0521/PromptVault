@@ -12,7 +12,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que una calificación pertenece a un prompt
      */
-    public function test_calificacion_belongs_to_prompt(): void
+    public function test_calificacion_pertenece_a_prompt(): void
     {
         $calificacion = Calificacion::factory()->create();
 
@@ -23,7 +23,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que una calificación pertenece a un usuario
      */
-    public function test_calificacion_belongs_to_user(): void
+    public function test_calificacion_pertenece_a_usuario(): void
     {
         $calificacion = Calificacion::factory()->create();
 
@@ -34,7 +34,7 @@ class CalificacionTest extends TestCase
     /**
      * Test que las estrellas están en el rango 1-5
      */
-    public function test_calificacion_estrellas_range(): void
+    public function test_calificacion_rango_estrellas(): void
     {
         $calificacion1 = Calificacion::factory()->fiveStars()->create();
         $calificacion2 = Calificacion::factory()->oneStar()->create();
