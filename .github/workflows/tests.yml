@@ -74,4 +74,4 @@ jobs:
       run: php artisan migrate --force
 
     - name: Ejecutar suite de tests
-      run: php artisan test --parallel --stop-on-failure
+      run: php artisan test --stop-on-failure
