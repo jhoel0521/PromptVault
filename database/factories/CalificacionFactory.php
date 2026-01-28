@@ -1,0 +1,49 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Calificacion;
+use App\Models\Prompt;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Calificacion>
+ */
+class CalificacionFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'prompt_id' => Prompt::factory(),
+            'user_id' => User::factory(),
+            'estrellas' => fake()->numberBetween(1, 5),
+            'comentario' => fake()->optional()->sentence(10),
+        ];
+    }
+
+    /**
+     * Crear una calificación con 5 estrellas
+     */
+    public function fiveStars(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'estrellas' => 5,
+        ]);
+    }
+
+    /**
+     * Crear una calificación con 1 estrella
+     */
+    public function oneStar(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'estrellas' => 1,
+        ]);
+    }
+}
