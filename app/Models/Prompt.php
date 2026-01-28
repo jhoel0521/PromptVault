@@ -106,12 +106,7 @@ class Prompt extends Model
             return true;
         }
 
-        // Admin puede ver todo
-        if ($user->esAdmin()) {
-            return true;
-        }
-
-        // Verificar si tiene acceso compartido
+        // Verificar si tiene acceso compartido (respeta privacidad incluso para admin)
         return $this->accesosCompartidos()
             ->where('user_id', $user->id)
             ->exists();
@@ -124,11 +119,6 @@ class Prompt extends Model
     {
         // El dueño tiene acceso total
         if ($this->user_id === $user->id) {
-            return 'propietario';
-        }
-
-        // Admin tiene acceso total
-        if ($user->esAdmin()) {
             return 'propietario';
         }
 

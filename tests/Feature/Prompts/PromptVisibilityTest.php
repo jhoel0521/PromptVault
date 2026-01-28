@@ -107,8 +107,7 @@ class PromptVisibilityTest extends TestCase
     }
 
     /**
-     * Test que admin NO puede ver prompts privados de otros vía Policy HTTP
-     * Nota: Modelo esVisiblePara() retorna true, pero CompartirService NO da acceso al admin
+     * Test que admin NO puede ver prompts privados de otros (respeta privacidad)
      */
     public function test_admin_cannot_see_private_prompts_via_policy(): void
     {
@@ -122,11 +121,10 @@ class PromptVisibilityTest extends TestCase
             'visibilidad' => 'privado',
         ]);
 
-        // Modelo: Admin PUEDE ver (esVisiblePara retorna true)
-        $this->assertTrue($prompt->esVisiblePara($admin));
+        // Modelo: Admin NO puede ver (esVisiblePara respeta privacidad)
+        $this->assertFalse($prompt->esVisiblePara($admin));
 
-        // Pero via Policy HTTP: Admin NO puede ver (compartirService rechaza)
-        // Policy usa compartirService que NO considera admin
+        // Policy HTTP: Admin NO puede ver
         $this->actingAs($admin)
             ->get(route('prompts.show', $prompt))
             ->assertStatus(403);
