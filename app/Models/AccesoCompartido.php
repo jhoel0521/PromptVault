@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AccesoCompartido extends Model
 {
+    use HasFactory;
+
     protected $table = 'accesos_compartidos';
 
     protected $fillable = [

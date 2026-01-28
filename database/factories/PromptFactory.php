@@ -24,10 +24,9 @@ class PromptFactory extends Factory
             'descripcion' => fake()->text(200),
             'contenido' => fake()->paragraphs(3, true),
             'visibilidad' => fake()->randomElement(['privado', 'publico', 'enlace']),
-            'token_compartir' => fake()->unique()->sha256(),
-            'numero_vistas' => fake()->numberBetween(0, 1000),
+            'version_actual' => 1,
             'promedio_calificacion' => fake()->numberBetween(1, 5),
-            'activo' => true,
+            'conteo_vistas' => fake()->numberBetween(0, 1000),
         ];
     }
 

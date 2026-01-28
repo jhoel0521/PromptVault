@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\AccesoCompartido;
 use App\Models\Prompt;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;

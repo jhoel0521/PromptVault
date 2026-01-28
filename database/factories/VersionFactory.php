@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Prompt;
-use App\Models\Version;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

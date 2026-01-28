@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Etiqueta;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +18,7 @@ class EtiquetaFactory extends Factory
     {
         return [
             'nombre' => fake()->unique()->word(),
-            'descripcion' => fake()->optional()->sentence(),
-            'color' => fake()->hexColor(),
+            'color_hex' => fake()->hexColor(),
         ];
     }
 }
