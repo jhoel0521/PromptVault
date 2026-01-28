@@ -22,7 +22,7 @@ class CompartirPromptRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email|exists:users,email|not_in:'.auth()->user()->email,
             'nivel_acceso' => 'required|in:lector,comentador,editor',
         ];
     }
@@ -36,6 +36,7 @@ class CompartirPromptRequest extends FormRequest
             'email.required' => 'El email es obligatorio',
             'email.email' => 'Debe ser un email válido',
             'email.exists' => 'No existe un usuario con ese email',
+            'email.not_in' => 'No puedes compartir un prompt contigo mismo',
             'nivel_acceso.required' => 'Debe seleccionar un nivel de acceso',
             'nivel_acceso.in' => 'El nivel debe ser: lector, comentador o editor',
         ];
