@@ -12,7 +12,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que prompts públicos son visibles para todos autenticados
      */
-    public function test_public_prompts_visible_to_all(): void
+    public function test_prompts_publicos_visibles_para_todos(): void
     {
         $owner = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -40,7 +40,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que prompts privados están ocultos de otros usuarios
      */
-    public function test_private_prompts_hidden_from_others(): void
+    public function test_prompts_privados_ocultos_para_otros(): void
     {
         $owner = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -68,7 +68,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que prompts compartidos son visibles para usuarios con acceso
      */
-    public function test_shared_prompts_visible_to_shared_users(): void
+    public function test_prompts_compartidos_visibles_para_usuarios_compartidos(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
@@ -109,7 +109,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que admin NO puede ver prompts privados de otros (respeta privacidad)
      */
-    public function test_admin_cannot_see_private_prompts_via_policy(): void
+    public function test_admin_no_puede_ver_prompts_privados_via_policy(): void
     {
         $owner = User::factory()->create();
         $admin = User::factory()->create();
@@ -133,7 +133,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que prompts de enlace son tratados como privados
      */
-    public function test_link_prompts_treated_as_private(): void
+    public function test_prompts_enlace_tratados_como_privados(): void
     {
         $owner = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -161,7 +161,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que el nivel de acceso de propietario se retorna correctamente
      */
-    public function test_owner_has_propietario_access_level(): void
+    public function test_propietario_tiene_nivel_acceso_propietario(): void
     {
         $owner = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $owner->id]);
@@ -173,7 +173,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que el nivel de acceso de usuario compartido se retorna correctamente
      */
-    public function test_shared_user_has_correct_access_level(): void
+    public function test_usuario_compartido_tiene_nivel_acceso_correcto(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
@@ -192,7 +192,7 @@ class PromptVisibilityTest extends TestCase
     /**
      * Test que usuario sin acceso no tiene nivel de acceso
      */
-    public function test_user_without_access_has_no_level(): void
+    public function test_usuario_sin_acceso_sin_nivel(): void
     {
         $owner = User::factory()->create();
         $otherUser = User::factory()->create();

@@ -10,7 +10,7 @@ class UserManagementTest extends TestCase
     /**
      * Test que admin puede listar usuarios
      */
-    public function test_admin_can_list_users(): void
+    public function test_admin_puede_listar_usuarios(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // Admin role
@@ -26,7 +26,7 @@ class UserManagementTest extends TestCase
     /**
      * Test que admin puede crear usuario
      */
-    public function test_admin_can_create_user(): void
+    public function test_admin_puede_crear_usuario(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // Admin role
@@ -52,7 +52,7 @@ class UserManagementTest extends TestCase
     /**
      * Test que admin puede desactivar usuario
      */
-    public function test_admin_can_deactivate_user(): void
+    public function test_admin_puede_desactivar_usuario(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // Admin role
@@ -80,7 +80,7 @@ class UserManagementTest extends TestCase
     /**
      * Test que admin puede cambiar rol de usuario
      */
-    public function test_admin_can_change_user_role(): void
+    public function test_admin_puede_cambiar_rol_usuario(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // Admin role
@@ -110,7 +110,7 @@ class UserManagementTest extends TestCase
     /**
      * Test que non-admin no puede acceder a gestión de usuarios
      */
-    public function test_non_admin_cannot_access_user_management(): void
+    public function test_no_admin_no_puede_acceder_gestion_usuarios(): void
     {
         $user = User::factory()->create();
         $user->update(['role_id' => 2]); // Usuario normal

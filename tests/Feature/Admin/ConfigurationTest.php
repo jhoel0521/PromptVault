@@ -11,7 +11,7 @@ class ConfigurationTest extends TestCase
     /**
      * Test que admin puede ver configuraciones
      */
-    public function test_admin_can_view_settings(): void
+    public function test_admin_puede_ver_configuraciones(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // Admin role
@@ -25,7 +25,7 @@ class ConfigurationTest extends TestCase
     /**
      * Test que admin puede actualizar configuraciones
      */
-    public function test_admin_can_update_settings(): void
+    public function test_admin_puede_actualizar_configuraciones(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // Admin role
@@ -58,7 +58,7 @@ class ConfigurationTest extends TestCase
     /**
      * Test que non-admin no puede acceder a configuraciones
      */
-    public function test_non_admin_cannot_access_settings(): void
+    public function test_no_admin_no_puede_acceder_configuraciones(): void
     {
         $user = User::factory()->create();
         $user->update(['role_id' => 2]); // Usuario normal

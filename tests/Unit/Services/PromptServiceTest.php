@@ -22,7 +22,7 @@ class PromptServiceTest extends TestCase
     /**
      * Test que crear prompt valida y crea registro con versión inicial
      */
-    public function test_crear_prompt_validates_input(): void
+    public function test_create_prompt_validates_input(): void
     {
         $user = User::factory()->create();
         $etiqueta1 = Etiqueta::create(['nombre' => 'Laravel']);
@@ -64,7 +64,7 @@ class PromptServiceTest extends TestCase
     /**
      * Test que actualizar prompt crea nueva versión si contenido cambia
      */
-    public function test_actualizar_prompt_creates_version(): void
+    public function test_update_prompt_creates_version(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create([
@@ -124,7 +124,7 @@ class PromptServiceTest extends TestCase
     /**
      * Test que eliminar prompt elimina el registro
      */
-    public function test_eliminar_prompt_soft_delete(): void
+    public function test_delete_prompt_soft_delete(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $user->id]);

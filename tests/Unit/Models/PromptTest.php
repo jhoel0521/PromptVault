@@ -13,7 +13,7 @@ class PromptTest extends TestCase
     /**
      * Test que un prompt pertenece a un usuario
      */
-    public function test_prompt_belongs_to_user(): void
+    public function test_prompt_pertenece_a_usuario(): void
     {
         $prompt = Prompt::factory()->create();
 
@@ -24,7 +24,7 @@ class PromptTest extends TestCase
     /**
      * Test que un prompt tiene muchas versiones
      */
-    public function test_prompt_has_many_versiones(): void
+    public function test_prompt_tiene_muchas_versiones(): void
     {
         $prompt = Prompt::factory()->create();
         Version::factory(3)->create(['prompt_id' => $prompt->id]);
@@ -35,7 +35,7 @@ class PromptTest extends TestCase
     /**
      * Test que un prompt tiene muchas etiquetas (many-to-many)
      */
-    public function test_prompt_has_many_etiquetas(): void
+    public function test_prompt_tiene_muchas_etiquetas(): void
     {
         $prompt = Prompt::factory()->create();
         $etiquetas = Etiqueta::factory(3)->create();
@@ -50,7 +50,7 @@ class PromptTest extends TestCase
     /**
      * Test que el promedio de calificación se calcula correctamente
      */
-    public function test_prompt_recalcular_promedio(): void
+    public function test_prompt_recalcula_promedio(): void
     {
         $prompt = Prompt::factory()->create(['promedio_calificacion' => 0]);
 
@@ -61,7 +61,7 @@ class PromptTest extends TestCase
     /**
      * Test que se incrementan las vistas
      */
-    public function test_prompt_incrementar_vistas(): void
+    public function test_prompt_incrementa_vistas(): void
     {
         $prompt = Prompt::factory()->create(['conteo_vistas' => 0]);
 
@@ -72,7 +72,7 @@ class PromptTest extends TestCase
     /**
      * Test que el propietario puede ver su prompt
      */
-    public function test_prompt_es_visible_para_owner(): void
+    public function test_prompt_visible_para_propietario(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $user->id, 'visibilidad' => 'privado']);
@@ -83,7 +83,7 @@ class PromptTest extends TestCase
     /**
      * Test que los prompts públicos son visibles para todos
      */
-    public function test_prompt_es_visible_para_public(): void
+    public function test_prompt_publico_visible_para_todos(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->publico()->create();
@@ -94,7 +94,7 @@ class PromptTest extends TestCase
     /**
      * Test que los prompts privados no son visibles para usuarios no autorizados
      */
-    public function test_prompt_not_visible_for_private(): void
+    public function test_prompt_privado_no_visible_para_otros(): void
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();

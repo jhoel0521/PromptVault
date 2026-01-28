@@ -12,7 +12,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que propietario puede compartir un prompt
      */
-    public function test_owner_can_share_prompt(): void
+    public function test_propietario_puede_compartir_prompt(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
@@ -41,7 +41,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que se puede compartir con nivel 'lector'
      */
-    public function test_share_with_lector_level(): void
+    public function test_compartir_con_nivel_lector(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
@@ -71,7 +71,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que se puede compartir con nivel 'comentador'
      */
-    public function test_share_with_comentador_level(): void
+    public function test_compartir_con_nivel_comentador(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
@@ -98,7 +98,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que se puede compartir con nivel 'editor'
      */
-    public function test_share_with_editor_level(): void
+    public function test_compartir_con_nivel_editor(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
@@ -125,12 +125,12 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que propietario puede revocar acceso
      */
-    public function test_owner_can_revoke_access(): void
+    public function test_propietario_puede_revocar_acceso(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();
 
-        $prompt = Prompt::factory()->create(['user_id' => $owner->id]);
+        $prompt = Prompt::factory()->privado()->create(['user_id' => $owner->id]);
 
         // Compartir primero
         AccesoCompartido::create([
@@ -168,7 +168,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que no se puede compartir con uno mismo
      */
-    public function test_cannot_share_with_self(): void
+    public function test_no_puede_compartir_consigo_mismo(): void
     {
         $owner = User::factory()->create();
         $prompt = Prompt::factory()->create(['user_id' => $owner->id]);
@@ -186,7 +186,7 @@ class AccesoCompartidoTest extends TestCase
     /**
      * Test que solo propietario puede revocar acceso
      */
-    public function test_only_owner_can_revoke_access(): void
+    public function test_solo_propietario_puede_revocar_acceso(): void
     {
         $owner = User::factory()->create();
         $sharedUser = User::factory()->create();

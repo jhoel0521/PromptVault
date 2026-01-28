@@ -1,0 +1,88 @@
+name: Testing Suite
+
+on:
+  pull_request:
+    branches: [ main, dev ]
+  push:
+    branches: [ main, dev ]
+
+jobs:
+  tests:
+    name: Ejecutar Tests (PHP 8.4)
+    runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.4']
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: promptvault_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - name: Obtener código
+      uses: actions/checkout@v4
+
+    - name: Instalar Node.js y Compilar Assets
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Construir Frontend (NPM Build)
+      run: |
+        npm install
+        npm run build
+    # ---------------------------------------------------
+
+    - name: Configurar PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-version }}
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, pdo_mysql, bcmath, soap, intl, gd, exif, iconv
+        coverage: none
+
+    - name: Configurar entorno .env
+      run: |
+        cp .env.example .env
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+    - name: Cachear dependencias Composer
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - name: Instalar dependencias
+      run: composer install --prefer-dist --no-progress --no-interaction
+
+    - name: Generar clave de aplicación
+      run: php artisan key:generate
+
+    - name: Configurar base de datos
+      run: |
+        echo "DB_CONNECTION=mysql" >> .env
+        echo "DB_HOST=127.0.0.1" >> .env
+        echo "DB_PORT=3306" >> .env
+        echo "DB_DATABASE=promptvault_test" >> .env
+        echo "DB_USERNAME=root" >> .env
+        echo "DB_PASSWORD=password" >> .env
+
+    - name: Ejecutar migraciones
+      run: php artisan migrate --force
+
+    - name: Ejecutar suite de tests
+      # Sin --parallel para evitar problemas en CI básico
+      run: php artisan test --stop-on-failure

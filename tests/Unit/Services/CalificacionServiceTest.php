@@ -21,7 +21,7 @@ class CalificacionServiceTest extends TestCase
     /**
      * Test que calificar crea o actualiza calificación
      */
-    public function test_calificar_creates_or_updates_rating(): void
+    public function test_calificar_crea_o_actualiza_calificacion(): void
     {
         $user = User::factory()->create();
         $prompt = Prompt::factory()->create();
@@ -57,7 +57,7 @@ class CalificacionServiceTest extends TestCase
     /**
      * Test que obtener calificación devuelve la calificación del usuario
      */
-    public function test_obtener_calificacion_returns_user_rating(): void
+    public function test_obtener_calificacion_retorna_calificacion_usuario(): void
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();

@@ -12,7 +12,7 @@ class EtiquetaTest extends TestCase
     /**
      * Test que usuario puede agregar etiquetas a un prompt
      */
-    public function test_user_can_add_tags_to_prompt(): void
+    public function test_usuario_puede_agregar_etiquetas_a_prompt(): void
     {
         $user = User::factory()->create();
 
@@ -41,7 +41,7 @@ class EtiquetaTest extends TestCase
     /**
      * Test que usuario puede remover etiquetas de un prompt
      */
-    public function test_user_can_remove_tags_from_prompt(): void
+    public function test_usuario_puede_eliminar_etiquetas_de_prompt(): void
     {
         $user = User::factory()->create();
 
@@ -86,7 +86,7 @@ class EtiquetaTest extends TestCase
     /**
      * Test que admin puede crear etiquetas globales
      */
-    public function test_admin_can_create_global_tags(): void
+    public function test_admin_puede_crear_etiquetas_globales(): void
     {
         $admin = User::factory()->create();
         $admin->update(['role_id' => 1]); // role_id 1 = admin
@@ -114,7 +114,7 @@ class EtiquetaTest extends TestCase
     /**
      * Test que se pueden filtrar prompts por etiqueta
      */
-    public function test_filter_prompts_by_tag(): void
+    public function test_filtrar_prompts_por_etiqueta(): void
     {
         $user = User::factory()->create();
 

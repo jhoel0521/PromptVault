@@ -30,9 +30,9 @@ class BackupServiceTest extends TestCase
     }
 
     /**
-     * Test que create backup genera archivo SQL
+     * Test que crear respaldo genera archivo SQL
      */
-    public function test_create_backup_generates_file(): void
+    public function test_crear_respaldo_genera_archivo(): void
     {
         // Crear backup
         $resultado = $this->service->createBackup();
@@ -52,9 +52,9 @@ class BackupServiceTest extends TestCase
     }
 
     /**
-     * Test que list backups devuelve archivos con metadata
+     * Test que listar respaldos devuelve archivos con metadata
      */
-    public function test_list_backups_returns_files(): void
+    public function test_listar_respaldos_devuelve_archivos(): void
     {
         // Crear directorio si no existe
         if (! File::exists($this->backupsPath)) {

@@ -11,7 +11,7 @@ class EventoTest extends TestCase
     /**
      * Test que usuario puede crear evento
      */
-    public function test_user_can_create_event(): void
+    public function test_usuario_puede_crear_evento(): void
     {
         $user = User::factory()->create();
 
@@ -39,7 +39,7 @@ class EventoTest extends TestCase
     /**
      * Test que usuario puede ver sus propios eventos
      */
-    public function test_user_can_view_own_events(): void
+    public function test_usuario_puede_ver_propios_eventos(): void
     {
         $user = User::factory()->create();
         $otherUser = User::factory()->create();
@@ -79,7 +79,7 @@ class EventoTest extends TestCase
     /**
      * Test que usuario puede actualizar evento
      */
-    public function test_user_can_update_event(): void
+    public function test_usuario_puede_actualizar_evento(): void
     {
         $user = User::factory()->create();
 
@@ -116,7 +116,7 @@ class EventoTest extends TestCase
     /**
      * Test que usuario puede eliminar evento
      */
-    public function test_user_can_delete_event(): void
+    public function test_usuario_puede_eliminar_evento(): void
     {
         $user = User::factory()->create();
 
@@ -142,7 +142,7 @@ class EventoTest extends TestCase
     /**
      * Test que usuario puede marcar evento como completado
      */
-    public function test_user_can_mark_event_complete(): void
+    public function test_usuario_puede_marcar_evento_completado(): void
     {
         $user = User::factory()->create();
 

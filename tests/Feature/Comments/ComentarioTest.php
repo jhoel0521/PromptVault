@@ -12,7 +12,7 @@ class ComentarioTest extends TestCase
     /**
      * Test que usuario puede comentar en prompt público
      */
-    public function test_user_can_comment_on_public_prompt(): void
+    public function test_usuario_puede_comentar_en_prompt_publico(): void
     {
         $owner = User::factory()->create();
         $commenter = User::factory()->create();
@@ -42,7 +42,7 @@ class ComentarioTest extends TestCase
     /**
      * Test que usuario puede responder a un comentario
      */
-    public function test_user_can_reply_to_comment(): void
+    public function test_usuario_puede_responder_a_comentario(): void
     {
         $owner = User::factory()->create();
         $user1 = User::factory()->create();
@@ -81,7 +81,7 @@ class ComentarioTest extends TestCase
     /**
      * Test que propietario del prompt puede eliminar comentario
      */
-    public function test_owner_can_delete_comment(): void
+    public function test_propietario_puede_eliminar_comentario(): void
     {
         $owner = User::factory()->create();
         $commenter = User::factory()->create();
@@ -111,7 +111,7 @@ class ComentarioTest extends TestCase
     /**
      * Test que autor del comentario puede eliminarlo
      */
-    public function test_user_can_delete_own_comment(): void
+    public function test_usuario_puede_eliminar_propio_comentario(): void
     {
         $owner = User::factory()->create();
         $commenter = User::factory()->create();
@@ -141,7 +141,7 @@ class ComentarioTest extends TestCase
     /**
      * Test que comentarios anidados se muestran correctamente
      */
-    public function test_nested_comments_display_correctly(): void
+    public function test_comentarios_anidados_se_muestran_correctamente(): void
     {
         $owner = User::factory()->create();
         $user1 = User::factory()->create();
