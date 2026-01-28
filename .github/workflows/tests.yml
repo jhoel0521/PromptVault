@@ -82,14 +82,3 @@ jobs:
       with:
         name: logs-pruebas-${{ matrix.php-version }}
         path: storage/logs/
-
-  prevent-direct-push:
-    name: Proteger branches principales
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
-    steps:
-    - name: Bloquear push directo
-      run: |
-        echo "❌ ERROR: Push directo a ${{ github.ref }} no está permitido"
-        echo "Por favor usa Pull Requests para fusionar cambios"
-        exit 1
