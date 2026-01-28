@@ -22,7 +22,6 @@ class AccesoCompartidoFactory extends Factory
             'prompt_id' => Prompt::factory(),
             'user_id' => User::factory(),
             'nivel_acceso' => fake()->randomElement(['lector', 'comentador', 'editor']),
-            'fecha_expiracion' => fake()->optional()->dateTimeBetween('now', '+1 year'),
         ];
     }
 

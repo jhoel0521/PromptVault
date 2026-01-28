@@ -19,6 +19,7 @@ class RoleFactory extends Factory
         return [
             'nombre' => fake()->unique()->word(),
             'descripcion' => fake()->sentence(),
+            'nivel_acceso' => fake()->numberBetween(1, 5),
         ];
     }
 

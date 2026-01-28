@@ -20,9 +20,8 @@ class VersionFactory extends Factory
         return [
             'prompt_id' => Prompt::factory(),
             'numero_version' => fake()->numberBetween(1, 10),
-            'titulo' => fake()->sentence(5),
-            'descripcion' => fake()->text(200),
             'contenido' => fake()->paragraphs(3, true),
+            'mensaje_cambio' => fake()->optional()->sentence(),
         ];
     }
 }

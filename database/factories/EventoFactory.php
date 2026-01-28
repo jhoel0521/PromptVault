@@ -26,6 +26,9 @@ class EventoFactory extends Factory
             'descripcion' => fake()->text(200),
             'fecha_inicio' => $startDate,
             'fecha_fin' => fake()->dateTimeBetween($startDate, '+2 months'),
+            'tipo' => fake()->randomElement(['personal', 'trabajo', 'reunion']),
+            'ubicacion' => fake()->optional()->address(),
+            'todo_el_dia' => false,
             'completado' => false,
         ];
     }

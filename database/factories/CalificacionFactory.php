@@ -22,7 +22,7 @@ class CalificacionFactory extends Factory
             'prompt_id' => Prompt::factory(),
             'user_id' => User::factory(),
             'estrellas' => fake()->numberBetween(1, 5),
-            'comentario' => fake()->optional()->sentence(10),
+            'resena' => fake()->optional()->sentence(10),
         ];
     }
 
