@@ -1,59 +1,290 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🗂️ PromptVault
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://img.shields.io/badge/Laravel-12.0-FF2D20?style=flat&logo=laravel" alt="Laravel 12">
+  <img src="https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat&logo=php" alt="PHP 8.2+">
+  <img src="https://img.shields.io/badge/TailwindCSS-3.x-38B2AC?style=flat&logo=tailwind-css" alt="TailwindCSS">
+  <img src="https://img.shields.io/badge/Alpine.js-3.x-8BC0D0?style=flat&logo=alpine.js" alt="Alpine.js">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License MIT">
 </p>
 
-## About Laravel
+**PromptVault** es un sistema de gestión de prompts para IA con arquitectura SOLID, enfocado en seguridad, control de versiones y colaboración. Construido con Laravel 12, permite a los usuarios crear, organizar, compartir y versionar prompts con integración multi-proveedor de IA (Claude, Groq, Gemini).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 📖 Índice
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [✨ Características Principales](#-características-principales)
+- [🏗️ Arquitectura y Stack Tecnológico](#️-arquitectura-y-stack-tecnológico)
+- [🚀 Instalación y Configuración](#-instalación-y-configuración)
+- [⚙️ Configuración de Proveedores de IA](#️-configuración-de-proveedores-de-ia)
+- [🧪 Testing](#-testing)
+- [📚 Documentación Técnica](#-documentación-técnica)
+- [🔐 Seguridad](#-seguridad)
+- [📝 Licencia](#-licencia)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ✨ Características Principales
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🔒 **Gestión Segura de Prompts**
+- CRUD completo con autorización granular mediante Policies
+- Control de privacidad: público/privado por prompt
+- Sistema de permisos basado en roles (admin, usuario, colaborador)
+- Protección de privacidad: admins no pueden acceder a prompts privados
 
-## Laravel Sponsors
+### 📜 **Versionado Inteligente**
+- Historial automático de cambios en título y contenido
+- Restauración a versiones anteriores con auditoría completa
+- Comparación visual de diferencias entre versiones
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 🤝 **Colaboración y Compartición**
+- Compartir prompts con usuarios específicos (lectura/escritura)
+- Sistema de comentarios anidados con notificaciones
+- Calificación de prompts (⭐ 1-5 estrellas)
+- Panel de accesos compartidos con gestión de permisos
 
-### Premium Partners
+### 🤖 **Integración Multi-IA**
+- **Claude (Anthropic)**: Soporte para modelos Claude 3
+- **Groq**: API ultra-rápida con múltiples modelos LLM
+- **Gemini (Google AI Studio)**: Integración con familia Gemini
+- Chatbot interactivo con selección de provider y modelo
+- Comando `php artisan check:models` para listar modelos disponibles
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 🎨 **UI/UX Moderna**
+- 100% TailwindCSS (sin CSS custom)
+- Alpine.js para interactividad reactiva
+- Diseño responsive y accesible
+- Modo mantenimiento integrado con UI administrativa
 
-## Contributing
+### 🛠️ **Administración Avanzada**
+- Panel de configuración con variables .env editables
+- Sistema de backups automáticos con descarga/restauración
+- Gestión de usuarios, roles y permisos
+- Dashboard de reportes con estadísticas en tiempo real
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🏗️ Arquitectura y Stack Tecnológico
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### **Backend**
+- **Laravel 12** - Framework PHP moderno
+- **PHP 8.2+** - Strict types, enums nativos
+- **MySQL/SQLite** - Base de datos relacional
+- **Arquitectura SOLID** - Repositorios, Servicios, Policies, Contracts
 
-## Security Vulnerabilities
+### **Frontend**
+- **TailwindCSS 3.x** - Utility-first CSS framework
+- **Alpine.js 3.x** - Framework JavaScript reactivo
+- **Vite** - Build tool ultra-rápido
+- **Blade Components** - Sistema de componentes reutilizables
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### **Testing**
+- **PHPUnit 11.5** - Framework de testing PHP
+- **Pest (opcional)** - Syntax alternativo para tests
+- Cobertura: Models, Services, Policies, Feature Tests
 
-## License
+### **Dependencias Clave**
+- `lucianotonet/groq-php` - SDK oficial de Groq
+- `laravel/breeze` - Autenticación con Blade + Alpine
+- `laravel/pint` - Code style fixer (Laravel PSR-12)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🚀 Instalación y Configuración
+
+### **Requisitos Previos**
+- PHP >= 8.2
+- Composer >= 2.x
+- Node.js >= 18.x & npm
+- MySQL/MariaDB o SQLite
+- Extensiones PHP: `pdo`, `mbstring`, `openssl`, `tokenizer`, `xml`, `curl`
+
+### **Instalación Rápida (Recomendada)**
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/tu-usuario/PromptVault.git
+cd PromptVault
+
+# 2. Ejecutar instalación automática
+composer setup
+
+# 3. Ejecutar migraciones y seeders
+php artisan migrate:fresh --seed --force
+
+# 4. Iniciar entorno de desarrollo (concurrente)
+composer dev
+```
+
+### **Instalación Manual (Paso a Paso)**
+
+```bash
+# 1. Instalar dependencias PHP
+composer install
+
+# 2. Crear archivo .env desde plantilla
+cp .env.example .env
+
+# 3. Generar clave de aplicación
+php artisan key:generate
+
+# 4. Configurar base de datos en .env
+# Editar DB_CONNECTION, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+
+# 5. Ejecutar migraciones
+php artisan migrate --force
+
+# 6. Sembrar datos iniciales (opcional)
+php artisan db:seed --force
+
+# 7. Instalar dependencias frontend
+npm install
+
+# 8. Compilar assets
+npm run build
+
+# 9. Iniciar servidor de desarrollo
+php artisan serve
+# En otra terminal:
+npm run dev
+```
+
+### **Datos de Prueba Iniciales**
+
+El seeder crea un usuario administrador por defecto:
+
+- **Email:** `admin@promptvault.local`
+- **Password:** `password`
+
+---
+
+## ⚙️ Configuración de Proveedores de IA
+
+Edita el archivo `.env` y agrega las API keys de los proveedores que desees usar:
+
+```env
+# Claude (Anthropic)
+ANTHROPIC_API_KEY=sk-ant-xxxxxxxxxxxxx
+
+# Groq
+GROQ_API_KEY=gsk_xxxxxxxxxxxxx
+
+# Gemini (Google AI Studio)
+GEMINI_API_KEY=AIzaSyxxxxxxxxxxxxx
+```
+
+### **Verificar Modelos Disponibles**
+
+```bash
+php artisan check:models
+```
+
+Este comando lista todos los modelos activos por proveedor:
+- ✅ Modelos configurados (con API key válida)
+- ❌ Modelos inactivos (sin API key)
+
+---
+
+## 🧪 Testing
+
+### **Ejecutar Tests**
+
+```bash
+# Todos los tests
+composer test
+
+# Tests específicos
+php artisan test --filter=PromptTest
+
+# Con cobertura de código
+php artisan test --coverage
+```
+
+### **Estructura de Tests**
+
+```
+tests/
+├── Unit/
+│   ├── Models/         # Tests de relaciones y scopes
+│   └── Services/       # Tests de lógica de negocio
+└── Feature/
+    ├── Prompts/        # Tests de CRUD, visibilidad, versionado
+    ├── Sharing/        # Tests de compartición y colaboración
+    ├── Comments/       # Tests de comentarios
+    └── Auth/           # Tests de autenticación y autorización
+```
+
+📄 Ver: [docs/fase4-plan-integral-testing.md](docs/fase4-plan-integral-testing.md) para plan detallado de testing.
+
+---
+
+## 📚 Documentación Técnica
+
+La carpeta `docs/` contiene documentación detallada de todas las fases del proyecto:
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`AGENTS.md`](AGENTS.md) | 🤖 Protocolo de desarrollo para agentes IA (SOLID, commits, task.md) |
+| [`task.md`](task.md) | 📋 Lista de tareas activas, completadas y planificadas (TODO maestro) |
+| [`docs/fase1-auditoria-seguridad-implementacion-prompts.md`](docs/fase1-auditoria-seguridad-implementacion-prompts.md) | 🔐 Auditoría de seguridad y refactorización de módulo Prompts |
+| [`docs/docs-migration-css-to-tailwind.md`](docs/docs-migration-css-to-tailwind.md) | 🎨 Migración completa de CSS custom a TailwindCSS (59 archivos) |
+| [`docs/fase4-plan-integral-testing.md`](docs/fase4-plan-integral-testing.md) | 🧪 Plan de implementación de suite de tests (Unit + Feature) |
+| [`docs/implementacion-base-datos-plan-pruebas.md`](docs/implementacion-base-datos-plan-pruebas.md) | 🗄️ Diseño de base de datos y plan de pruebas inicial |
+| [`docs/test-results.md`](docs/test-results.md) | ✅ Resultados de ejecución de tests automatizados |
+
+### **Bitácora de Desarrollo**
+
+Todos los cambios técnicos están documentados en:
+- **[`task.md`](task.md)**: Bitácora cronológica con descripción de archivos modificados, decisiones arquitectónicas y estado de tareas.
+
+---
+
+## 🔐 Seguridad
+
+### **Principios Implementados**
+- ✅ **Autorización en capas**: FormRequests + Policies + Middleware
+- ✅ **CSRF Protection**: Habilitado en todos los formularios
+- ✅ **SQL Injection**: 100% consultas con Eloquent/Query Builder
+- ✅ **XSS Protection**: Escape automático en Blade (`{{ }}`)
+- ✅ **Mass Assignment**: Protección con `$fillable`/`$guarded`
+- ✅ **Rate Limiting**: Limitación de intentos de login
+- ✅ **Privacidad**: Admins no acceden a prompts privados
+
+### **Auditorías de Seguridad**
+
+📄 Ver: [docs/fase1-auditoria-seguridad-implementacion-prompts.md](docs/fase1-auditoria-seguridad-implementacion-prompts.md)
+
+### **Reportar Vulnerabilidades**
+
+Si descubres una vulnerabilidad de seguridad, por favor envía un email a **seguridad@promptvault.local** en lugar de abrir un issue público.
+
+---
+
+## 📝 Licencia
+
+Este proyecto está licenciado bajo la [Licencia MIT](https://opensource.org/licenses/MIT).
+
+**Copyright © 2026 PromptVault**
+
+Laravel Framework es open-source licenciado bajo [MIT license](https://opensource.org/licenses/MIT).
+
+---
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor sigue estas guías:
+
+1. **Fork** el proyecto
+2. Crea una **rama** para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. **Commitea** tus cambios siguiendo [Conventional Commits](https://www.conventionalcommits.org/)
+4. Ejecuta **`./vendor/bin/pint`** para formatear el código
+5. Ejecuta **`composer test`** para verificar que todos los tests pasen
+6. **Push** a la rama (`git push origin feature/nueva-funcionalidad`)
+7. Abre un **Pull Request**
+
+📄 Ver protocolo completo en: [`AGENTS.md`](AGENTS.md)
+
+---
+
+<p align="center">Hecho con ❤️ usando Laravel 12</p>
