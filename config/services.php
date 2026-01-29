@@ -45,6 +45,11 @@ return [
         'model' => env('CLAUDE_MODEL', 'claude-sonnet-4-20250514'),
     ],
 
+    'gemini' => [
+        'api_key' => env('GOOGLE_AI_STUDIO_API_KEY'),
+        'model' => env('GEMINI_MODEL', 'gemini-2.0-flash'),
+    ],
+
     'chatbot' => [
         'default_provider' => env('CHATBOT_DEFAULT_PROVIDER', 'groq'),
     ],

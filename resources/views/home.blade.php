@@ -20,7 +20,9 @@
             const initial = stored || (prefersDark ? 'dark' : 'light');
             if (initial === 'dark') {
                 document.documentElement.classList.add('dark');
-                document.body.classList.add('dark');
+                if (document.body) {
+                    document.body.classList.add('dark');
+                }
             }
         })();
 
@@ -93,7 +95,7 @@
             <h1 class="text-5xl md:text-6xl font-bold mb-4" 
                 :class="darkMode ? 'bg-gradient-to-r from-white to-rose-600' : 'bg-gradient-to-r from-slate-900 to-rose-600'"
                 style="background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                Biblioteca de Prompts
+                Biblioteca de
             </h1>
             <p class="text-xl" :class="darkMode ? 'text-slate-400' : 'text-slate-600'">Descubre y comparte los mejores prompts para IA</p>
         </section>

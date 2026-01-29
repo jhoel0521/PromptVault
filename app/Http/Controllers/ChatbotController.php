@@ -22,7 +22,7 @@ class ChatbotController extends Controller
     {
         $validated = $request->validate([
             'message' => 'required|string|max:500',
-            'provider' => 'nullable|string|in:groq,claude',
+            'provider' => 'nullable|string|in:groq,claude,gemini',
         ]);
 
         try {
