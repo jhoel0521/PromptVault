@@ -68,8 +68,8 @@ class LoginController extends Controller
             default => '¡Bienvenido a PromptVault!',
         };
 
-        // Todos los usuarios van al dashboard
-        return redirect()->intended('/dashboard')->with('success', $mensaje);
+        // Todos los usuarios van al home
+        return redirect()->intended('/')->with('success', $mensaje);
     }
 
     /**
