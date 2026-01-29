@@ -58,6 +58,6 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect('/prompts')->with('success', '¡Cuenta creada exitosamente! Bienvenido a PromptVault.');
+        return redirect('/')->with('success', '¡Cuenta creada exitosamente! Bienvenido a PromptVault.');
     }
 }
