@@ -7,6 +7,16 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ---
 
+## Integración Google AI Studio (Gemini) [x]
+- [x] Agregar provider Gemini en `AiProvider` y factory
+- [x] Implementar `ChatbotGeminiRepository` con API de Google AI Studio
+- [x] Exponer Gemini en UI (widget) con 3 opciones de provider
+- [x] Agregar variables en `.env.example` y configuración en `services.php`
+- [x] Ajustar validación de provider en `ChatbotController`
+- [x] Crear comando `check:models` para listar modelos compatibles
+- [x] Ampliar `check:models` para Groq y Claude
+- [x] Agregar `getAvailableModels()` en `ChatbotService`
+
 ## Tareas Completadas (Fase 1)
 
 ✅ Tareas 1-7: Auditoría de seguridad, calificaciones, buscador, chatbot, refactorización
@@ -366,6 +376,9 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ## Bitácora
 
+- 29/01/2026: **Extensión check:models para Groq y Claude** - `check:models` ahora soporta `--groq`, `--claude` y `--all` usando `ChatbotService::getAvailableModels()`. Se agregó el método al contrato de servicio y se implementó para Gemini, Groq y Claude con llamados a sus APIs. **Archivos modificados**: app/Contracts/Services/ChatbotServiceInterface.php, app/Services/ChatbotService.php, app/Console/Commands/CheckModels.php, task.md.
+- 29/01/2026: **Comando check:models para Google AI Studio** - Creado comando Artisan `check:models` con opción `--google-ai-studio`/`--GOOGLE_AI_STUDIO` para consultar modelos disponibles en Gemini API y filtrar los que soportan `generateContent`. **Archivo modificado**: app/Console/Commands/CheckModels.php, task.md.
+- 29/01/2026: **Integración Gemini (Google AI Studio) en Chatbot** - Agregado provider Gemini en `AiProvider` y `ChatbotRepositoryFactory`, implementado `ChatbotGeminiRepository` con API `generateContent`, actualizado widget de chat para mostrar 3 opciones de proveedor y etiqueta dinámica, incorporadas variables `GOOGLE_AI_STUDIO_API_KEY` y `GEMINI_MODEL` en `.env.example`, y extendida validación de provider en `ChatbotController`. **Archivos modificados**: app/Enums/AiProvider.php, app/Factories/ChatbotRepositoryFactory.php, app/Http/Controllers/ChatbotController.php, app/Repositories/ChatbotGeminiRepository.php, config/services.php, resources/views/components/chatbot-widget.blade.php, .env.example, task.md.
 - 28/01/2026: **✅ REFACTORIZACIÓN COMPLETA: Tests a Español + ChatbotService + CI/CD PHP 8.4** - Ejecutada refactorización integral: (1) **Nombres de Tests a Español Puro**: Convertidos 115+ tests en 26 archivos de inglés a español con patrón `test_sustantivo_verbo_complemento` (ej: `test_usuario_puede_crear_prompt`). Unit Tests (44): 8 modelos + 5 servicios + ExampleTest. Feature Tests (63): Prompts CRUD/Versionado/Visibilidad + Compartir/Colaboración + Comentarios/Calificaciones/Etiquetas + Admin/Calendario. (2) **ChatbotService Tests**: Creado `tests/Unit/Services/ChatbotServiceTest.php` con 8 tests en español: `test_obtener_prompts_disponibles_devuelve_coleccion_vacia_sin_keywords`, `test_obtener_prompts_disponibles_consulta_repositorio_con_string`, `test_obtener_prompts_disponibles_acepta_array_keywords`, `test_preguntar_crea_conversacion_y_devuelve_payload`, `test_obtener_historial_devuelve_conversaciones_usuario`, `test_eliminar_conversacion_elimina_solo_usuario`, `test_eliminar_conversacion_devuelve_falso_cuando_no_existe`, `test_limpiar_historial_elimina_todas_conversaciones`. (3) **CI/CD GitHub Actions**: Actualizado `.github/workflows/tests.yml` para PHP 8.4 mínimo, agregado job `prevent-direct-push` que bloquea pushes directos a main/dev. Traducidos todos los step names al español, agregado trigger `workflow_dispatch` para ejecuciones manuales. (4) **Validación Final**: Ejecutada suite completa: **115/115 tests PASSED**, 337 assertions exitosas, duración 26.35s. Commit final: "refactor: nombres tests a español + ChatbotService tests + CI/CD mejorado (PHP 8.4, protección branches)". **Archivos modificados**: 26 test files, `.github/workflows/tests.yml`, `task.md`. **Status**: ✅ COMPLETADO - Suite Spanish, ChatbotService cubierto, CI/CD hardened con PHP 8.4 y branch protection.
 - 28/01/2026: **Ajustes de CI y tests de ChatbotService** - Revertidos nombres de tests a inglés por solicitud. Agregado `tests/Unit/Services/ChatbotServiceTest.php` con cobertura de métodos principales (`getAvailablePrompts`, `ask`, `getHistory`, `deleteConversation`, `clearHistory`). Actualizado `.github/workflows/tests.yml` para PHP mínimo 8.4 y bloqueo de pushes directos a main/dev mediante job dedicado, manteniendo ejecución por PR. 
 - 28/01/2026: **🎉 FASE 4 COMPLETADA - Tarea 35: Validación Final y Cobertura** - Ejecutada validación final de suite de testing integral con 107/107 tests pasando (44 unit + 63 feature), 316 assertions exitosas, duración 17.10s. **Documentación**: Creado `docs/test-results.md` con resumen ejecutivo completo: distribución de tests por módulo, funcionalidades críticas testeadas, validaciones de seguridad, arquitectura validada (Repository-Service pattern), issues resueltos, cobertura por módulo (100% en todos), métricas de rendimiento. **CI/CD**: Creado pipeline GitHub Actions (`.github/workflows/tests.yml`) para ejecutar tests en push/PR (branches main/dev/feature/*), matriz PHP 8.2-8.3, MySQL 8.0, ejecución paralela, caché de composer, upload de logs en fallos. **Fix**: Corregido test intermitente `test_owner_can_revoke_access` especificando `visibilidad => 'privado'` explícitamente (factory podía crear prompts públicos por defecto). **Cobertura validada**: >80% en funcionalidades críticas - Prompts (24 tests CRUD/versionado/visibilidad), Compartir (17 tests niveles acceso), Calificaciones (8 tests), Comentarios (9 tests), Etiquetas (6 tests), Administración (13 tests), Servicios (12 tests). **Arquitectura SOLID validada**: Repository pattern (PromptRepository, VersionRepository), Service pattern (5 servicios testeados), Dependency Injection, Policies (PromptPolicy, ComentarioPolicy). **Total Fase 4: 107 tests (100% passing), 0 errores, 0 warnings**. 🚀 **FASE 4: PLAN INTEGRAL DE TESTING - COMPLETADA EXITOSAMENTE**.
@@ -402,6 +415,6 @@ Auditoría integral de seguridad, implementación de Policies y estandarización
 
 ---
 
-**Última actualización:** 28 de enero de 2026
+**Última actualización:** 29 de enero de 2026
 **Estado General:** Fase 4 - Plan Integral de Testing (LISTO PARA INICIARSE)
 **Próximas Fases:** Fases 2 y 3 pausadas por decisión del cliente

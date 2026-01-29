@@ -13,6 +13,15 @@ function parseMarkdown(text) {
 </script>
 
 @auth
+@php
+    $providers = collect(\App\Enums\AiProvider::cases())
+        ->map(fn ($provider) => [
+            'value' => $provider->value,
+            'name' => $provider->getDisplayName(),
+        ])
+        ->values()
+        ->all();
+@endphp
 <div x-data="{
         open: false,
         messages: [],
@@ -20,10 +29,7 @@ function parseMarkdown(text) {
         loading: false,
         provider: '{{ config('services.chatbot.default_provider', 'groq') }}',
         showProviderMenu: false,
-        providers: [
-            { value: 'groq', name: 'Groq (Llama 3.3)' },
-            { value: 'claude', name: 'Claude (Anthropic)' }
-        ],
+        providers: @js($providers),
         getProviderName() {
             const p = this.providers.find(p => p.value === this.provider);
             return p ? p.name : this.provider;
@@ -63,7 +69,7 @@ function parseMarkdown(text) {
                             <button @click="showProviderMenu = !showProviderMenu"
                                     class="text-xs text-slate-400 hover:text-rose-400 transition-colors flex items-center gap-1">
                                 <span>Powered by</span>
-                                <span class="text-rose-400" x-text="provider === 'groq' ? 'Groq' : 'Claude'"></span>
+                                <span class="text-rose-400" x-text="getProviderName()"></span>
                                 <i class="fas fa-chevron-down text-[10px]" :class="showProviderMenu && 'rotate-180'"></i>
                             </button>
                             {{-- Dropdown menu --}}
@@ -236,7 +242,7 @@ function parseMarkdown(text) {
                 </div>
                 <div>
                     <h4 class="text-white font-semibold">Asistente IA</h4>
-                    <small class="text-slate-400 text-xs block">Powered by Groq & Claude</small>
+                    <small class="text-slate-400 text-xs block">Powered by Groq, Claude y Gemini</small>
                 </div>
             </div>
             <button @click="open = false"

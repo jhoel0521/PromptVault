@@ -10,6 +10,7 @@ use App\Models\ChatbotConversacion;
 use App\Models\User;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 
 class ChatbotService implements ChatbotServiceInterface
@@ -119,6 +120,176 @@ class ChatbotService implements ChatbotServiceInterface
     public function clearHistory(User $user): int
     {
         return ChatbotConversacion::where('user_id', $user->id)->delete();
+    }
+
+    public function getAvailableModels(AiProvider $provider): array
+    {
+        return match ($provider) {
+            AiProvider::GEMINI => $this->getGeminiModels(),
+            AiProvider::GROQ => $this->getGroqModels(),
+            AiProvider::CLAUDE => $this->getClaudeModels(),
+        };
+    }
+
+    private function getGeminiModels(): array
+    {
+        $apiKey = config('services.gemini.api_key');
+        if (empty($apiKey)) {
+            return [
+                'success' => false,
+                'message' => 'Falta GOOGLE_AI_STUDIO_API_KEY en tu .env',
+                'rows' => [],
+            ];
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'X-goog-api-key' => $apiKey,
+            ])->timeout(60)->get('https://generativelanguage.googleapis.com/v1beta/models');
+
+            if ($response->failed()) {
+                $error = $response->json('error.message', 'Error desconocido');
+
+                return [
+                    'success' => false,
+                    'message' => "Error de API: {$error}",
+                    'rows' => [],
+                ];
+            }
+
+            $models = collect($response->json('models', []))
+                ->filter(function ($model) {
+                    $methods = $model['supportedGenerationMethods'] ?? [];
+
+                    return in_array('generateContent', $methods, true);
+                })
+                ->map(function ($model) {
+                    $methods = $model['supportedGenerationMethods'] ?? [];
+
+                    return [
+                        'model' => $model['name'] ?? '-',
+                        'name' => $model['displayName'] ?? '-',
+                        'methods' => implode(', ', $methods),
+                    ];
+                })
+                ->values()
+                ->all();
+
+            return [
+                'success' => true,
+                'message' => null,
+                'rows' => $models,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error inesperado: '.$e->getMessage(),
+                'rows' => [],
+            ];
+        }
+    }
+
+    private function getGroqModels(): array
+    {
+        $apiKey = config('services.groq.api_key');
+        if (empty($apiKey)) {
+            return [
+                'success' => false,
+                'message' => 'Falta GROQ_API_KEY en tu .env',
+                'rows' => [],
+            ];
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '.$apiKey,
+            ])->timeout(60)->get('https://api.groq.com/openai/v1/models');
+
+            if ($response->failed()) {
+                $error = $response->json('error.message', 'Error desconocido');
+
+                return [
+                    'success' => false,
+                    'message' => "Error de API: {$error}",
+                    'rows' => [],
+                ];
+            }
+
+            $models = collect($response->json('data', []))
+                ->map(function ($model) {
+                    return [
+                        'model' => $model['id'] ?? '-',
+                        'name' => $model['owned_by'] ?? '-',
+                        'methods' => 'chat.completions',
+                    ];
+                })
+                ->values()
+                ->all();
+
+            return [
+                'success' => true,
+                'message' => null,
+                'rows' => $models,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error inesperado: '.$e->getMessage(),
+                'rows' => [],
+            ];
+        }
+    }
+
+    private function getClaudeModels(): array
+    {
+        $apiKey = config('services.claude.api_key');
+        if (empty($apiKey)) {
+            return [
+                'success' => false,
+                'message' => 'Falta ANTHROPIC_API_KEY en tu .env',
+                'rows' => [],
+            ];
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'x-api-key' => $apiKey,
+                'anthropic-version' => '2023-06-01',
+            ])->timeout(60)->get('https://api.anthropic.com/v1/models');
+
+            if ($response->failed()) {
+                $error = $response->json('error.message', 'Error desconocido');
+
+                return [
+                    'success' => false,
+                    'message' => "Error de API: {$error}",
+                    'rows' => [],
+                ];
+            }
+
+            $models = collect($response->json('data', []))
+                ->map(function ($model) {
+                    return [
+                        'model' => $model['id'] ?? '-',
+                        'name' => $model['display_name'] ?? '-',
+                        'methods' => 'messages',
+                    ];
+                })
+                ->values()
+                ->all();
+
+            return [
+                'success' => true,
+                'message' => null,
+                'rows' => $models,
+            ];
+        } catch (\Throwable $e) {
+            return [
+                'success' => false,
+                'message' => 'Error inesperado: '.$e->getMessage(),
+                'rows' => [],
+            ];
+        }
     }
 
     private function buildContext(Collection $prompts): string
