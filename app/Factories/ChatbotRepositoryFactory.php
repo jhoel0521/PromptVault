@@ -5,6 +5,7 @@ namespace App\Factories;
 use App\Contracts\Repositories\ChatbotRepositoryInterface;
 use App\Enums\AiProvider;
 use App\Repositories\ChatbotClaudeRepository;
+use App\Repositories\ChatbotGeminiRepository;
 use App\Repositories\ChatbotGroqRepository;
 
 class ChatbotRepositoryFactory
@@ -17,6 +18,7 @@ class ChatbotRepositoryFactory
         return match ($provider) {
             AiProvider::GROQ => new ChatbotGroqRepository,
             AiProvider::CLAUDE => new ChatbotClaudeRepository,
+            AiProvider::GEMINI => new ChatbotGeminiRepository,
         };
     }
 
@@ -54,6 +56,10 @@ class ChatbotRepositoryFactory
             [
                 'value' => AiProvider::CLAUDE->value,
                 'name' => AiProvider::CLAUDE->getDisplayName(),
+            ],
+            [
+                'value' => AiProvider::GEMINI->value,
+                'name' => AiProvider::GEMINI->getDisplayName(),
             ],
         ];
     }

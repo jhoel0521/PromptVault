@@ -20,7 +20,9 @@
             const initial = stored || (prefersDark ? 'dark' : 'light');
             if (initial === 'dark') {
                 document.documentElement.classList.add('dark');
-                document.body.classList.add('dark');
+                if (document.body) {
+                    document.body.classList.add('dark');
+                }
             }
         })();
 

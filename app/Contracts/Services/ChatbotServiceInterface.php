@@ -21,4 +21,11 @@ interface ChatbotServiceInterface
     public function deleteConversation(User $user, int $conversationId): bool;
 
     public function clearHistory(User $user): int;
+
+    /**
+     * Listar modelos disponibles del provider
+     *
+     * @return array{success: bool, message: string|null, rows: array<int, array{model: string, name: string, methods: string}>}
+     */
+    public function getAvailableModels(AiProvider $provider): array;
 }
