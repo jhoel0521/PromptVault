@@ -1,0 +1,13 @@
+name: Forzar Rama de Origen de PR
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify dev as source
+        if: github.head_ref != 'dev'
+        run: |
+          echo "Error: Solo se aceptan PRs desde 'dev' hacia 'main'."
+          exit 1
