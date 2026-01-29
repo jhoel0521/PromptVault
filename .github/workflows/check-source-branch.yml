@@ -4,6 +4,7 @@ on:
     branches: [ main ]
 jobs:
   check-branch:
+    name: Verificar Rama de Origen
     runs-on: ubuntu-latest
     steps:
       - name: Verify dev as source
